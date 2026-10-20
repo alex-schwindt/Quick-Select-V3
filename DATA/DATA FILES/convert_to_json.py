@@ -160,7 +160,7 @@ PRODUCT_CONFIGS = {
             {"cols": ["A", "R"], "frm": "DAIKIN", "to": "TEMPMASTER"},
         ],
         "searchSchema": {
-            "displayName": "Multi Position Splits",
+            "displayName": "Unitary & Light Commercial Split Systems",
             "description": "Conventional split systems with a multi-position air handler + outdoor condensing unit. Enter design loads and the page returns models that meet the targets within your tolerance.",
             "targets": [
                 {"label": "Indoor Cooling Capacity",    "col": "I", "unit": "BTU/h", "defaultTolerance": 10},

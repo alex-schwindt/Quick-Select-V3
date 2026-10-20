@@ -976,7 +976,7 @@ WHAT'S IN THE GRID
     function exportSplitSystems(format, groups, projectName) {
         var grid = buildCombinedSplitSystemsGrid(groups);
         if (!grid || !grid.rows.length) {
-            alert('Select at least one mini split and one multi position split first.');
+            alert('Select at least one mini split and one unitary & light commercial split system first.');
             return;
         }
         if (format === 'pdf') {
@@ -2518,7 +2518,7 @@ WHAT'S IN THE GRID
             'gas_packs': 'Gas Pack RTUs',
             'marvair': 'Marvair Vertical Wall Mount',
             'mini_splits': 'Mini Splits',
-            'multi_position_splits': 'Multi Position Splits',
+            'multi_position_splits': 'Unitary & Light Commercial Split Systems',
             'gas_splits': 'Gas Splits',
             'vfds': 'VFDs',
             'diffusers': 'Diffusers'

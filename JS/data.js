@@ -61,7 +61,7 @@
         },
         {
             productKey: 'multi_position_splits',
-            displayName: 'MULTI POSITION SPLITS',
+            displayName: 'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEMS',
             jsonFile: 'DATA/JSON/multi_position_splits.json',
             pictureFile: 'DATA/PICTURES/MULTI POSITION SPLITS.jpg',
             assetsFolder: 'ASSETS/MULTI POSITION SPLITS',
