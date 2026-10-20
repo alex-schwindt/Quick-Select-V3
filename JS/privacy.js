@@ -6,13 +6,14 @@
    The short version, and the reason this page can be so short:
    HHpro is a static site. Sign-in is Cloudflare Access (email),
    which sets its own session cookie and keeps a sign-in log H&H
-   admins can see; the only server code (worker/) reads the
-   signed-in email to pick which firm layouts to serve and stores
-   nothing. Beyond that: no analytics and no third-party requests -
-   Inter is self-hosted precisely so that stays true (see the
-   @font-face note at the top of CSS/base.css). Everything a user
-   creates lives in their own browser's localStorage and is never
-   transmitted anywhere.
+   admins can see. The server code (worker/) reads the signed-in
+   email to pick which firm layouts to serve, and stores saved
+   projects under that email in Cloudflare D1 (server/projects.js),
+   where H&H admins (server/admins.js) can view them. Beyond that:
+   no analytics and no third-party requests - Inter is self-hosted
+   precisely so that stays true (see the @font-face note at the
+   top of CSS/base.css). Generated documents are built in the
+   browser and never uploaded.
 
    KEEP THIS PAGE HONEST. If anything is ever added that phones
    home - analytics, a CDN asset, an error reporter, a contact
@@ -34,20 +35,23 @@
             title: 'The short version',
             paragraphs: [
                 'HHpro is available only to people Hoffman & Hoffman has given access. You sign ' +
-                'in with your email address through Cloudflare Access, and that sign-in is the ' +
-                'only personal information involved. Everything you do in the site itself runs ' +
-                'inside your browser and is never sent to us. There is no analytics and no advertising.'
+                'in with your email address through Cloudflare Access. Projects you save are stored ' +
+                'under that email address so they are available wherever you sign in, and ' +
+                'Hoffman & Hoffman administrators can view them. Everything else you do in the site ' +
+                'runs inside your browser and is not sent to us. There is no analytics and no advertising.'
             ]
         },
         {
             title: 'What is stored, and where',
             paragraphs: [
-                'Projects, selections and your saved preferences are written to your own ' +
-                'browser’s local storage, on your own device. They never leave it. We cannot ' +
-                'see them, and neither can anyone else with access to the website.',
-                'Because that storage belongs to your browser, clearing your browsing data ' +
-                'deletes it permanently. Use “Export All to CSV” on the Projects page to keep ' +
-                'a backup you control.',
+                'Saved projects - their names, the equipment selections in them and their schedule ' +
+                'settings - are stored on Hoffman & Hoffman’s Cloudflare account under your email ' +
+                'address, and a working copy is kept in your browser’s local storage so the site ' +
+                'stays fast and works offline. Hoffman & Hoffman administrators can view every ' +
+                'saved project; other users cannot see yours.',
+                'Deleting a project removes its contents from the server copy too. Your browser’s ' +
+                'other settings (for example hidden columns and the active, unsaved list) stay on ' +
+                'your device only. “Export All to CSV” on the Projects page makes a copy you control.',
                 'Signing in places a session cookie from Cloudflare Access in your browser so you ' +
                 'stay signed in. It is used for nothing else and is removed when you sign out or ' +
                 'the session expires.'
@@ -74,7 +78,8 @@
                 'access was granted — in a log Hoffman & Hoffman administrators can view. We use it ' +
                 'only to manage who has access and to look into misuse. On each visit the site also ' +
                 'checks your email address to decide which engineering firms’ schedule layouts you ' +
-                'can use; that check is not stored. We add no analytics or logging of our own.'
+                'can use; that check is not stored. Saved projects are kept in a Cloudflare D1 ' +
+                'database on Hoffman & Hoffman’s account. We add no analytics or logging of our own.'
             ]
         },
         {
@@ -82,11 +87,11 @@
             paragraphs: [
                 'Privacy laws such as the GDPR and the CCPA give you the right to see, correct or ' +
                 'delete personal data a site holds about you, and to know whether it is sold or ' +
-                'shared. The only personal data involved is your email address and the sign-in ' +
-                'log described above; nothing is ever sold or shared. To ask what is held or to ' +
-                'have your access removed, contact your Hoffman & Hoffman representative. The ' +
-                'data this site creates is already entirely in your hands: clearing your ' +
-                'browser’s site data removes all of it immediately.'
+                'shared. The personal data involved is your email address, the sign-in log and the ' +
+                'projects saved under your email, described above; nothing is ever sold or shared. ' +
+                'To ask what is held, to have your saved projects deleted, or to have your access ' +
+                'removed, contact your Hoffman & Hoffman representative. You can also delete any ' +
+                'project yourself from the Projects page.'
             ]
         },
         {
@@ -94,7 +99,7 @@
             paragraphs: [
                 'HHpro is a professional engineering tool intended for use in the course of work. ' +
                 'It is not directed at children and collects no information beyond the sign-in ' +
-                'described above.'
+                'and saved projects described above.'
             ]
         },
         {

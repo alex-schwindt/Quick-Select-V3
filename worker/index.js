@@ -12,12 +12,15 @@
                            to users allowed the firm; everyone
                            else gets a plain 404 so the response
                            doesn't confirm the firm exists
+     /api/me, /api/projects*, /api/admin/*
+                        -> saved projects in D1 (server/projects.js)
 
-   Who gets which firm: server/firm-access.js. Identity check:
-   server/access.js.
+   Who gets which firm: server/firm-access.js. Who is an admin:
+   server/admins.js. Identity check: server/access.js.
    ============================================================ */
 
 import { accessEmail, firmsFor } from '../server/access.js';
+import { handleProjects } from '../server/projects.js';
 
 const NO_STORE = { 'Cache-Control': 'private, no-store' };
 
@@ -53,6 +56,10 @@ export default {
         const { pathname } = new URL(request.url);
         if (pathname === '/api/firms') return apiFirms(request, env);
         if (pathname.startsWith('/firms/')) return firmFile(request, env, pathname);
+        if (pathname.startsWith('/api/')) {
+            const res = await handleProjects(request, env, pathname, await accessEmail(request, env));
+            return res || notFound();
+        }
         // Not normally reached - every other path is served straight from
         // the assets - but answer correctly if routing ever changes.
         return env.ASSETS.fetch(request);

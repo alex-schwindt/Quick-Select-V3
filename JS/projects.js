@@ -66,17 +66,22 @@
     /**
      * Standing notice about where projects actually live.
      *
-     * They are held in this browser's localStorage (see cart.js,
-     * 'hhpro_projects') - one copy, on one machine, with no server behind
-     * it. Clearing site data or browsing history wipes them, and nothing
-     * about the UI hints at that, so the page says it plainly and points at
-     * the CSV export sitting directly above as the backup.
+     * Normally they are synced to the user's account (project_sync.js), so
+     * the page says so - including that H&H administrators can see them.
+     *
+     * When sync is off (no server, signed out, storage not set up) they are
+     * held in this browser's localStorage only (see cart.js,
+     * 'hhpro_projects') - one copy, on one machine. Clearing site data or
+     * browsing history wipes them, and nothing about the UI hints at that,
+     * so the page says it plainly and points at the CSV export sitting
+     * directly above as the backup.
      *
      * Deliberately not dismissable: the risk lasts as long as the storage
      * does, and a notice the user dismissed six months ago is no warning at
      * all on the day their cache gets cleared.
      */
     function buildStorageNotice() {
+        if (HHpro.ProjectSync && HHpro.ProjectSync.isEnabled()) return buildSyncedNotice();
         var box = document.createElement('aside');
         box.className = 'projects-notice';
 
@@ -109,6 +114,36 @@
         action.appendChild(document.createTextNode(
             ' “Export All to CSV” saves a backup; “Import from CSV” restores it.'));
         body.appendChild(action);
+
+        box.appendChild(body);
+        return box;
+    }
+
+    function buildSyncedNotice() {
+        var box = document.createElement('aside');
+        box.className = 'projects-notice projects-notice-synced';
+
+        var icon = document.createElement('span');
+        icon.className = 'projects-notice-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.appendChild(HHpro.UI.icon('check'));
+        box.appendChild(icon);
+
+        var body = document.createElement('div');
+        body.className = 'projects-notice-body';
+
+        var title = document.createElement('p');
+        title.className = 'projects-notice-title';
+        title.textContent = 'Projects are saved to your account';
+        body.appendChild(title);
+
+        var me = HHpro.ProjectSync.me();
+        var text = document.createElement('p');
+        text.className = 'projects-notice-text';
+        text.textContent = 'Saved for ' + (me ? me.email : 'your sign-in') + ' and available on any ' +
+            'computer you sign in on. Hoffman & Hoffman administrators can view saved projects. ' +
+            '“Export All to CSV” still makes a copy you can share or keep.';
+        body.appendChild(text);
 
         box.appendChild(body);
         return box;

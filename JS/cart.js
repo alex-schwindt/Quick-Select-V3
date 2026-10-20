@@ -6,7 +6,8 @@
    Two modes, managed by the same data shape:
      - 'cart'    : a temporary list, lost on tab close
      - 'project' : backed by an entry in localStorage under
-                   'hhpro_projects'
+                   'hhpro_projects', which project_sync.js keeps in
+                   step with the signed-in user's server copy
 
    Persistence:
      sessionStorage 'hhpro_active_cart'    -> the active cart/project
@@ -299,7 +300,11 @@
             localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
         } catch (e) {
             alert('Could not save project - browser storage is unavailable or full.');
+            return;
         }
+        // Push the change to the server copy (project_sync.js) - a no-op
+        // when sync is off.
+        if (HHpro.ProjectSync) HHpro.ProjectSync.notify();
     }
 
     function newProjectId() {
@@ -368,7 +373,8 @@
         if (!Array.isArray(ids)) return;
         try {
             localStorage.setItem(PROJECTS_ORDER_KEY, JSON.stringify(ids));
-        } catch (e) { /* non-fatal: the order just won't persist */ }
+        } catch (e) { return; /* non-fatal: the order just won't persist */ }
+        if (HHpro.ProjectSync) HHpro.ProjectSync.notify();
     }
 
     function listProjects() {
@@ -488,7 +494,10 @@
                 extra: (incoming.extra && typeof incoming.extra === 'object') ? incoming.extra : {},
                 engineer: incoming.engineer || defaultEngineer(),
                 createdAt: incoming.createdAt || nowIso,
-                updatedAt: incoming.updatedAt || nowIso
+                // A replace is a fresh save: keeping the file's older
+                // timestamp would lose to the copy it replaces on sync.
+                updatedAt: (existingId !== undefined && onConflict === 'replace')
+                    ? nowIso : (incoming.updatedAt || nowIso)
             };
             existingByName[finalName.toLowerCase()] = finalId;
         });

@@ -52,6 +52,21 @@
 
         actions.appendChild(HHpro.UI.createUserGuideButton());
 
+        // Admins (server/admins.js) get the all-projects view.
+        if (HHpro.ProjectSync && HHpro.ProjectSync.isAdmin()) {
+            var adminBtn = document.createElement('button');
+            adminBtn.type = 'button';
+            adminBtn.className = 'header-action';
+            adminBtn.appendChild(HHpro.UI.icon('folder'));
+            var adminLabel = document.createElement('span');
+            adminLabel.textContent = 'Admin';
+            adminBtn.appendChild(adminLabel);
+            adminBtn.addEventListener('click', function () {
+                HHpro.App.showView('admin');
+            });
+            actions.appendChild(adminBtn);
+        }
+
         var logoutBtn = document.createElement('button');
         logoutBtn.type = 'button';
         logoutBtn.className = 'header-action';

@@ -29,6 +29,16 @@
     "ACCESS_AUD": "e7a0ff4c8b88079eed4f34b2763debb74bac4af2b1e638e22b9d146b66ba409e"
   },
 
+  // Saved projects (server/projects.js). The tables create themselves on
+  // first use. Created 10/20/2026 with `npx wrangler d1 create hhpro-projects`.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hhpro-projects",
+      "database_id": "5438341a-8a81-4e91-8542-591b067b41c5"
+    }
+  ],
+
   "observability": {
     "enabled": true
   }

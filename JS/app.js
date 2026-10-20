@@ -29,11 +29,12 @@
 
     // Sign-in happens before the page ever loads: Cloudflare Access
     // won't serve the site to anyone it hasn't authenticated. So init
-    // only has to fetch the engineering-firm layouts this user may use,
-    // then open the overview.
+    // only has to fetch the engineering-firm layouts this user may use
+    // and bring their saved projects in from the server (both fall back
+    // quietly when unavailable), then open the overview.
     function init() {
-        HHpro.Templates.loadFirms().then(function (firms) {
-            HHpro.State.setAllowedEngineers(['hoffman'].concat(firms));
+        Promise.all([HHpro.Templates.loadFirms(), HHpro.ProjectSync.init()]).then(function (res) {
+            HHpro.State.setAllowedEngineers(['hoffman'].concat(res[0]));
             HHpro.State.setLoggedIn(true);
             HHpro.App.showView('main');
         });
