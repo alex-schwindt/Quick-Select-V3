@@ -1,0 +1,341 @@
+/* ============================================================
+   HHpro - Projects view
+   ------------------------------------------------------------
+   Layout for the projects-list page. Reuses the .modal* styles
+   from cart.css for the confirm/name-prompt/conflict modals.
+   ============================================================ */
+
+.projects-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg) var(--space-xl);
+    gap: var(--space-lg);
+    overflow: auto;
+    min-height: 0;
+}
+
+/* ---------- Title bar ---------- */
+.projects-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-shrink: 0;
+}
+
+.projects-title {
+    /* xl, not xxl - the app header already says "Projects", so this
+       bar is status, not the page's loudest element */
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* Muted inventory count rendered inside the title ("4 projects") */
+.projects-title-count {
+    margin-left: var(--space-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+/* ---------- Toolbar (New / Import / Export) ---------- */
+.projects-toolbar {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    align-items: center;
+    flex-shrink: 0;
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.projects-btn {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast);
+}
+
+.projects-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Disabled secondary (e.g. Export with no projects) drops its strong
+   border and fill so it reads as inert rather than clickable-but-faded */
+.projects-btn-secondary:disabled {
+    background-color: transparent;
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+.projects-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+.projects-btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+}
+
+.projects-btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+}
+.projects-btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+/* ---------- Project list ---------- */
+/* ---------- Storage disclaimer ----------
+   Sits between the toolbar and the project cards so the CSV buttons it
+   refers to are directly above it. Amber-keyed like the other cautions in
+   the app, but low-contrast body text so permanent page furniture doesn't
+   read as an unresolved error. */
+.projects-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid color-mix(in srgb, var(--color-warning) 55%, transparent);
+    border-left-width: 3px;
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in srgb, var(--color-warning) 8%, transparent);
+}
+
+.projects-notice-icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    margin-top: 1px;
+    color: var(--color-warning);
+}
+
+.projects-notice-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.projects-notice-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.projects-notice-title {
+    margin: 0 0 2px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.projects-notice-text {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+}
+
+.projects-notice-text + .projects-notice-text {
+    margin-top: 4px;
+}
+
+.projects-notice-text strong {
+    color: var(--color-text);
+}
+
+@media (max-width: 640px) {
+    .projects-notice {
+        padding: var(--space-sm);
+    }
+}
+
+.projects-list-wrap {
+    flex: 1;
+    min-height: 0;
+}
+
+.projects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-md);
+}
+
+/* ---------- Project card ---------- */
+.project-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+}
+
+/* Lift + brand ring on hover, matching the main-view tiles */
+.project-card:hover {
+    border-color: var(--color-primary-light);
+    box-shadow: var(--shadow-md), 0 0 0 1px var(--color-primary-light);
+    transform: translateY(-1px);
+}
+
+/* Active project ring uses the light accent - the dark --color-primary
+   sits below the 3:1 non-text contrast floor against the page bg */
+.project-card-active {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 1px var(--color-primary-light), var(--shadow-sm);
+}
+
+.project-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.project-card-name-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.project-card-name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+.project-card-badge {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-light);
+    background-color: rgba(91, 169, 216, 0.15);
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.project-card-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* Action buttons at the bottom of the card */
+.project-card-actions {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.project-card-btn {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast);
+}
+
+.project-card-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+.project-card-btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.project-card-btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+}
+.project-card-btn-secondary:hover {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+.project-card-btn-danger {
+    background-color: var(--color-surface);
+    color: var(--color-error-light);
+    border-color: var(--color-border-strong);
+}
+/* Tinted hover (not a solid red fill) keeps the label AA-readable and
+   matches the .project-card-badge tint technique */
+.project-card-btn-danger:hover {
+    background-color: rgba(239, 68, 68, 0.14);
+    border-color: var(--color-error);
+    color: var(--color-error-light);
+}
+
+/* ---------- Empty state ----------
+   Composes the shared .hh-empty primitives from base.css (dashed well,
+   folder icon, title/hint). This block only centers the well in the
+   leftover space below the toolbar and caps its width. */
+.projects-list-wrap-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.projects-empty {
+    width: 100%;
+    max-width: 520px;
+    background-color: var(--color-bg-dark);
+}
+
+/* ---------- Danger-variant modal button (used by confirm modals) ----
+   Extends the .modal-btn family from cart.css with a destructive red
+   variant for Delete/Discard/Replace actions. */
+.modal-btn-danger {
+    /* --color-error-hover (#dc2626) rather than the brighter base red:
+       white label text needs the darker fill to pass AA */
+    background-color: var(--color-error-hover);
+    color: white;
+    border-color: var(--color-error-hover);
+}
+.modal-btn-danger:hover:not(:disabled) {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* ---------- Drag-to-reorder ----------
+   The whole card is the drag handle (its buttons keep their pointer
+   cursor). While dragging, the source card dims; the card under the
+   pointer shows a brand-blue snap-guide bar on the side the dragged
+   card will land. Declared after the :hover rule so it wins at equal
+   specificity during a drag. */
+.project-card[draggable="true"] {
+    cursor: grab;
+}
+
+.project-card.hh-dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.project-card.hh-drop-before {
+    box-shadow: inset 3px 0 0 0 var(--color-primary-light), var(--shadow-md);
+}
+
+.project-card.hh-drop-after {
+    box-shadow: inset -3px 0 0 0 var(--color-primary-light), var(--shadow-md);
+}

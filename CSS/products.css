@@ -1,0 +1,1036 @@
+/* ============================================================
+   Product pages - shared styles for all product types
+   ------------------------------------------------------------
+   Layout: breadcrumb header (from base.css), title row,
+   filter bar, filter status, and the schedule table (scrollable).
+   ============================================================ */
+
+.product-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;          /* center the inner block on the page */
+    padding: var(--space-md);
+    /* Tall-enough windows behave as before (schedule scrolls inside its
+       own card). When the window is too short to fit header + gallery +
+       filters + a usable slice of schedule, the view itself scrolls
+       vertically instead of clipping the schedule out of reach. */
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+/* Inner column: shrink-wraps to the schedule's width (its widest child)
+   so the header, filter bar, status line, and table all share that width
+   and center together. Wide tables cap at full width (the table then
+   scrolls inside its own card). */
+.product-view-inner {
+    display: flex;
+    flex-direction: column;
+    /* Tighter than --space-md: five stacked bands sit above the schedule
+       (title, gallery, filters, chips, status), so each gap pixel is
+       paid five times in lost schedule height. */
+    gap: 10px;
+    width: fit-content;
+    max-width: 100%;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Short windows (unmaximized / low-res screens): the pinned-header
+   layout above would crush or clip the schedule once the title +
+   gallery + filter rows eat most of the height. Switch to a scrolling
+   page instead: the inner column takes its natural height, the
+   schedule card gets a viewport-relative height (still scrolling
+   internally with sticky headers), and .product-view's overflow-y
+   scrolls everything into reach. */
+/* Shortish windows (1080p with OS display scaling, small laptops):
+   keep the pinned no-scroll layout but squeeze the non-schedule bands
+   harder so the table keeps a workable number of visible rows. */
+@media (max-height: 820px) {
+    .app-header {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .product-view-inner {
+        gap: var(--space-sm);
+    }
+
+    .product-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .model-card {
+        flex-basis: 72px;
+        min-width: 56px;
+    }
+
+    .model-gallery-compact .model-card {
+        flex-basis: 64px;
+    }
+
+    .model-card-desc {
+        display: none;
+    }
+}
+
+@media (max-height: 720px) {
+    .product-view-inner {
+        flex: none;
+        min-height: auto;
+        overflow: visible;
+    }
+
+    .product-view .schedule-wrap {
+        flex: none;
+        /* Nearly a full viewport once the page chrome is scrolled away
+           (170px ~= app header + page padding + a sliver of context). */
+        height: max(360px, calc(100vh - 170px));
+    }
+}
+
+/* Title row at the top of the product page */
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    gap: var(--space-md);
+}
+
+.product-title {
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+}
+
+.product-meta {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-xs);
+}
+
+/* "Back to Products" button in the top-right of the product header.
+   Styled like a secondary button so it reads as navigation rather
+   than a primary action. */
+.product-back-btn {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    align-self: center;
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+/* Secondary-button hover recipe shared app-wide: row-hover fill +
+   brand border, text color unchanged. */
+.product-back-btn:hover {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+/* ---------- Filter bar ---------- */
+.filter-bar {
+    background-color: var(--color-surface);
+    /* Hairline border defines the card edge on the dark page; the
+       shadow alone is too subtle at this elevation. */
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 140px;
+}
+
+.filter-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    min-height: 20px;
+}
+
+.filter-select {
+    padding: 6px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    /* Inset "well" tone (one step below the filter-bar surface) so the
+       dropdowns read as inputs rather than dissolving into the card. */
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    min-height: 32px;
+}
+
+.filter-select:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -1px;
+    border-color: var(--color-primary-light);
+}
+
+/* Constraining filters get a brand-blue border + label so a quick scan
+   of the bar shows which dropdowns are set vs. on "All". The classes
+   are toggled in buildFilterBar (JS/base.js). */
+.filter-select.is-active {
+    border-color: var(--color-primary-light);
+}
+
+.filter-group.is-active .filter-label {
+    color: var(--color-primary-light);
+}
+
+.filter-clear {
+    padding: 6px 14px;
+    background-color: transparent;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast);
+    min-height: 32px;
+}
+
+.filter-clear:hover {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+.filter-status {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+/* Notice shown when a large product (grilles) caps how many rows the
+   browse table renders at once (data.js maxBrowseRows). */
+.schedule-row-cap-notice {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+    border-radius: 4px;
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
+/* ---------- Active model-filter chip ---------- */
+
+/* Row that holds the model-filter chip when the user landed here from
+   the quick-lookup search. Empty (so no layout space) otherwise. */
+.model-filter-chip-row {
+    flex-shrink: 0;
+}
+
+.model-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 8px 6px 14px;
+    background-color: rgba(91, 169, 216, 0.12);
+    border: 1px solid var(--color-primary-light);
+    border-radius: 999px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+}
+
+.model-filter-chip-label {
+    line-height: 1;
+}
+
+.model-filter-chip-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: var(--font-size-xs);
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast);
+}
+
+.model-filter-chip-clear:hover {
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- Schedule table ---------- */
+.schedule-wrap {
+    background-color: var(--color-surface);
+    /* Hairline border defines the card edge on the dark page; the
+       shadow alone is too subtle at this elevation. */
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: auto;
+    flex: 1;
+    min-height: 200px;
+    /* Hug the table and center it on the page. Tables wider than the
+       page cap at full width and scroll inside (max-width + overflow);
+       narrower ones (e.g. Marvair) shrink-wrap and sit centered. */
+    align-self: center;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* width: min-content gives us tight columns. Each column is sized to the
+   widest *unbreakable* content it holds - for data cells that's the full
+   text (since tbody td is nowrap), for header cells that's the longest
+   individual WORD (since thead th wraps at spaces). Multi-word headers like
+   "OPERATING WEIGHT" therefore wrap onto two lines and let the column be as
+   narrow as the widest data value. */
+.schedule-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-size-sm);
+    /* Fixed-width figures so stacked numbers (CFM, MCA, MOP, weights)
+       align vertically and are comparable down a column. */
+    font-variant-numeric: tabular-nums;
+    width: min-content;
+}
+
+/* Common cell styles - center both horizontally and vertically.
+   4px vertical padding (was 6) buys back one to two visible data rows
+   on 1080p-class screens across the multi-tier sticky header + body. */
+.schedule-table th,
+.schedule-table td {
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: 4px 8px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: var(--color-surface);
+}
+
+/* Headers wrap at word boundaries so long names ("OPERATING WEIGHT") can
+   break onto two lines and keep the column narrower. word-break: normal
+   means individual words WON'T be broken mid-letter even if they don't
+   fit - the column will grow instead.
+   Header type is one step smaller + muted so the (already ALL-CAPS)
+   header band recedes behind the data; smaller words also let the
+   min-content column sizing produce narrower columns. */
+.schedule-table thead th {
+    background-color: var(--color-bg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    border-top: 1px solid var(--color-border);
+    white-space: normal;
+    word-break: normal;
+    /* Each thead row is sticky; the exact top value is set per-row in JS
+       (applyStickyHeaderOffsets) so multiple header rows stack visibly
+       instead of all piling up at top: 0. */
+    position: sticky;
+    z-index: 2;
+}
+
+/* Seam under the sticky header so rows visibly slide beneath a pinned
+   plane. Scoped to the LAST thead row only -- applyStickyHeaderOffsets
+   stacks several sticky rows and a shadow on every row would draw onto
+   the header row below it. The pinned actions-head spans all header
+   rows, so it carries its own copy of the seam (combined with the pin
+   shadow) further down. */
+.schedule-table thead tr:last-child th:not(.actions-head) {
+    border-bottom: 2px solid var(--color-border-strong);
+    box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.5);
+}
+
+/* Data cells stay on a single line so schedule values don't wrap */
+.schedule-table tbody td {
+    white-space: nowrap;
+}
+
+/* Zebra striping makes it easier to track a row across the wide horizontal
+   scroll. Even rows get a subtle lift above the base surface; hover and
+   the selection-boundary border still win over this. */
+.schedule-table tbody tr:nth-child(even) > td {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.schedule-table tbody tr.selection-boundary > td {
+    border-top: 2px solid var(--color-border-strong);
+}
+
+.schedule-table tbody tr:hover > td {
+    background-color: var(--color-row-hover);
+}
+
+/* ---------- Actions column ----------
+   The selector below uses `.schedule-table thead th.actions-head` so it
+   beats the specificity of `.schedule-table thead th` above. Without this
+   extra specificity, the z-index on actions-head gets overridden back to 2,
+   other thead cells render on top of it as they scroll past, and the
+   Actions header appears to "slide away" when you scroll horizontally. */
+.schedule-table thead th.actions-head {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-inverse);
+    left: 0;
+    z-index: 4; /* higher than other thead cells (2) and body action cells (1) */
+    min-width: 200px;
+    /* Pin shadow (right-edge cast for the sticky column) combined with
+       this cell's copy of the header seam -- it rowspans every header
+       row, so the tr:last-child seam rule above can't reach it. */
+    border-bottom: 2px solid var(--color-border-strong);
+    box-shadow: var(--shadow-pin), 0 4px 8px -4px rgba(0, 0, 0, 0.5);
+}
+
+.schedule-table tbody td.actions-cell {
+    background-color: var(--color-bg);
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 2px solid var(--color-border-strong);
+    padding: 6px 8px;
+    /* Right-edge cast so scrolled columns read as sliding underneath
+       the pinned column rather than through it. */
+    box-shadow: var(--shadow-pin);
+}
+
+/* Zebra rule above also paints the actions-cell, but the pinned action
+   column should keep its own bg color regardless of row parity. */
+.schedule-table tbody tr:nth-child(even) > td.actions-cell {
+    background-color: var(--color-bg);
+}
+
+/* The pinned column keeps its own (opaque, sticky-safe) background on
+   hover, but lifts toward row-hover so the highlighted row still reads
+   continuously across the pinned boundary. #182742 is --color-bg nudged
+   toward --color-row-hover. Declared after the zebra-parity rule above
+   so the hover tint wins on even rows too. */
+.schedule-table tbody tr:hover > td.actions-cell {
+    background-color: #182742;
+}
+
+.actions-row {
+    display: flex;
+    gap: var(--space-xs);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 4px 8px;
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.action-btn-select {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-weight: 500;
+}
+
+.action-btn-select:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.action-btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+}
+
+.action-btn-secondary:hover {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+/* Submittal button when the selection has no submittal file yet: a
+   hairline strikethrough + muted text marks it unavailable at a
+   glance. The button stays clickable (shows the standard alert). */
+.action-btn-no-file {
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+}
+
+/* ---------- kW variant cell (dropdown + chevron) ----------
+   Used on products that merge same-system / different-kW rows into
+   one row with a dropdown (multi_position_splits, marvair). The
+   chevron is just a visual hint that the cell is interactive; the
+   real <select> is invisible-styled on top of the cell so the
+   underlying td value still reads naturally to engineers used to
+   the original layout. */
+.kw-variant-control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.kw-variant-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* A clearly interactive control: faint accent fill + a real border +
+       an accent chevron, so a dropdown cell never reads as static data. */
+    background-color: rgba(91, 169, 216, 0.12);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: 2px 18px 2px 6px;
+    font: inherit;
+    text-align: center;
+    text-align-last: center;
+    cursor: pointer;
+    min-width: 42px;
+}
+
+.kw-variant-select:hover,
+.kw-variant-select:focus {
+    border-color: var(--color-primary-light);
+    background-color: var(--color-row-hover);
+    outline: none;
+}
+
+/* Keyboard focus: the global +2px ring would collide with the tight
+   table cell around this select, so pull the ring inside the control. */
+.kw-variant-select:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -1px;
+}
+
+.kw-variant-chevron {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8em;
+    color: var(--color-primary-light);
+    line-height: 1;
+}
+
+/* ---------- Multi Position Split capacity dropdowns ----------
+   The cooling/heat-pump dropdowns reuse the kW-dropdown control styling.
+   A saved cooling combo that's no longer valid (e.g. after a capacity
+   table edit) flags only the offending dropdown(s) orange; the outputs
+   show "-". Normal interaction can't reach this state because the menus
+   only ever offer valid combinations. */
+.capacity-invalid .kw-variant-select {
+    border-color: var(--color-warning);
+    background-color: rgba(245, 158, 11, 0.18);
+    color: var(--color-text);
+}
+
+.capacity-invalid .kw-variant-chevron {
+    color: var(--color-warning);
+}
+
+/* ---------- Loading / error / empty states ---------- */
+.product-message {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xxl);
+    color: var(--color-text-muted);
+    text-align: center;
+    gap: var(--space-md);
+}
+
+.product-message p {
+    max-width: 640px;
+}
+
+.product-message.error {
+    /* Light variant: solid --color-error fails AA as text on the
+       dark page background. */
+    color: var(--color-error-light);
+}
+
+.product-message-hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.product-message-details {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-family: monospace;
+    background-color: var(--color-bg);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    margin-top: var(--space-md);
+    max-width: 640px;
+    overflow-wrap: break-word;
+}
+
+/* Bare .zero-results (still used by the project-view schedule) keeps
+   the legacy text-only treatment. */
+.zero-results {
+    padding: var(--space-xxl);
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+}
+
+/* The browse schedule composes the shared .hh-empty primitives
+   (base.css) instead; here we just re-assert hh-empty's padding and
+   position the dashed well inside the schedule card. */
+.hh-empty.zero-results {
+    padding: var(--space-xxl) var(--space-lg);
+    margin: var(--space-xl) auto;
+    max-width: min(520px, calc(100% - var(--space-xl) * 2));
+}
+/* ============================================================
+   Diffuser model gallery (product intro section)
+   ------------------------------------------------------------
+   A row of picture cards above the filter bar - one per model
+   family. Clicking a card filters the schedule to that model
+   (clicking the active card clears the filter). Cards mirror
+   the home-page tile language at a smaller scale.
+   ============================================================ */
+
+.product-intro:empty {
+    display: none;
+}
+
+/* Always a single row: cards shrink evenly below their 128px ideal so
+   the strip fits the window (freeing vertical space for the schedule on
+   small screens). If the window is narrower than the cards' floor, the
+   strip scrolls horizontally rather than wrapping. */
+.model-gallery {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+/* Center the row when it fits without clipping the left edge when it
+   overflows (the `justify-content: center` + overflow combo would make
+   the leftmost cards unreachable). */
+.model-card:first-child { margin-left: auto; }
+.model-card:last-child { margin-right: auto; }
+
+.model-card {
+    flex: 0 1 104px;
+    min-width: 82px;
+    /* Size container so the caption text can adapt to how far the card
+       was squeezed (see @container rules below). */
+    container-type: inline-size;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0 0 var(--space-xs) 0;
+    text-align: center;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.model-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--color-primary-light);
+    border-color: transparent;
+}
+
+.model-card.is-active {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 1px var(--color-primary-light);
+}
+
+/* Black image well to match the home-page product tiles (the
+   gallery renders are processed onto black backgrounds). */
+.model-card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #000;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.model-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Compact gallery variant (mini-split type picker): smaller cards, and a
+   reserved two-line caption block so cards whose label fits on one line
+   stay the same height as the rest (images aligned across the row). */
+.model-gallery-compact .model-card {
+    flex: 0 1 84px;
+    min-width: 64px;
+    /* Buttons vertically center their content by default; column-flex
+       pins the image to the top so all images align regardless of how
+       many caption lines follow. */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.model-gallery-compact .model-card-label {
+    /* Fill the leftover card height and center the caption within it. */
+    flex: 1;
+    min-height: 2.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-card-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: var(--space-xs);
+    padding: 0 var(--space-xs);
+}
+
+.model-card-desc {
+    font-size: 10px;
+    line-height: 1.3;
+    color: var(--color-text-muted);
+    padding: 2px var(--space-xs) 0;
+    text-transform: capitalize;
+}
+
+/* Narrower windows: tighten the strip so even the 15-card grille
+   gallery fits a ~1200px window without resorting to horizontal
+   scrolling. */
+@media (max-width: 1440px) {
+    .model-gallery {
+        gap: var(--space-xs);
+    }
+
+    .model-card {
+        min-width: 72px;
+    }
+}
+
+/* Squeezed cards (single-row gallery on narrow windows): drop the
+   long-form description first, then step the family label down so
+   grouped names like "500/600/700 RTN" still fit. */
+@container (max-width: 112px) {
+    .model-card-desc {
+        display: none;
+    }
+}
+
+@container (max-width: 96px) {
+    .model-card-label {
+        font-size: 10px;
+        overflow-wrap: break-word;
+    }
+}
+
+/* ============================================================
+   Core-style icon row (diffusers, SMD/AMD family)
+   ------------------------------------------------------------
+   A single horizontal row of Price core-style icons under the
+   model gallery. Visible only while an SMD-family model is
+   selected. Icons present in the data act as CORE STYLE filter
+   buttons; the rest render dimmed as reference only.
+   ============================================================ */
+
+.core-style-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--space-xs);
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: var(--space-sm);
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.core-style-row-label {
+    flex: 0 0 auto;
+    align-self: center;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-right: var(--space-xs);
+    white-space: nowrap;
+}
+
+.core-style-card {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    padding: 2px;
+    background-color: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.core-style-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.core-style-card:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--color-primary-light);
+    border-color: transparent;
+}
+
+.core-style-card.is-active {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+/* Reference-only icons (code not present in the data) */
+.core-style-card:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+/* ============================================================
+   Gas Pack RTUs -- design-values toggle
+   ------------------------------------------------------------
+   A row that a Design Search result was selected onto can show
+   either the selection Eric ran by hand or the capacity-table
+   values at the searched condition. The swapped cells are tinted
+   so it is obvious at a glance which numbers moved, and a
+   standing banner explains the Submittal PDF mismatch for as
+   long as any row is switched over.
+   ============================================================ */
+
+.action-btn-design {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+}
+
+.action-btn-design:hover {
+    background-color: var(--color-row-hover);
+    border-color: var(--color-primary-light);
+}
+
+.action-btn-design.is-on {
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.schedule-table tbody td.gp-design-cell {
+    background-color: color-mix(in srgb, var(--color-warning) 16%, transparent);
+    font-weight: 600;
+}
+
+/* The row Design Search sent the user to. */
+.schedule-table tbody tr.row-focused > td {
+    box-shadow: inset 0 1px 0 var(--color-primary-light),
+                inset 0 -1px 0 var(--color-primary-light);
+}
+
+.gp-design-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-warning);
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in srgb, var(--color-warning) 12%, transparent);
+    font-size: var(--font-size-sm);
+    line-height: 1.45;
+    color: var(--color-text);
+}
+
+.gp-design-warning[hidden] {
+    display: none;
+}
+
+.gp-design-warning-icon {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-warning);
+    color: #1f2937;
+    font-weight: 700;
+    text-align: center;
+    line-height: 20px;
+}
+
+.gp-design-warning-text {
+    flex: 1 1 auto;
+}
+
+.gp-design-warning-reset {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   GPS (Bipolar Ionization) - product-type gallery + notes
+   ------------------------------------------------------------
+   The GPS page opens on a gallery of the seven ionizer product
+   types (one card per sub-schedule: photo + the schedule's
+   LOCATION filter text). Clicking a card swaps the page to that
+   type's full schedule, with its pre-numbered notes below.
+   ============================================================ */
+
+.gps-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
+    gap: var(--space-lg);
+    justify-content: center;
+    margin-top: var(--space-md);
+}
+
+/* Cards echo the home-page product tiles (black photo well over a
+   label strip) so the gallery reads as "pick a product type". */
+.gps-type-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0;
+    transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.gps-type-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--color-primary-light);
+    border-color: transparent;
+}
+
+.gps-type-card:active {
+    transform: translateY(0) scale(0.99);
+}
+
+.gps-type-card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #000;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0;
+}
+
+.gps-type-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: tile-img-fade 250ms ease;
+    transition: transform var(--transition-med);
+}
+
+.gps-type-card:hover .gps-type-card-image img {
+    transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gps-type-card-image img {
+        animation: none;
+        transition: none;
+    }
+
+    .gps-type-card:hover .gps-type-card-image img {
+        transform: none;
+    }
+}
+
+/* The filter text under the photo (e.g. "CEILING MOUNTED FAN"). */
+.gps-type-card-label {
+    padding: var(--space-md) var(--space-sm);
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--color-text);
+}
+
+/* ---------- Pre-numbered notes under a GPS schedule ---------- */
+/* Lines are verbatim from the Excel (numbering included), so this
+   is a plain line list inside the shared .notes-block shell - no
+   <ol> numbering anywhere. */
+.gps-notes-wrap {
+    margin-top: var(--space-md);
+}
+
+.gps-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.gps-notes-line {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+/* Gallery mode: the inner column takes the full page width (instead
+   of shrink-wrapping) so the auto-fill card grid can form multiple
+   centered columns. */
+.product-view-inner.gps-inner-gallery {
+    width: 100%;
+}
+
+/* The GPS tile photo is a small 140x40 logo - cover-cropping it to the
+   4:3 tile box makes it an illegible zoom. Contain it (with breathing
+   room) on the black well instead so the whole logo reads. */
+.tile.tile-gps .tile-image img {
+    object-fit: contain;
+    padding: 18% 14%;
+}
+
+/* GPS schedule pages put the notes directly under the schedule, so the
+   schedule card hugs its table instead of stretching to fill the page
+   (overriding .schedule-wrap's flex:1/min-height and the short-window
+   fixed height). Tall tables still cap near the viewport and scroll
+   inside with sticky headers. */
+.schedule-wrap.gps-schedule-wrap,
+.product-view .schedule-wrap.gps-schedule-wrap {
+    flex: 0 1 auto;
+    height: auto;
+    min-height: 0;
+    max-height: max(360px, calc(100vh - 230px));
+}

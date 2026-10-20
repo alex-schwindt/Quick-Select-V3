@@ -1,0 +1,881 @@
+/* ============================================================
+   HHpro - Base Styles
+   ------------------------------------------------------------
+   CSS variables, reset, typography, and shared components used
+   across every view. All other CSS files build on these.
+   ============================================================ */
+
+/* ---------- Inter (self-hosted) ----------
+   Previously loaded from fonts.googleapis.com, which handed every
+   visitor's IP address and User-Agent to Google on page load - the
+   only third-party request the site made, and the one thing that
+   stopped "HHpro sends nothing anywhere" from being literally true.
+   The files now live in ASSETS/FONTS and are served from our own
+   origin, so the app makes zero external requests.
+
+   Inter v20 ships as a VARIABLE font: one file covers the whole
+   100-900 weight axis, which is why a single @font-face with a
+   weight RANGE replaces the four fixed-weight rules Google served.
+   Both subsets are declared; the browser downloads latin-ext only
+   if a glyph on the page actually needs it.
+
+   Licence: SIL Open Font License 1.1 - see ASSETS/FONTS/OFL.txt.
+   To update: refetch from Google Fonts with a modern browser UA,
+   which is what serves woff2 rather than the legacy formats. */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../ASSETS/FONTS/inter-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+                   U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+                   U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+                   U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../ASSETS/FONTS/inter-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+                   U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
+                   U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+                   U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+    /* Tell the browser this is a dark UI so native chrome (scrollbars,
+       checkbox wells, select dropdowns, date pickers) renders dark
+       instead of the light-theme defaults. */
+    color-scheme: dark;
+
+    /* ---- Dark mode palette ----
+       Surface hierarchy (darkest -> brightest):
+         --color-bg-dark  : deep saturated dark (sticky sub-headers,
+                            inset wells under cards)
+         --color-bg       : page background (default canvas behind cards)
+         --color-surface  : cards, modals, table cells, form inputs
+       Brand blue is reserved for the top app header + buttons so it
+       reads as the action / brand surface, separate from the neutral
+       dark page chrome.
+    */
+
+    /* Colors - surfaces */
+    --color-bg: #0f172a;
+    --color-bg-dark: #0a1220;
+    --color-surface: #1e293b;
+    --color-border: #2a3a52;
+    --color-border-strong: #475569;
+
+    /* Colors - text (high contrast on dark surfaces) */
+    --color-text: #e6edf3;
+    --color-text-muted: #94a3b8;
+    --color-text-inverse: #ffffff;
+
+    /* Colors - brand (kept the same brand blue so the favicon/logo
+       stay coherent; hover/light variants tuned for dark backgrounds) */
+    --color-primary: #0f4c75;
+    --color-primary-hover: #1a6090;
+    --color-primary-light: #5ba9d8;
+
+    /* Colors - semantic (slightly more vibrant on dark backgrounds).
+       --color-error is for fills/borders; --color-error-light is the
+       readable text variant on dark surfaces (plain #ef4444 fails WCAG
+       AA as small text on the navy surfaces); --color-error-hover is
+       the darkened hover for solid danger buttons. */
+    --color-error: #ef4444;
+    --color-error-light: #f87171;
+    --color-error-hover: #dc2626;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-row-hover: #2a3b54;
+
+    /* Projects compact tile gradient (the colored action card on the
+       overview page; product tiles use their JPG, no background color). */
+    --tile-projects: #2c3e50;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 0.9375rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-xxl: 2rem;
+
+    /* Spacing scale */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-xxl: 48px;
+
+    /* Borders & radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+
+    /* Shadows - tuned for the dark theme: black needs ~0.45+ alpha to
+       register over the navy page. --shadow-pin is the horizontal cast
+       used by sticky table columns so scrolled content reads as sliding
+       underneath them. */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+    --shadow-pin: 8px 0 12px -6px rgba(0, 0, 0, 0.55);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-med: 250ms ease;
+}
+
+/* Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Disable outer page scroll so each view controls its own scrolling.
+       Main view scrolls inside .app-main; product view scrolls inside
+       .schedule-wrap (header + filters stay pinned above). */
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    /* Brand glow over the page canvas on every view - reads as
+       ambient light behind the content. The blueprint grid that
+       pairs with it is drawn by JS/background.js on a fixed canvas
+       so it can react to the pointer. */
+    background-color: var(--color-bg);
+    background-image: radial-gradient(900px 600px at 50% 38%,
+        rgba(15, 76, 117, 0.35), transparent 70%);
+    background-repeat: no-repeat;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Full-viewport blueprint-grid canvas (built by JS/background.js).
+   Negative z-index tucks it between the body's glow background and
+   every view's content; pointer-events none keeps it inert. The
+   glow stays under the grid only while the body background can
+   propagate to the document canvas - never set a background on
+   html, or it would paint over this layer.
+
+   width/height are required: a canvas is a replaced element, so
+   inset alone doesn't stretch it - without these it renders at its
+   bitmap size (viewport x devicePixelRatio) and the grid would
+   draw oversized on scaled Windows displays. */
+#bg-grid {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#app-root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+p {
+    margin: 0;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    /* Dark-mode defaults so native form controls don't fall back to
+       the user-agent's white background and dark text. Class-based
+       overrides (e.g. transparent inputs on the schedule) win because
+       a single class beats an element selector. */
+    background-color: var(--color-surface);
+    color: var(--color-text);
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--color-text-muted);
+    /* 0.75 keeps placeholders clearly secondary while staying readable
+       on the dark surfaces (0.6 dipped below ~3:1 contrast). */
+    opacity: 0.75;
+}
+
+/* Chrome paints autofilled fields with its own yellow background,
+   which glares on the dark theme. Its background-color can't be
+   overridden directly, so the standard workaround: cover it with an
+   opaque inset shadow and re-tint the text. Fields whose resting
+   background isn't --color-surface override just the shadow color
+   (e.g. .login-input in login.css). */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset;
+    -webkit-text-fill-color: var(--color-text);
+    caret-color: var(--color-primary-light);
+}
+
+/* Checkboxes and radios pick up the brand accent instead of the
+   user-agent default blue (matters most on the Files tab, which is
+   essentially a wall of checkboxes). */
+input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--color-primary-light);
+}
+
+/* ============================================================
+   Scrollbars
+   ------------------------------------------------------------
+   The app is built around internal scroll containers (schedule
+   tables scroll both axes constantly), so the default light-grey
+   Windows scrollbars are the brightest thing on screen without
+   this. Thin, dark, pill-style thumbs on a transparent track.
+   ============================================================ */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-strong);
+    border-radius: 999px;
+    /* Transparent border + padding-box clip insets the thumb from the
+       container edge so it reads as a floating pill. */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-text-muted);
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* ============================================================
+   Keyboard focus
+   ------------------------------------------------------------
+   One ring for every control. Element-level so any class-based
+   :focus recipe (inputs with custom borders/glows) still wins on
+   specificity; buttons and links that define nothing get a clear
+   brand-blue ring instead of the UA default.
+   ============================================================ */
+:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 2px;
+}
+
+/* ============================================================
+   Inline icons
+   ------------------------------------------------------------
+   SVGs returned by HHpro.UI.icon() get .icon. They size to 1em so
+   they follow the surrounding font-size automatically; flex-shrink
+   keeps them from squashing in tight buttons.
+   ============================================================ */
+.icon {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    /* Slight optical lift so the stroke baseline aligns with the
+       cap-height of adjacent text rather than the descender. */
+    vertical-align: -0.125em;
+}
+
+/* Shared button component */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: background-color var(--transition-fast),
+                transform var(--transition-fast);
+    white-space: nowrap;
+}
+
+/* Press feedback: tiny scale-down on active for any button that
+   isn't using its transform for layout positioning (cart-toggle,
+   tile lift, login shake all manage their own transforms). The
+   ":not(:disabled)" guard prevents disabled buttons from twitching. */
+.btn:active:not(:disabled),
+.action-btn:active:not(:disabled),
+.modal-btn:active:not(:disabled),
+.projects-btn:active:not(:disabled),
+.project-card-btn:active:not(:disabled),
+.cart-item-btn:active:not(:disabled),
+.docs-item-action:active:not(:disabled),
+.product-back-btn:active:not(:disabled),
+.header-action:active:not(:disabled),
+.docs-modal-close:active:not(:disabled),
+.cart-panel-close:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+/* Buttons that contain an icon + text (or a standalone icon) need
+   inline-flex layout so the icon and label align cleanly. This is
+   the single rule that unifies the behavior across the app's button
+   families instead of repeating it per file. */
+.action-btn,
+.modal-btn,
+.projects-btn,
+.project-card-btn,
+.cart-item-btn,
+.docs-item-action,
+.product-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-primary:disabled {
+    background-color: var(--color-border-strong);
+    cursor: not-allowed;
+}
+
+/* App-level header (main view and product view both use this).
+   Uses the brand primary color so the top of every page carries the
+   HHpro identity; sub-headers (cart panel, files-tree blocks) keep
+   the neutral dark surface to stay quieter. */
+.app-header {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    /* Slimmer than the generic --space-md band: every pixel of chrome
+       height comes straight out of the schedule's visible rows on
+       1080p-class screens. */
+    padding: 10px var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+
+.app-header-brand {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Brand wordmark
+   ------------------------------------------------------------
+   Shared between the login title, the main header, and the
+   product/projects breadcrumb. Inherits font-size from the
+   parent (.app-header-brand, .breadcrumb-link, .login-title)
+   so each surface controls its own scale. The "HH" half uses
+   currentColor so it picks up white on dark headers and the
+   primary blue on the white login card; "pro" stays in the
+   lighter brand accent on every surface.
+   ============================================================ */
+.brand-logo {
+    display: inline-flex;
+    align-items: baseline;
+    /* Tighter than the previous 0.5-1px tracking because wordmarks
+       read better when letters sit close together. */
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+
+.brand-mark {
+    color: currentColor;
+    font-weight: 700;
+}
+
+.brand-accent {
+    color: var(--color-primary-light);
+    font-weight: 500;
+    /* Slight optical correction so "pro" doesn't feel glued to the H */
+    margin-left: 0.04em;
+}
+
+/* Hoffman & Hoffman logo - top-left of every app header, doubles as
+   the Home button (see createHeaderLogo in ui.js). Height is pinned so
+   the header band stays slim; width follows the ~7:1 artwork. */
+.header-logo-btn {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm, 4px);
+}
+
+.header-logo {
+    display: block;
+    height: 32px;
+    width: auto;
+}
+
+@media (max-width: 640px) {
+    .header-logo {
+        height: 24px;
+    }
+}
+
+/* Right side of the header: User Guide + Log out sit together as one
+   flex-child so the header's space-between keeps its 3-zone layout. */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.header-action {
+    color: var(--color-text-inverse);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: background-color var(--transition-fast),
+                transform var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header-action:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Breadcrumb in the header */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.breadcrumb-link {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text-inverse);
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+    padding: 4px 0;
+    letter-spacing: 0.5px;
+}
+
+.breadcrumb-link:hover {
+    opacity: 0.85;
+}
+
+.breadcrumb-sep {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: var(--font-size-lg);
+}
+
+.breadcrumb-current {
+    font-size: var(--font-size-base);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Main content area - default is "scroll internally if content is tall".
+   Individual views can override this if they want to manage scroll differently
+   (e.g. product view uses overflow: hidden and puts scrolling on the table). */
+.app-main {
+    flex: 1;
+    padding: var(--space-xl);
+    overflow: auto;
+    min-height: 0;
+}
+
+/* ============================================================
+   Loading spinner + empty states (shared primitives)
+   ------------------------------------------------------------
+   Views compose these instead of inventing their own: append a
+   .hh-spinner div above loading text, or build empty states as
+   .hh-empty > (icon + .hh-empty-title + .hh-empty-hint).
+   ============================================================ */
+@keyframes hh-spin {
+    to { transform: rotate(360deg); }
+}
+
+.hh-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary-light);
+    border-radius: 50%;
+    animation: hh-spin 0.8s linear infinite;
+}
+
+/* Smaller variant for inline/button contexts */
+.hh-spinner-sm {
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hh-spinner {
+        /* Keep a slow rotation so "working" stays distinguishable from
+           "stuck" without the fast spin. */
+        animation-duration: 2.4s;
+    }
+}
+
+.hh-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-xxl) var(--space-lg);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.hh-empty .icon {
+    /* .icon sizes to 1em, so font-size scales the glyph */
+    font-size: 44px;
+    color: var(--color-border-strong);
+}
+
+.hh-empty-title {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.hh-empty-hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+/* Utility */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ============================================================
+   Visual effects layer
+   ------------------------------------------------------------
+   Tasteful, blueprint-flavored touches that pair with the
+   ambient grid. The spotlight-border pieces read cursor
+   coordinates written by JS/visual_fx.js; the rest are pure CSS
+   utilities. Everything degrades to plain surfaces under
+   prefers-reduced-motion.
+   ============================================================ */
+
+/* ---------- Spotlight card borders ----------
+   The card's edge nearest the cursor brightens on hover. A masked
+   gradient on ::after paints only the 1px border ring; the gradient
+   is centered on the pointer via --spot-x/--spot-y (defaults to the
+   card center until the first move). Layers under the existing hover
+   ring rather than replacing it. */
+.tile,
+.project-card {
+    position: relative;
+}
+
+.tile::after,
+.project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(180px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+        var(--spot-color, rgba(91, 169, 216, 0.65)), transparent 60%);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition-med);
+    pointer-events: none;
+}
+
+.tile:hover::after,
+.project-card:hover::after {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile::after,
+    .project-card::after {
+        display: none;
+    }
+}
+
+/* ---------- Drafting corner ticks ----------
+   Four L-shaped registration marks, like the crop marks on a drawing
+   sheet, drawn with eight layered gradients on a single ::before (two
+   bars per corner). Applied to the action tiles, project cards, and
+   the refrigerant totals card. */
+.tile-projects-compact,
+.project-card,
+.refrigerant-totals-card {
+    position: relative;
+}
+
+.tile-projects-compact::before,
+.project-card::before,
+.refrigerant-totals-card::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    pointer-events: none;
+    opacity: 0.55;
+    --tick: var(--color-border-strong);
+    --len: 9px;
+    background-image:
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick)),
+        linear-gradient(var(--tick), var(--tick));
+    background-repeat: no-repeat;
+    background-position:
+        top left, top left,
+        top right, top right,
+        bottom left, bottom left,
+        bottom right, bottom right;
+    background-size:
+        var(--len) 1px, 1px var(--len),
+        var(--len) 1px, 1px var(--len),
+        var(--len) 1px, 1px var(--len),
+        var(--len) 1px, 1px var(--len);
+}
+
+/* The action tiles carry their own ::before? No - keep the gradient
+   marks above their gradient fill but below the label text. */
+.tile-projects-compact .tile-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- Dimension-line section header ----------
+   Styles a heading as a drafting dimension callout: the title sits in
+   a gap between two thin rules, each capped with a vertical end tick. */
+.hh-dimline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.hh-dimline::before,
+.hh-dimline::after {
+    content: "";
+    flex: 1;
+    height: 7px;
+    --dl: var(--color-border-strong);
+}
+
+.hh-dimline::before {
+    background:
+        linear-gradient(var(--dl), var(--dl)) left center / 100% 1px no-repeat,
+        linear-gradient(var(--dl), var(--dl)) left center / 1px 7px no-repeat;
+}
+
+.hh-dimline::after {
+    background:
+        linear-gradient(var(--dl), var(--dl)) right center / 100% 1px no-repeat,
+        linear-gradient(var(--dl), var(--dl)) right center / 1px 7px no-repeat;
+}
+
+/* ---------- Staggered reveal ----------
+   visual_fx.js adds .hh-reveal + a per-item --reveal-delay to grid /
+   list children on first paint. */
+@keyframes hh-reveal-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.hh-reveal {
+    animation: hh-reveal-in 360ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hh-reveal { animation: none; }
+}
+
+/* ---------- Export draw-in confirmation ----------
+   flashSuccess() overlays a brand-blue badge whose checkmark strokes
+   itself in (stroke-dashoffset), then removes it after ~1.3s. */
+.hh-flashing {
+    position: relative;
+}
+
+.hh-check {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-radius: inherit;
+    animation: hh-check-pop 160ms ease both;
+}
+
+.hh-check .icon {
+    width: 18px;
+    height: 18px;
+    stroke-dasharray: 26;
+    stroke-dashoffset: 26;
+    animation: hh-check-draw 380ms ease forwards;
+    animation-delay: 70ms;
+}
+
+@keyframes hh-check-pop {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes hh-check-draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hh-check { animation: none; }
+    .hh-check .icon { animation: none; stroke-dashoffset: 0; }
+}
+
+
+/* ============================================================
+   Privacy & Data page + footer link
+   ============================================================ */
+
+.app-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg, 24px);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+}
+
+.app-footer-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-primary-light);
+    font-size: inherit;
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.app-footer-link:hover {
+    color: var(--color-text);
+}
+
+/* Bottom-right corner variant (login page). The login view centres its
+   card with flexbox, so the footer has to leave the flow entirely or it
+   lands beside the card instead of under it. */
+.app-footer-corner {
+    position: absolute;
+    right: var(--space-lg);
+    bottom: var(--space-md);
+    margin: 0;
+    padding: 0;
+    border-top: none;
+}
+
+/* Readable measure: legal-ish prose is unusable at full schedule width. */
+.privacy-view {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-md);
+}
+
+.privacy-title {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.privacy-lede {
+    margin: 0 0 var(--space-lg, 24px);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.privacy-section-title {
+    margin: var(--space-lg, 24px) 0 var(--space-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-primary-light);
+}
+
+.privacy-text {
+    margin: 0 0 var(--space-sm);
+    font-size: var(--font-size-sm);
+    line-height: 1.65;
+    color: var(--color-text);
+}
+
+.privacy-updated {
+    margin-top: var(--space-lg, 24px);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}

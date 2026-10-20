@@ -1,0 +1,691 @@
+/* ============================================================
+   Design Search view
+   ------------------------------------------------------------
+   Single-page layout: intro, category picker, then a
+   form (targets + filters) and a results section. Reuses the
+   schedule-wrap / schedule-table styles from products.css for
+   the result table so results look identical to the main
+   product page.
+   ============================================================ */
+
+/* The page is fixed-height (overflow: hidden) so we get exactly one
+   scroll context on the page. The intro/category picker pin to the
+   top, the form caps below them and scrolls internally if it gets
+   tall, and the work area takes the remaining space. The results
+   section inside the work area then flex-grows to fill, with the
+   schedule-wrap inside it owning the only meaningful vertical scroll.
+   This avoids the "two nested scrollbars" UX where the user can't
+   tell which container to scroll to see the data rows. */
+.design-search-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg) var(--space-xl);
+    gap: var(--space-md);
+    overflow: hidden;
+    min-height: 0;
+}
+
+.design-search-intro,
+.design-search-category {
+    flex-shrink: 0;
+}
+
+.design-search-title {
+    font-size: var(--font-size-xxl);
+    color: var(--color-text);
+    margin: 0 0 var(--space-xs) 0;
+}
+
+.design-search-sub {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    max-width: 800px;
+    margin: 0;
+}
+
+/* ---------- Category picker ---------- */
+
+.design-search-category {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    max-width: 360px;
+    flex-shrink: 0;
+}
+
+.design-search-category-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.design-search-category-select {
+    /* uses .filter-select styling from products.css */
+    min-height: 40px;
+    font-size: var(--font-size-base);
+}
+
+/* ---------- Work area (form + results) ---------- */
+
+/* Split layout: form sidebar on the left, results on the right.
+   Each side owns its own internal scroll so vertical real estate
+   isn't fought over -- the form can be tall (lots of indoor-unit
+   filters on multi-split) without crushing the results table. */
+.design-search-work {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-md);
+    min-height: 0;
+    overflow: hidden;
+}
+
+@media (max-width: 900px) {
+    /* On narrow viewports the sidebar is too cramped; stack
+       vertically with the form capped at half-height. */
+    .design-search-work {
+        flex-direction: column;
+    }
+}
+
+.design-search-status {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin: 0;
+}
+
+/* Failure message framed as an alert card rather than bare red text;
+   --color-error-light keeps the copy readable on the tinted fill.
+   align-self stops it stretching to fill the flex work area. */
+.design-search-error {
+    color: var(--color-error-light);
+    font-style: normal;
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    align-self: flex-start;
+}
+
+/* Loading: a centered surface card occupying the same footprint as the
+   placeholder, so switching categories doesn't collapse the two-pane
+   layout into a single floating line while data fetches. The spinner
+   is the shared .hh-spinner primitive from base.css. */
+.design-search-loading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-xxl);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+/* ---------- Form ---------- */
+
+.design-search-form {
+    width: 420px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 900px) {
+    .design-search-form {
+        width: 100%;
+        max-height: 50vh;
+    }
+}
+
+.design-search-desc {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.design-search-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.design-search-section-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* Inside the form card the section titles drop to eyebrow style (small,
+   uppercase, muted) so they group their controls instead of competing
+   with the 2rem page title; the results header keeps the larger cut. */
+.design-search-form .design-search-section-title {
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+/* Hairline dividers between stacked form sections -- a tall multi-split
+   form otherwise reads as one undifferentiated column. */
+.design-search-section + .design-search-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+}
+
+.design-search-hint {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+/* Target rows: [label] [value] [unit] ± [tol] %
+   Each row is a flex line with the label allowed to shrink/wrap so
+   long labels like "Indoor Unit Heating Capacity (Heat Pump)" fit
+   in the narrow sidebar without pushing the inputs off-screen. */
+.design-target-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-top: var(--space-xs);
+}
+
+.design-target-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    /* Padding and equal negative margin cancel out, so the hover pill
+       below can bleed slightly past the row without shifting layout. */
+    padding: 2px var(--space-xs);
+    margin: -2px calc(-1 * var(--space-xs));
+    border-radius: var(--radius-sm);
+}
+
+/* Row-tracking highlight: long target lists (multi-split) make it easy
+   to lose which value/tolerance pair belongs to which label. */
+.design-target-row:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.design-target-label {
+    flex: 1;
+    min-width: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    text-align: left;
+    line-height: 1.25;
+}
+
+.design-target-value,
+.design-target-tolerance {
+    padding: 6px 8px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    /* Hide the native number-input spinner; engineers type the value
+       and the up/down buttons just shrink the usable text area. */
+    -moz-appearance: textfield;
+    appearance: textfield;
+    transition: border-color var(--transition-fast);
+}
+
+/* Pre-click responsiveness: lift the border before the focus outline
+   takes over so fields feel live under the pointer. */
+.design-target-value:hover,
+.design-target-tolerance:hover {
+    border-color: var(--color-text-muted);
+}
+
+.design-target-value::-webkit-outer-spin-button,
+.design-target-value::-webkit-inner-spin-button,
+.design-target-tolerance::-webkit-outer-spin-button,
+.design-target-tolerance::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.design-target-value {
+    width: 88px;
+    text-align: right;
+}
+
+.design-target-tolerance {
+    width: 56px;
+    text-align: right;
+}
+
+.design-target-value:focus,
+.design-target-tolerance:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -1px;
+    border-color: var(--color-primary-light);
+}
+
+.design-target-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    width: 44px;
+    flex-shrink: 0;
+}
+
+.design-target-plusminus {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.design-target-pct {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    user-select: none;
+    flex-shrink: 0;
+}
+
+/* Filter dropdowns -- reuse .filter-group / .filter-select / .filter-label.
+   In the sidebar context we stack them in a single column so each
+   dropdown gets full width and the labels (sometimes long, like
+   "COOLING ONLY OR HEAT PUMP") aren't truncated. */
+.design-filter-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-top: var(--space-xs);
+}
+
+.design-filter-grid .filter-group {
+    min-width: 0;
+}
+
+.design-filter-grid .filter-select {
+    width: 100%;
+}
+
+/* On the product page .filter-select sits on the page canvas, but here
+   it sits inside the surface-colored form card where its surface
+   background dissolves into the panel. The inset bg matches the target
+   inputs' "dark well = editable" affordance. */
+.design-search-form .filter-select {
+    background-color: var(--color-bg);
+    transition: border-color var(--transition-fast);
+}
+
+.design-search-form .filter-select:hover {
+    border-color: var(--color-text-muted);
+}
+
+/* ---------- Action buttons ---------- */
+
+.design-search-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    /* Same hairline divider as between sections, anchoring the submit
+       row to the bottom of the form card. */
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+}
+
+/* "Find matches" is .btn-primary (1rem, 10px 20px padding) while Reset
+   reuses the projects-view secondary button (0.875rem, 10px 16px) --
+   level the pair to one height/size and let the primary action take
+   the leftover row width since it is the pane's single main action. */
+.design-search-actions .btn-primary {
+    flex: 1;
+}
+
+.design-search-actions .projects-btn {
+    padding: 10px 20px;
+    font-size: var(--font-size-base);
+}
+
+/* ---------- Results ---------- */
+
+.design-search-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-height: 0;
+    /* The pane itself scrolls: with BOTH result groups (verified +
+       nominal) plus the off-grid flags on screen, splitting the fixed
+       viewport left each table a sliver shorter than its own sticky
+       header on 1080p-class screens. Each schedule-wrap below instead
+       gets a guaranteed useful height and this column scrolls between
+       the groups. */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.design-search-results-header {
+    flex-shrink: 0;
+}
+
+.design-search-results-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Match count as a badge beside the title instead of baked into the
+   heading text, so the number pops out of the scan line. */
+.design-search-count {
+    padding: 2px 10px;
+    background-color: rgba(91, 169, 216, 0.12);
+    border: 1px solid var(--color-primary-light);
+    border-radius: 999px;
+    color: var(--color-primary-light);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Active search criteria as chips -- same visual recipe as the product
+   page's model-filter chip, so "what the ranking was based on" reads
+   in the established active-filter language and stays auditable. */
+.design-search-chip-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+}
+
+.design-search-chip-lead {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.design-search-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background-color: rgba(91, 169, 216, 0.12);
+    border: 1px solid var(--color-primary-light);
+    border-radius: 999px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+}
+
+/* Zero-results: composed on the shared .hh-empty dashed well, grown to
+   fill the results column so a small card doesn't strand a dead zone
+   of canvas beneath it. */
+.design-search-empty {
+    flex: 1;
+}
+
+/* Placeholder shown in the right pane before any search has been run.
+   Shares the .hh-empty dashed-well treatment ("nothing here yet");
+   the width cap keeps the message from stranding on wide screens. */
+.design-search-placeholder {
+    flex: 1;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* The schedule-wrap takes ALL remaining space in its flex parent and
+   handles its own scroll (overflow: auto inherited from products.css
+   .schedule-wrap). max-height: none overrides any earlier cap. With
+   the rest of the page laid out as flex columns above, the wrap
+   inherits whatever vertical room is left -- typically several
+   hundred pixels of data rows visible at once. */
+.design-search-schedule-wrap {
+    flex: 1;
+    max-height: none;
+    min-height: 0;
+    /* Hairline edge -- the shadow alone is too soft to crisp the card
+       against the canvas where the results pane meets the form. */
+    border: 1px solid var(--color-border);
+}
+
+/* (Narrow viewport stacking is handled higher up via the
+   flex-direction: column override on .design-search-work; target
+   rows themselves stay the same compact horizontal line.) */
+
+/* ---------- Performance at design conditions ---------- */
+
+/* Condition inputs sit above the capacity target rows: two labelled
+   groups (cooling / heat-pump heating) of compact deg-F fields. */
+.design-cond-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-xl);
+    padding-top: var(--space-xs);
+}
+
+.design-cond-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.design-cond-group-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.design-cond-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+}
+
+.design-cond-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.design-cond-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+}
+
+.design-cond-value {
+    width: 64px;
+    padding: 6px 8px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    text-align: right;
+    box-sizing: border-box;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    transition: border-color var(--transition-fast);
+}
+
+.design-cond-value::-webkit-outer-spin-button,
+.design-cond-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.design-cond-value:hover { border-color: var(--color-text-muted); }
+
+.design-cond-value:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -1px;
+    border-color: var(--color-primary-light);
+}
+
+/* The fixed 70F heat-pump EAT: visibly a value, visibly not editable. */
+.design-cond-fixed,
+.design-cond-value:disabled {
+    color: var(--color-text-muted);
+    background-color: var(--color-surface);
+    border-style: dashed;
+    cursor: help;
+}
+
+.design-cond-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+/* ---------- Capacity result flags + sub-sections ---------- */
+
+/* Off-grid / out-of-range notices between the chips and the tables. */
+.design-search-flags {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-xs) var(--space-md);
+    border: 1px solid var(--color-warning);
+    border-left-width: 4px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(245, 158, 11, 0.08);
+}
+
+.design-search-flag {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-text);
+}
+
+.design-search-subheader {
+    flex-shrink: 0;
+    margin-top: var(--space-sm);
+}
+
+.design-search-subtitle {
+    margin: 0 0 2px 0;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Group tint: verified reads "safe", nominal reads "check further". */
+.design-search-subtitle-verified { color: var(--color-success); }
+.design-search-subtitle-nominal  { color: var(--color-warning); }
+
+.design-search-none-verified {
+    flex-shrink: 0;
+    margin: var(--space-sm) 0 0 0;
+}
+
+/* Every result table is guaranteed enough height for its sticky
+   header plus a real set of data rows; a lone group still flex-grows
+   to fill the pane. When two groups exceed the pane, the results
+   column scrolls (see .design-search-results). */
+.design-search-results .design-search-schedule-wrap {
+    flex-shrink: 0;
+    min-height: min(60vh, 520px);
+}
+
+/* Shortish windows (1080p with OS display scaling, small laptops):
+   tighten the page chrome so the results tables keep their rows --
+   same treatment as the product pages in products.css. */
+@media (max-height: 820px) {
+    .design-search-page {
+        padding: var(--space-sm) var(--space-xl);
+        gap: var(--space-sm);
+    }
+
+    .design-search-title {
+        font-size: var(--font-size-lg);
+        margin-bottom: 0;
+    }
+
+    .design-search-sub {
+        font-size: var(--font-size-sm);
+    }
+
+    .design-search-results .design-search-schedule-wrap {
+        min-height: min(64vh, 440px);
+    }
+}
+
+/* ============================================================
+   Gas Pack RTUs -- condition-aware form + result schedule
+   ------------------------------------------------------------
+   The Gas Pack page replaces the schema-driven form entirely, so
+   it reuses the shared .design-* primitives and only adds what is
+   genuinely new: the electrical-option checkboxes, the two-row
+   grouped result header, and the "-> schedule row" hint under
+   each Select button.
+   ============================================================ */
+
+.design-gp-options {
+    margin-top: var(--space-md);
+}
+
+.design-gp-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.design-gp-check input {
+    accent-color: var(--color-primary-light);
+    cursor: pointer;
+}
+
+/* Group header row: the ungrouped leading columns get no rule so the
+   band reads as "Cooling / Heating / Electrical" and nothing else. */
+.design-gp-table thead th.design-gp-group-blank {
+    background-color: transparent;
+    border-bottom-color: transparent;
+}
+
+.design-gp-table .gp-col-model {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* A row evaluated at a harsher bracketing point rather than an exact
+   rated one. Marked, not hidden -- the number is still conservative. */
+.design-gp-table tbody tr.design-gp-offgrid .gp-col-model::after {
+    content: '*';
+    color: var(--color-warning);
+    margin-left: 2px;
+    font-weight: 700;
+}
+
+.design-gp-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.design-gp-match {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.design-search-note {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}

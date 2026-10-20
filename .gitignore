@@ -1,0 +1,27 @@
+# Product documents (manuals, submittals, Revit, CAD) - not tracked for
+# now; they're being reworked. FONTS and the favicon stay because every
+# page loads them.
+ASSETS/*
+!ASSETS/FONTS/
+!ASSETS/favicon.svg
+
+# Working / reference files, not part of the site
+HHpro Website Rules.docx
+missing_cad.csv
+DATA/DATA FILES/validation_report.txt
+
+# Cloudflare build output and local-dev secrets
+dist/
+.wrangler/
+.dev.vars
+node_modules/
+
+# Python and Office junk
+__pycache__/
+*.pyc
+~$*
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store

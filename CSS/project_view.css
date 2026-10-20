@@ -1,0 +1,1938 @@
+/* ============================================================
+   HHpro - View Project page
+   ------------------------------------------------------------
+   Layout + styling for the per-project detail view.
+   Reuses .schedule-table / .schedule-wrap rules from products.css
+   and .modal* rules from cart.css, with a few additions and
+   tweaks below.
+   ============================================================ */
+
+.project-view-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    gap: var(--space-md);
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ---------- Header (title + Back button) ---------- */
+/* Header + tab bar always span the full page width (centered), regardless of
+   how wide the active tab's schedule is. This keeps the tabs on one line and
+   the title/layout controls spread across the page even when a template's
+   schedule is narrow (e.g. the transposed Refresco layout). */
+.project-header,
+.project-tabs {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.project-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-shrink: 0;
+}
+
+.project-title {
+    font-size: var(--font-size-xxl);
+    color: var(--color-text);
+    margin: 0;
+    word-break: break-word;
+}
+
+.project-meta {
+    margin: var(--space-xs) 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* Right-side cluster in the project view's header. Holds the
+   "Exit Project" + "All Projects" buttons (or just "Back" when
+   in temporary-cart mode). */
+.project-header-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+    align-items: center;
+}
+
+/* ---------- Empty states ---------- */
+.project-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-xxl) var(--space-lg);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.project-empty-title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+}
+
+.project-empty-hint {
+    margin: 0;
+    max-width: 560px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.project-empty-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.project-loading {
+    padding: var(--space-xxl);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+/* Spinner ring above the loading text so the multi-second docs/
+   schedule fetches read as "working" rather than stalled. Same
+   metrics as the shared .hh-spinner in base.css (which also owns
+   the hh-spin keyframes). */
+.project-loading::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto var(--space-sm);
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary-light);
+    border-radius: 50%;
+    animation: hh-spin 0.8s linear infinite;
+}
+
+/* ---------- Tab bar ---------- */
+.project-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    border-bottom: 2px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.project-tab {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    margin-bottom: -2px;
+    padding: 10px 18px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--transition-fast),
+                background-color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+/* The tab bar sits directly on the --color-bg canvas, so the hover
+   tint must be a translucent lift rather than a solid bg color. */
+.project-tab:hover {
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Inset ring so the focus outline isn't clipped by the tab bar's
+   bottom border / neighboring tabs. */
+.project-tab:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -2px;
+}
+
+.project-tab-active {
+    color: var(--color-primary-light);
+    border-bottom-color: var(--color-primary-light);
+    /* Faint fill keeps the active tab findable in a long wrapped row */
+    background-color: rgba(91, 169, 216, 0.06);
+    font-weight: 600;
+}
+
+/* ---------- Tab body container ---------- */
+.project-tab-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    overflow: hidden;
+}
+
+.project-product-tab {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;          /* center the inner block on the page */
+    overflow: auto;
+}
+
+/* Inner column: shrink-wraps to the schedule's width so the schedule and
+   notes share it and center together. (The toolbar is a full-width sibling
+   above this, not inside it.) */
+.project-product-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Keep long note lines from widening the centered block: contribute 0 to
+   the inner's intrinsic width, then fill that width and wrap. Result: the
+   notes section is never wider than the schedule above it. */
+.project-product-inner > .schedule-notes-section {
+    width: 0;
+    min-width: 100%;
+}
+
+/* ---------- Per-product toolbar ---------- */
+.project-toolbar {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    align-items: center;
+    flex-shrink: 0;
+    /* Full page width (its parent .project-product-tab centers its children),
+       so the toolbar spreads out like the wide Hoffman layout even when the
+       schedule below it is narrow. */
+    align-self: stretch;
+    position: sticky;
+    top: 0;
+    /* Matches the page canvas so the sticky bar doesn't read as a
+       stray lighter stripe; the bottom border gives scrolled-under
+       schedule content a deliberate edge to clip against. */
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 5;
+    padding: var(--space-xs) 0;
+}
+
+/* Thin vertical rules splitting the toolbar into [edit actions] |
+   [exports] | [edit mode] so six peer buttons read as groups. */
+.project-toolbar-divider {
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--color-border);
+    margin: 0 var(--space-xs);
+}
+
+/* ---------- Project schedule table ----------
+   Adds a Remove/Docs "actions" column as the leftmost column and a
+   Tag column just to its right. Both stay sticky when the schedule
+   scrolls sideways. Actions sit at left:0 (width 100px), Tag sits
+   at left:100px (past the actions column). */
+.project-schedule-wrap {
+    flex: 0 0 auto;
+}
+
+.project-sched-rm-head {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+    min-width: 100px;
+    width: 100px;
+    padding: 0 !important;
+    left: 0;
+    z-index: 4;
+}
+
+.schedule-table thead th.project-sched-rm-head {
+    position: sticky;
+}
+
+.project-sched-rm-cell {
+    background-color: var(--color-bg) !important;
+    padding: 0 !important;
+    text-align: center;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 100px;
+    width: 100px;
+    border-right: 1px solid var(--color-border);
+}
+
+/* Opaque hover tint (not transparent) so sticky masking still works
+   while the row-hover band runs continuously into the pinned cells. */
+.schedule-table tbody tr:hover > td.project-sched-rm-cell {
+    background-color: var(--color-row-hover) !important;
+}
+
+/* Container for the per-row action controls. Grid layout inside the
+   100px sticky column:
+       [grab] [ X ][dup]
+       [grab] [  Docs  ]
+   The grab handle spans both rows on the left edge. */
+.project-sched-actions {
+    display: grid;
+    grid-template-columns: 14px 28px 28px;
+    grid-auto-rows: 28px;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+/* Drag-to-reorder handle. draggable lives on this span, so grabbing
+   anywhere else in the row still scrolls/selects normally. */
+.project-sched-grab {
+    grid-row: 1 / 3;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    cursor: grab;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    transition: color var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.project-sched-grab:hover {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+}
+
+.project-sched-grab:active {
+    cursor: grabbing;
+}
+
+/* While an item is being dragged, its rows dim in place... */
+.schedule-table tbody tr.row-dragging > td {
+    opacity: 0.35;
+}
+
+/* ...and a hairline accent marks where it will land. drop-before sits
+   on the first row of the item it would be inserted above; drop-after
+   on the very last row (drop at end of list). */
+.schedule-table tbody tr.drop-before > td {
+    box-shadow: inset 0 2px 0 var(--color-primary-light);
+}
+
+.schedule-table tbody tr.drop-after > td {
+    box-shadow: inset 0 -2px 0 var(--color-primary-light);
+}
+
+/* The Tag column is the outer edge of the sticky cluster, so it
+   carries the cast shadow that makes scrolled columns read as
+   sliding underneath. clip-path lets the shadow escape the cell's
+   right edge while clamping it to the row band vertically. */
+.project-sched-tag-head {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+    left: 100px;
+    z-index: 4;
+    min-width: 90px;
+    box-shadow: var(--shadow-pin);
+    clip-path: inset(0 -16px 0 0);
+}
+
+.schedule-table thead th.project-sched-tag-head {
+    position: sticky;
+}
+
+.project-sched-tag-cell {
+    background-color: var(--color-bg) !important;
+    position: sticky;
+    left: 100px;
+    z-index: 1;
+    border-right: 2px solid var(--color-border-strong) !important;
+    font-weight: 600;
+    color: var(--color-text);
+    box-shadow: var(--shadow-pin);
+    clip-path: inset(0 -16px 0 0);
+}
+
+.schedule-table tbody tr:hover > td.project-sched-tag-cell {
+    background-color: var(--color-row-hover) !important;
+}
+
+/* The data-column headers in the last header row get a 2px border-strong
+   underline (the header/body divider). The sticky + edge columns
+   (Actions, Tag, Serves, Indoor Tag, Configuration, Accessories) sit in
+   the FIRST header row and rowspan down, so that `tr:last-child` rule
+   never reaches them and their divider falls back to the default 1px -
+   the thick line visibly breaks under those columns. Match them up so
+   the divider is one consistent weight across the whole table width. */
+.schedule-table thead th.project-sched-rm-head,
+.schedule-table thead th.project-sched-tag-head,
+.schedule-table thead th.project-sched-serves-head,
+.schedule-table thead th.project-sched-indoor-tag-head,
+.schedule-table thead th.project-sched-config-head,
+.schedule-table thead th.project-sched-acc-head {
+    border-bottom: 2px solid var(--color-border-strong);
+}
+
+.project-sched-rm-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    /* Holds the SVG 'x' icon (sized 1em); flex centers it in the
+       square hit target. */
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.project-sched-rm-btn:hover {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+    color: white;
+}
+
+/* Duplicate button - same square secondary look as the remove button,
+   but hover goes primary (constructive action) instead of error red. */
+.project-sched-dup-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.project-sched-dup-btn:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+/* Compact "Docs" button. Styled to match the Docs button on the main
+   product tabs (same secondary look); spans the full width under the
+   X + duplicate pair. */
+.project-sched-docs-btn {
+    grid-column: 2 / 4;
+    width: 100%;
+    height: 28px;
+    padding: 0 8px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.project-sched-docs-btn:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+/* ============================================================
+   Auto Tag modal
+   ============================================================ */
+
+.autotag-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin: var(--space-sm) 0;
+}
+
+/* A group of inputs inside the Auto Tag modal - used when the product
+   has both outdoor and indoor tag columns, so the two prefix/start
+   pairs are visually separated with a subheader. Products without an
+   indoor tag column use just one ungrouped set of inputs (no header). */
+.autotag-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.autotag-section-header {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-xs);
+}
+
+.autotag-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.autotag-label {
+    min-width: 80px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.autotag-preview {
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-family: monospace;
+    word-break: break-all;
+}
+
+/* ============================================================
+   Columns modal
+   ============================================================ */
+
+.columns-modal {
+    max-width: 520px;
+}
+
+.columns-bulk {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.columns-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-xs);
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: var(--space-xs) 0;
+}
+
+.columns-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.columns-row:hover {
+    background-color: var(--color-bg);
+    border-color: var(--color-border);
+}
+
+.columns-row-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+/* ============================================================
+   Files tab
+   ------------------------------------------------------------
+   Two-column layout: left sidebar for doc-type bulk selection,
+   main tree for per-item file browsing. Both scroll independently.
+   ============================================================ */
+
+.files-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ---------- Top toolbar: count + Download button ---------- */
+.files-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.files-count-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* Busy state for the Download ZIP button while the archive builds.
+   The button is disabled during the fetch, but its label is live
+   progress text the user must read - so full opacity overrides the
+   generic .projects-btn:disabled fade (defined in projects.css;
+   this file loads later). tabular-nums keeps "Preparing 9 / 12"
+   from jittering in width as the counter ticks. */
+.projects-btn-busy,
+.projects-btn-busy:disabled {
+    opacity: 1;
+    cursor: progress;
+    background-color: var(--color-primary-hover);
+    font-variant-numeric: tabular-nums;
+}
+
+/* 14px ring (same metrics as .hh-spinner-sm in base.css, recolored
+   for the primary-blue fill) rendered as ::before so it picks up
+   the button's flex gap; the download icon hides while it spins. */
+.projects-btn-busy::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: hh-spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+.projects-btn-busy .icon {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Slow rotation instead of none - "working" must stay
+       distinguishable from "stuck" (matches base.css .hh-spinner). */
+    .project-loading::before,
+    .projects-btn-busy::before {
+        animation-duration: 2.4s;
+    }
+}
+
+/* ---------- Body: sidebar + tree ---------- */
+.files-body {
+    flex: 1;
+    display: flex;
+    gap: var(--space-md);
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ---------- Left sidebar (bulk by doc type) ---------- */
+.files-sidebar {
+    flex-shrink: 0;
+    width: 260px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    padding: var(--space-sm);
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.files-sidebar-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 var(--space-sm) 0;
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.files-type-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.files-type-row:hover {
+    background-color: var(--color-bg);
+}
+
+.files-type-cb {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.files-type-label {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+.files-type-count {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background-color: var(--color-bg);
+    padding: 2px 8px;
+    border-radius: 999px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* ---------- Main tree (products > items > files) ---------- */
+.files-tree {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    padding: var(--space-sm);
+}
+
+/* Product block */
+.files-product {
+    margin-bottom: var(--space-md);
+}
+
+.files-product:last-child {
+    margin-bottom: 0;
+}
+
+.files-product-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 8px 10px;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-inverse);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.files-product-cb {
+    cursor: pointer;
+}
+
+.files-product-name {
+    flex: 1;
+}
+
+/* Item block (inside a product). The border-left rail gives each
+   nesting level a vertical guide so the product > item > file
+   hierarchy stays parseable when a block scrolls past a screen. */
+.files-item {
+    margin-top: var(--space-sm);
+    margin-left: var(--space-md);
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-sm);
+}
+
+.files-item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 10px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.files-item-header:hover {
+    background-color: var(--color-row-hover);
+}
+
+.files-item-cb {
+    cursor: pointer;
+}
+
+.files-item-name {
+    flex: 1;
+    word-break: break-word;
+}
+
+.files-item-empty {
+    padding: 6px 10px 6px 34px;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* File rows (inside an item) - same nesting rail as .files-item */
+.files-list {
+    margin-left: var(--space-md);
+    padding: var(--space-xs) 0 var(--space-xs) var(--space-sm);
+    border-left: 1px solid var(--color-border);
+}
+
+.files-file-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    /* Wider horizontal gap so the doc-type and filename columns
+       align into scannable columns across rows */
+    column-gap: var(--space-md);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.files-file-row:hover {
+    background-color: var(--color-bg);
+}
+
+.files-file-cb {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.files-file-name {
+    flex-shrink: 0;
+    font-weight: 500;
+    color: var(--color-text);
+    min-width: 180px;
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.files-file-fname {
+    flex: 1;
+    color: var(--color-text-muted);
+    font-family: monospace;
+    font-size: var(--font-size-xs);
+    word-break: break-all;
+}
+
+.files-file-badge {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: white;
+    background-color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 3px;
+    min-width: 32px;
+    text-align: center;
+}
+
+.files-file-badge-zip {
+    /* Violet from the same modern saturation family as the
+       error/success/warning tokens */
+    background-color: #8b5cf6;
+}
+
+/* Responsive: collapse to single column on narrow viewports */
+@media (max-width: 900px) {
+    .files-body {
+        flex-direction: column;
+    }
+    .files-sidebar {
+        width: auto;
+        max-height: 200px;
+    }
+}
+/* ============================================================
+   Schedule notes section
+   ------------------------------------------------------------
+   Appears below the schedule on each per-product tab. Neutral
+   styling throughout - all three Marvair sections stacked
+   vertically. X button on the LEFT of deletable notes. Each
+   custom-notes row has a + button on the left to add the note
+   to the schedule notes above.
+   ============================================================ */
+
+.schedule-notes-section {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 2px solid var(--color-border);
+}
+
+/* Marvair stacks STANDARD, CONFIG, OPTIONAL vertically - never side by side */
+.notes-marvair-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Internal two-column split inside the STANDARD block */
+.notes-standard-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 var(--space-md);
+    align-items: start;
+}
+
+.notes-standard-columns > .notes-list {
+    margin: 0;
+}
+
+/* ---------- Shared block shell ---------- */
+.notes-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-surface);
+}
+
+.notes-block-header {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px dashed var(--color-border);
+}
+
+/* ---------- Notes list (ordered) ---------- */
+.notes-list {
+    list-style: decimal;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.notes-item {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    color: var(--color-text);
+    padding: 2px 0;
+}
+
+/* Row for deletable items: X on LEFT, text to its right */
+.notes-item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+}
+
+.notes-item-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+.notes-del-btn {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-bg);
+    color: var(--color-text-muted);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+.notes-del-btn:hover {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+    color: white;
+}
+
+/* User-added custom notes use the same styling but with a subtle
+   left-border accent so they're distinguishable from built-in notes.
+   Must be the light brand blue - the dark primary all but vanishes
+   against the notes card surface. */
+.notes-item-custom-added {
+    border-left: 3px solid var(--color-primary-light);
+    padding-left: 6px;
+    margin-left: -9px;
+}
+
+/* ---------- Sub-notes (Marvair optional children) ----------
+   Left-padding chosen to align with main note text, which starts
+   after the delete button + gap (~30px from the li edge). */
+.notes-sublist {
+    list-style: none;
+    margin: var(--space-xs) 0 0 0;
+    padding: 0 0 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.notes-subitem {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    position: relative;
+    padding-left: 16px;
+}
+
+.notes-subitem::before {
+    content: "\2013";           /* en-dash */
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+/* ---------- Empty-state hint ---------- */
+.notes-empty-hint {
+    margin: 0;
+    padding: var(--space-sm) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* ---------- Removed-notes restore row ---------- */
+.notes-removed {
+    background-color: var(--color-bg);
+    border-style: dashed;
+}
+
+.notes-removed-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.notes-removed-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 6px 12px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    background-color: var(--color-bg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.notes-removed-item:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+/* Custom (user-added) removed notes get a dashed border so they're
+   visually distinct from removed built-in notes */
+.notes-removed-item-custom {
+    border-style: dashed;
+}
+
+.notes-restore-icon {
+    flex-shrink: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.notes-removed-text {
+    word-break: break-word;
+    white-space: normal;
+    text-align: left;
+}
+
+/* ---------- Custom notes grid (with ADD button per row) ---------- */
+.notes-custom-hint {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.notes-custom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs) var(--space-md);
+}
+
+.notes-custom-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.notes-custom-number {
+    flex-shrink: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    min-width: 24px;
+    text-align: right;
+}
+
+/* "+" button that moves the textbox text into the schedule notes.
+   Placed between the row number and the textbox so the user's eye
+   reads "1. + [input]". Disabled when the textbox is empty. */
+.notes-custom-add-btn {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-bg);
+    color: var(--color-primary-light);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast),
+                opacity var(--transition-fast);
+}
+
+.notes-custom-add-btn:hover:not(:disabled) {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.notes-custom-add-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.notes-custom-input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 10px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition-fast),
+                box-shadow var(--transition-fast);
+}
+
+.notes-custom-input:hover {
+    border-color: var(--color-border-strong);
+}
+
+.notes-custom-input:focus {
+    outline: none;
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 2px rgba(91, 169, 216, 0.25);
+}
+
+/* Responsive: collapse internal columns on narrow viewports */
+@media (max-width: 900px) {
+    .notes-standard-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .notes-custom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   Extra editable schedule columns
+   ------------------------------------------------------------
+   Tag / Indoor Tag / Configuration / Accessories - all editable
+   via inputs inside the cells. Inputs appear borderless at rest
+   and reveal a border + white background on hover/focus, so the
+   schedule still reads like a schedule but the user can click any
+   field to edit it.
+   ============================================================ */
+
+/* Shared input styling for all editable schedule cells */
+.project-sched-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    margin: 0;
+    border: 1px solid transparent;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+    border-radius: 3px;
+    transition: border-color var(--transition-fast),
+                background-color var(--transition-fast),
+                box-shadow var(--transition-fast);
+}
+
+.project-sched-input:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--color-border-strong);
+}
+
+.project-sched-input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 2px rgba(91, 169, 216, 0.25);
+}
+
+.project-sched-input::placeholder {
+    color: var(--color-text-muted);
+    /* The placeholder is the only at-rest hint that a Tag/Serves/
+       Accessories cell accepts input - keep it readable. */
+    opacity: 0.75;
+    font-style: italic;
+}
+
+/* <select> variant for the Marvair Configuration cell */
+.project-sched-select {
+    cursor: pointer;
+    min-width: 160px;
+}
+
+/* When the Tag cell contains an input, reset the tag cell's
+   default font-weight so the input looks clean (otherwise the
+   input is styled with font-weight 600 through inheritance). */
+.project-sched-tag-cell .project-sched-input {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* ---------- Serves column ----------
+   Optional manual-input column for products flagged with
+   hasServesColumn in data.js (currently VFDs only). Sits
+   immediately to the right of the primary Tag column. Not sticky -
+   having too many sticky columns makes horizontal scrolling feel
+   cramped, and the Tag column is the only one users really need
+   pinned when they're comparing across wide schedules. */
+.project-sched-serves-head {
+    min-width: 160px;
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+}
+
+.project-sched-serves-cell {
+    min-width: 160px;
+    background-color: var(--color-surface) !important;
+}
+
+/* ---------- Indoor Tag column ----------
+   Only sticky when the table has the 'schedule-has-indoor-tag'
+   class (Mini Splits + Multi Position Splits). Sits to the right
+   of the primary Tag column (Tag at left:44..134, Indoor Tag at
+   left:134..). */
+.project-sched-indoor-tag-head {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+    min-width: 90px;
+    z-index: 4;
+}
+
+.project-sched-indoor-tag-cell {
+    background-color: var(--color-bg) !important;
+    border-right: 2px solid var(--color-border-strong) !important;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.schedule-has-indoor-tag .project-sched-indoor-tag-head {
+    position: sticky;
+    left: 190px;    /* 100 (Remove/Docs actions) + 90 (Tag) */
+    box-shadow: var(--shadow-pin);
+    clip-path: inset(0 -16px 0 0);
+}
+
+.schedule-has-indoor-tag .project-sched-indoor-tag-cell {
+    position: sticky;
+    left: 190px;
+    z-index: 1;
+    box-shadow: var(--shadow-pin);
+    clip-path: inset(0 -16px 0 0);
+}
+
+/* With an Indoor Tag column the sticky cluster's outer edge moves
+   one column right, so the Tag column hands its cast shadow off. */
+.schedule-has-indoor-tag .project-sched-tag-head,
+.schedule-has-indoor-tag .project-sched-tag-cell {
+    box-shadow: none;
+}
+
+.schedule-has-indoor-tag tbody tr:hover > td.project-sched-indoor-tag-cell {
+    background-color: var(--color-row-hover) !important;
+}
+
+/* ---------- Configuration column (Marvair only) ----------
+   Rendered at the right end of the schedule (just before
+   Accessories). Not sticky. */
+.project-sched-config-head {
+    min-width: 160px;
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+}
+
+.project-sched-config-cell {
+    min-width: 160px;
+    background-color: var(--color-surface) !important;
+}
+
+/* ---------- Accessories column ----------
+   Rightmost column of every schedule. Not sticky - free-text
+   field that can fit a paragraph if needed. */
+.project-sched-acc-head {
+    min-width: 220px;
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+}
+
+.project-sched-acc-cell {
+    min-width: 220px;
+    background-color: var(--color-surface) !important;
+}
+
+/* ============================================================
+   Refrigerant tab
+   ------------------------------------------------------------
+   Single wide table -- one row per mini-split / multi-position-
+   split system. Columns are grouped in a tier-1 header (System /
+   Factory Values / Field Measurements / Calculated Charge) with
+   the individual column labels on tier 2. Followed by a project-
+   totals card spanning the tab.
+   ============================================================ */
+
+.refrigerant-tab {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-md) var(--space-xl);
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+}
+
+.refrigerant-intro {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 920px;
+    flex-shrink: 0;
+}
+
+/* ---------- Table wrapper (owns the scroll) ---------- */
+
+.refrigerant-table-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.refrigerant-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-size-sm);
+    width: max-content;
+    min-width: 100%;
+    color: var(--color-text);
+}
+
+/* ---------- Headers ---------- */
+
+.refrigerant-table thead th {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-weight: 600;
+    text-align: center;
+    padding: 6px 8px;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    white-space: normal;
+    position: sticky;
+    z-index: 2;
+}
+
+.refrigerant-table thead tr:first-child th {
+    top: 0;
+}
+
+.refrigerant-table thead tr:nth-child(2) th {
+    /* Approximate tier-1 row height; bump if a group label ever wraps. */
+    top: 32px;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    /* Tight line-height so multi-line wrapped labels (e.g. "Max Vert
+       / ODU→IDU") don't balloon the header row. */
+    line-height: 1.2;
+}
+
+.refrigerant-table-group {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-inverse) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    font-size: var(--font-size-xs);
+}
+
+/* ---------- Body cells ---------- */
+
+.refrigerant-table tbody td {
+    padding: 6px 8px;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+    vertical-align: middle;
+    background-color: var(--color-surface);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.refrigerant-table tbody tr:nth-child(even) > td {
+    background-color: rgba(255, 255, 255, 0.025);
+}
+
+/* ---------- Stacked-content cells ----------
+   Used for combined ID cells (tag stacked over model), combined
+   factory cells (oz stacked over lbs, line sizes stacked, etc.),
+   and combined calc cells. Each line sits on its own row inside
+   the cell with tight line-height so two lines don't make the
+   row enormously tall. */
+.refrigerant-stacked-cell {
+    line-height: 1.25;
+}
+
+.refrigerant-stacked-line {
+    display: block;
+    padding: 1px 0;
+}
+
+/* ---------- Identification (left-most) cells ---------- */
+
+.refrigerant-id-cell {
+    text-align: left !important;
+    white-space: normal !important;
+    min-width: 130px;
+    line-height: 1.25;
+}
+
+.refrigerant-id-block + .refrigerant-id-block-divider {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dotted var(--color-border);
+}
+
+.refrigerant-id-tag {
+    color: var(--color-primary-light);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-size: var(--font-size-sm);
+}
+
+.refrigerant-id-model {
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* ---------- "No data" cell ---------- */
+
+.refrigerant-no-data-cell {
+    text-align: left !important;
+    color: var(--color-text-muted);
+    font-style: italic;
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* ---------- Factory value cells ---------- */
+
+.refrigerant-cell-na {
+    color: var(--color-text-muted);
+    font-style: italic;
+    opacity: 0.6;
+}
+
+/* ---------- Field input cells ---------- */
+
+.refrigerant-input-cell {
+    padding: 3px 5px !important;
+    background-color: var(--color-bg) !important;
+}
+
+.refrigerant-row-input {
+    width: 80px;
+    padding: 4px 6px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    /* Hide the native number-input spinner. Engineers type the value;
+       the up/down buttons just shrink the usable text area. */
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.refrigerant-row-input::-webkit-outer-spin-button,
+.refrigerant-row-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.refrigerant-row-input:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -1px;
+    border-color: var(--color-primary-light);
+}
+
+.refrigerant-row-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+    background-color: transparent;
+}
+
+/* Cell-level highlight when the entered value exceeds the system's
+   maximum. The full cell glows red so it's noticeable in a wide
+   table; hovering it shows the threshold via the title attribute. */
+.refrigerant-input-cell-warn {
+    background-color: rgba(239, 68, 68, 0.18) !important;
+}
+
+.refrigerant-input-cell-warn .refrigerant-row-input {
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+/* ---------- Calculated cells ---------- */
+
+.refrigerant-calc-cell {
+    background-color: var(--color-bg) !important;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+}
+
+.refrigerant-calc-cell-emphasize {
+    color: var(--color-primary-light);
+    font-weight: 700;
+}
+
+/* ---------- Project totals card ---------- */
+
+.refrigerant-totals-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-primary-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    box-shadow: var(--shadow-md);
+}
+
+.refrigerant-totals-header {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.refrigerant-totals-value {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.refrigerant-totals-hint {
+    font-size: var(--font-size-sm);
+    font-weight: normal;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+/* ---------- Toolbar (Refrigerant Report button) ---------- */
+
+.refrigerant-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+/* ---------- Header help "?" icons + tooltip ---------- */
+
+.refrigerant-help {
+    position: relative;
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: middle;
+    cursor: help;
+    outline: none;
+}
+
+.refrigerant-help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--color-text-muted);
+    color: var(--color-text-muted);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    /* Reset the uppercase/letter-spacing inherited from the th style
+       so the "?" renders cleanly. */
+    text-transform: none;
+    letter-spacing: 0;
+    transition: color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.refrigerant-help:hover .refrigerant-help-icon,
+.refrigerant-help:focus .refrigerant-help-icon,
+.refrigerant-help:focus-visible .refrigerant-help-icon {
+    color: var(--color-primary-light);
+    border-color: var(--color-primary-light);
+}
+
+.refrigerant-help-tooltip {
+    /* Hidden until hover/focus reveals it. */
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    padding: 10px 12px;
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    color: var(--color-text);
+    /* Override the th's uppercase / centered / muted styling so the
+       tooltip text reads as normal prose. */
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: normal;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.refrigerant-help:hover .refrigerant-help-tooltip,
+.refrigerant-help:focus .refrigerant-help-tooltip,
+.refrigerant-help:focus-visible .refrigerant-help-tooltip {
+    display: block;
+}
+
+/* ---------- Reference column ---------- */
+
+.refrigerant-reference-cell {
+    text-align: center !important;
+    white-space: nowrap;
+}
+
+.refrigerant-reference-link {
+    color: var(--color-primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-xs);
+}
+
+.refrigerant-reference-link:hover,
+.refrigerant-reference-link:focus {
+    text-decoration: underline;
+}
+
+/* ---------- Engineer (schedule-layout) selector ---------- */
+.project-engineer-select {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+}
+
+.project-engineer-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.project-engineer-dropdown {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+/* ---------- Engineer-template schedule table ----------
+   Reuses .schedule-table cell styling; these rules add the title row,
+   transposed row-header look, notes/manufacturers boxes, watermark, and
+   the in-place editable fields for not-yet-sourced values. */
+
+/* The template grid renders bare <tr><td> (no <tbody>), so it never inherits
+   the native schedule's "tbody td { nowrap }". Without this, attribute labels
+   and values wrap in narrow columns instead of sitting on one line like the
+   CAD/Excel exports. Notes & manufacturers rows re-enable wrapping below via
+   .tpl-notes (pre-wrap), which wins on specificity. */
+.template-schedule td,
+.template-schedule th {
+    white-space: nowrap;
+}
+
+.template-schedule .tpl-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-inverse);
+    text-align: center;
+}
+
+.template-schedule .tpl-header {
+    font-weight: 700;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-inverse);
+    text-align: center;
+}
+
+/* Transposed layout: bold attribute labels down the left column. */
+.template-schedule .tpl-rowhead {
+    font-weight: 600;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    text-align: left;
+}
+
+.template-schedule .tpl-left {
+    text-align: left;
+}
+
+.template-schedule .tpl-notes {
+    text-align: left;
+    font-weight: 400;
+    color: var(--color-text);
+    white-space: pre-wrap;
+}
+
+/* Single-line-notes templates (e.g. Saber): keep each note on one row and
+   let the table widen to fit, matching the firm's wide sheet + the exports. */
+.template-schedule .tpl-notes-nowrap {
+    white-space: nowrap;
+}
+
+.template-schedule .tpl-watermark {
+    text-align: right;
+    font-style: italic;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.tpl-field-input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font: inherit;
+    text-align: center;
+    padding: 2px 4px;
+}
+
+.tpl-field-input:focus {
+    outline: none;
+    border-style: solid;
+    border-color: var(--color-primary-light);
+    background-color: var(--color-surface);
+}
+
+/* ---------- Edit Schedule mode ---------- */
+.tpl-edit-hint {
+    margin: 0 0 var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+/* In edit mode every cell is an input. Size them to their content (via
+   the `size` attribute) instead of filling the cell, so the existing
+   text stays readable and the table grows/scrolls like the normal
+   schedule rather than collapsing every column to nothing. */
+.tpl-editing .tpl-edit-input {
+    width: auto;
+    min-width: 2.5ch;
+    background-color: var(--color-bg);
+}
+
+/* Inputs in edit mode inherit each cell's alignment; keep title/header
+   inputs readable on the dark header background. */
+.tpl-editing .tpl-left .tpl-edit-input,
+.tpl-editing .tpl-notes .tpl-edit-input,
+.tpl-editing .tpl-rowhead .tpl-edit-input {
+    text-align: left;
+}
+
+.tpl-editing .tpl-title .tpl-edit-input,
+.tpl-editing .tpl-header .tpl-edit-input {
+    color: var(--color-text-inverse);
+    border-color: var(--color-text-muted);
+    font-weight: 700;
+}
+
+/* Title and notes span the full table width - let their inputs fill the
+   cell so long text (e.g. the single-point-power note) stays fully
+   visible and editable rather than clipped to the sized width. */
+.tpl-editing .tpl-title .tpl-edit-input,
+.tpl-editing .tpl-notes .tpl-edit-input {
+    width: 100%;
+}
+/* ============================================================
+   Model-mapped notes (diffusers)
+   ------------------------------------------------------------
+   Notes list + optional legend image (SMD & AMD Options) side
+   by side. The legend wraps below the notes on narrow screens.
+   ============================================================ */
+
+.notes-with-legend {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.notes-with-legend > .notes-modelmap {
+    flex: 1 1 480px;
+    min-width: 320px;
+}
+
+.notes-legend-block {
+    flex: 0 1 460px;
+    min-width: 280px;
+}
+
+/* The legend scan is dark-line-art on white; keep it on a white
+   well so it stays legible on the dark theme. */
+.notes-legend-image {
+    display: block;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs);
+}
+
+/* Auto note numbers in the Accessories column (diffusers).
+   The numbers are generated from the schedule notes; the text
+   input next to them holds the user's own additions. */
+.project-sched-acc-cell-auto {
+    white-space: nowrap;
+}
+
+.project-sched-acc-autonums {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-right: var(--space-xs);
+}
+
+.project-sched-acc-cell-auto .project-sched-input {
+    width: auto;
+    min-width: 90px;
+    display: inline-block;
+}
+
+/* ============================================================
+   GPS (Bipolar Ionization) - per-sub-schedule sections on the
+   project view: each sub-schedule with items renders its own
+   title, schedule table, and read-only notes block.
+   ============================================================ */
+
+.project-sub-schedule-title {
+    margin: var(--space-lg) 0 var(--space-sm) 0;
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text);
+}
+
+.project-product-inner > .project-sub-schedule-title:first-child {
+    margin-top: 0;
+}
+
+/* Long GPS note lines contribute 0 to the inner column's intrinsic
+   width, then fill and wrap - the notes box never widens the block
+   past the schedule above it (same trick as .schedule-notes-section). */
+.project-product-inner > .gps-notes-wrap {
+    width: 0;
+    min-width: 100%;
+}
