@@ -1,0 +1,1409 @@
+{
+  "productType": "STOCKED CHILLERS",
+  "assetsFolder": "STOCKED CHILLERS",
+  "scheduleTitle": "AIR-COOLED CHILLERS",
+  "supportsMultiRowSelections": false,
+  "searchSchema": {
+    "displayName": "Stocked Chillers",
+    "description": "Quantech air-cooled chillers H&H holds in stock, at AHRI 550/590 conditions (54/44°F, 95°F ambient). Enter design loads and the page returns stock units that meet the targets within your tolerance.",
+    "targets": [
+      {
+        "label": "Cooling Capacity",
+        "col": "G",
+        "unit": "tons",
+        "defaultTolerance": 10
+      },
+      {
+        "label": "Water Flow",
+        "col": "N",
+        "unit": "GPM",
+        "defaultTolerance": 15
+      },
+      {
+        "label": "EER",
+        "col": "I",
+        "unit": "",
+        "defaultTolerance": 10
+      }
+    ]
+  },
+  "scheduleHeader": {
+    "columnLetters": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V"
+    ],
+    "rows": [
+      [
+        {
+          "col": "A",
+          "value": "AIR-COOLED CHILLERS",
+          "colspan": 22,
+          "rowspan": 1
+        }
+      ],
+      [
+        {
+          "col": "A",
+          "value": "MAKE",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "B",
+          "value": "MODEL NUMBER",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "C",
+          "value": "STOCK UNIT",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "D",
+          "value": "NOM TONS",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "E",
+          "value": "COMPRESSOR",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "F",
+          "value": "REFRIGERANT",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "G",
+          "value": "Cooling Performance",
+          "colspan": 5,
+          "rowspan": 1
+        },
+        {
+          "col": "L",
+          "value": "Evaporator",
+          "colspan": 5,
+          "rowspan": 1
+        },
+        {
+          "col": "Q",
+          "value": "Electrical Data",
+          "colspan": 3,
+          "rowspan": 1
+        },
+        {
+          "col": "T",
+          "value": "SOUND POWER dB(A)",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "U",
+          "value": "Operating Weight (lbs)",
+          "colspan": 1,
+          "rowspan": 2
+        },
+        {
+          "col": "V",
+          "value": "DIMENSIONS L x W x H (IN)",
+          "colspan": 1,
+          "rowspan": 2
+        }
+      ],
+      [
+        {
+          "col": "G",
+          "value": "CAPACITY (TONS)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "H",
+          "value": "POWER INPUT (KW)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "I",
+          "value": "EER",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "J",
+          "value": "IPLV",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "K",
+          "value": "AMBIENT (°F)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "L",
+          "value": "EWT (°F)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "M",
+          "value": "LWT (°F)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "N",
+          "value": "GPM",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "O",
+          "value": "EVAP WPD (FT)",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "P",
+          "value": "MIN / MAX GPM",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "Q",
+          "value": "VOLT/PH",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "R",
+          "value": "Unit MCA",
+          "colspan": 1,
+          "rowspan": 1
+        },
+        {
+          "col": "S",
+          "value": "Unit MOCP",
+          "colspan": 1,
+          "rowspan": 1
+        }
+      ]
+    ]
+  },
+  "filterColumns": [
+    {
+      "name": "SIZE",
+      "col": "X"
+    },
+    {
+      "name": "ELECTRICAL",
+      "col": "Y"
+    },
+    {
+      "name": "COMPRESSOR TYPE",
+      "col": "Z"
+    },
+    {
+      "name": "REFRIGERANT",
+      "col": "AA"
+    }
+  ],
+  "documentationColumns": [
+    {
+      "name": "SUBMITTAL",
+      "col": "AC",
+      "folder": "SUBMITTALS",
+      "fileExtension": "pdf"
+    },
+    {
+      "name": "ENGINEERING MANUAL",
+      "col": "AD",
+      "folder": "ENGINEERING MANUALS",
+      "fileExtension": "pdf"
+    }
+  ],
+  "refrigerantColumns": [],
+  "selections": [
+    {
+      "id": "sel_0001",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3040THJ17XCB",
+            "C": "QTC3040THJ17VSD",
+            "D": 40,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 38.98,
+            "H": 39.46,
+            "I": 11.85,
+            "J": 18.62,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 93.04,
+            "O": 7.43,
+            "P": "41 / 224",
+            "Q": "200-208/3",
+            "R": 182,
+            "S": 200,
+            "T": 93,
+            "U": 3825,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 40,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0002",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3040THJ46XCB",
+            "C": "QTC3040THJ46VSD",
+            "D": 40,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 38.98,
+            "H": 39.46,
+            "I": 11.85,
+            "J": 18.62,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 93.04,
+            "O": 7.43,
+            "P": "41 / 224",
+            "Q": "460/3",
+            "R": 83,
+            "S": 90,
+            "T": 93,
+            "U": 3825,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 40,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0003",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3050THJ17XCB",
+            "C": "QTC3050THJ17VSD",
+            "D": 50,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 48.25,
+            "H": 51.88,
+            "I": 11.16,
+            "J": 17.59,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 115.2,
+            "O": 7.26,
+            "P": "48 / 224",
+            "Q": "200-208/3",
+            "R": 235,
+            "S": 250,
+            "T": 94,
+            "U": 3704,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 50,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0004",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3050THJ46XCB",
+            "C": "QTC3050THJ46VSD",
+            "D": 50,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 48.25,
+            "H": 51.88,
+            "I": 11.16,
+            "J": 17.59,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 115.2,
+            "O": 7.26,
+            "P": "48 / 224",
+            "Q": "460/3",
+            "R": 106,
+            "S": 125,
+            "T": 94,
+            "U": 3704,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 50,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0005",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3055THJ17XFB",
+            "C": "QTC3055THJ17VSD",
+            "D": 55,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 56.11,
+            "H": 62.08,
+            "I": 10.85,
+            "J": 17.52,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 133.9,
+            "O": 7.22,
+            "P": "60 / 325",
+            "Q": "200-208/3",
+            "R": 285,
+            "S": 300,
+            "T": 93,
+            "U": 4026,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 55,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0006",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3055THJ46XFB",
+            "C": "QTC3055THJ46VSD",
+            "D": 55,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 56.11,
+            "H": 62.08,
+            "I": 10.85,
+            "J": 17.52,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 133.9,
+            "O": 7.22,
+            "P": "60 / 325",
+            "Q": "460/3",
+            "R": 132,
+            "S": 150,
+            "T": 93,
+            "U": 4026,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 55,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0007",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3060THJ17XFB",
+            "C": "QTC3060THJ17VSD",
+            "D": 60,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 61.35,
+            "H": 69.32,
+            "I": 10.62,
+            "J": 17.66,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 146.4,
+            "O": 8.42,
+            "P": "60 / 325",
+            "Q": "200-208/3",
+            "R": 315,
+            "S": 350,
+            "T": 93,
+            "U": 4220,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 60,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0008",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3060THJ46XFB",
+            "C": "QTC3060THJ46VSD",
+            "D": 60,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 61.35,
+            "H": 69.32,
+            "I": 10.62,
+            "J": 17.66,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 146.4,
+            "O": 8.42,
+            "P": "60 / 325",
+            "Q": "460/3",
+            "R": 152,
+            "S": 175,
+            "T": 93,
+            "U": 4220,
+            "V": "101.4 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 60,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0009",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3070TSJ46XFB",
+            "C": "QTC3070TSJ46VSD",
+            "D": 70,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 69.98,
+            "H": 79.18,
+            "I": 10.61,
+            "J": 17.99,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 167,
+            "O": 10.8,
+            "P": "60 / 325",
+            "Q": "460/3",
+            "R": 170,
+            "S": 175,
+            "T": 94,
+            "U": 4464,
+            "V": "116.1 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 70,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0010",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3075TSJ46XFB",
+            "C": "QTC3075TSJ46VSD",
+            "D": 75,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 76.64,
+            "H": 88.91,
+            "I": 10.34,
+            "J": 17.26,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 183,
+            "O": 8.92,
+            "P": "100 / 350",
+            "Q": "460/3",
+            "R": 179,
+            "S": 200,
+            "T": 94,
+            "U": 4517,
+            "V": "116.1 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 75,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0011",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3085TSJ17XFB",
+            "C": "QTC3085TSJ17VSD",
+            "D": 85,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 80.58,
+            "H": 96.02,
+            "I": 10.07,
+            "J": 17.56,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 192.3,
+            "O": 6.48,
+            "P": "100 / 400",
+            "Q": "200-208/3",
+            "R": 401,
+            "S": 450,
+            "T": 94,
+            "U": 4610,
+            "V": "116.1 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 85,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0012",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3085TSJ46XFB",
+            "C": "QTC3085TSJ46VSD",
+            "D": 85,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 80.58,
+            "H": 96.02,
+            "I": 10.07,
+            "J": 17.56,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 192.3,
+            "O": 6.48,
+            "P": "100 / 400",
+            "Q": "460/3",
+            "R": 186,
+            "S": 200,
+            "T": 94,
+            "U": 4610,
+            "V": "116.1 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 85,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0013",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3095TSJ17XFB",
+            "C": "QTC3095TSJ17PC",
+            "D": 95,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 95.04,
+            "H": 114.8,
+            "I": 9.935,
+            "J": 17.03,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 226.9,
+            "O": 8.89,
+            "P": "100 / 400",
+            "Q": "200-208/3",
+            "R": 460,
+            "S": 500,
+            "T": 95,
+            "U": 5247,
+            "V": "142.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 95,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0014",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3095TSJ46XFB",
+            "C": "QTC3095TSJ46VSD",
+            "D": 95,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 95.04,
+            "H": 114.8,
+            "I": 9.935,
+            "J": 17.03,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 226.9,
+            "O": 8.89,
+            "P": "100 / 400",
+            "Q": "460/3",
+            "R": 222,
+            "S": 250,
+            "T": 95,
+            "U": 5247,
+            "V": "142.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 95,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0015",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3110TSJ17XFB",
+            "C": "QTC3110TSJ17VSD",
+            "D": 110,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 118.2,
+            "H": 141.7,
+            "I": 10.01,
+            "J": 17.09,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 282.2,
+            "O": 8.24,
+            "P": "150 / 625",
+            "Q": "200-208/3",
+            "R": 507,
+            "S": 600,
+            "T": 96,
+            "U": 5695,
+            "V": "142.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 110,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0016",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3110TSJ46XFB",
+            "C": "QTC3110TSJ46VSD",
+            "D": 110,
+            "E": "4 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 118.2,
+            "H": 141.7,
+            "I": 10.01,
+            "J": 17.09,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 282.2,
+            "O": 8.24,
+            "P": "150 / 625",
+            "Q": "460/3",
+            "R": 250,
+            "S": 300,
+            "T": 96,
+            "U": 5695,
+            "V": "142.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 110,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0017",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3129THJ17XFB",
+            "C": "QTC3129THJ17VSD",
+            "D": 129,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 124.4,
+            "H": 144.2,
+            "I": 10.35,
+            "J": 18.15,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 297,
+            "O": 12.3,
+            "P": "138 / 525",
+            "Q": "200-208/3",
+            "R": 565,
+            "S": 600,
+            "T": 97,
+            "U": 7194,
+            "V": "187.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 129,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0018",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3129THJ46XFB",
+            "C": "QTC3129THJ46VSD",
+            "D": 129,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 124.4,
+            "H": 144.2,
+            "I": 10.35,
+            "J": 18.15,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 297,
+            "O": 12.3,
+            "P": "138 / 525",
+            "Q": "460/3",
+            "R": 273,
+            "S": 300,
+            "T": 97,
+            "U": 7194,
+            "V": "187.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 129,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0019",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3140TSJ17XFB",
+            "C": "QTC3140TSJ17VSD",
+            "D": 140,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 143.2,
+            "H": 173,
+            "I": 9.932,
+            "J": 17.75,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 341.7,
+            "O": 11.9,
+            "P": "150 / 625",
+            "Q": "200-208/3",
+            "R": 628,
+            "S": 700,
+            "T": 97,
+            "U": 7154,
+            "V": "187.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 140,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0020",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3140TSJ46XFB",
+            "C": "QTC3140TSJ46VSD",
+            "D": 140,
+            "E": "5 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 143.2,
+            "H": 173,
+            "I": 9.932,
+            "J": 17.75,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 341.7,
+            "O": 11.9,
+            "P": "150 / 625",
+            "Q": "460/3",
+            "R": 310,
+            "S": 350,
+            "T": 97,
+            "U": 7154,
+            "V": "187.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 140,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0021",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4150S",
+            "C": "QTC4150SXXX46R",
+            "D": 150,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 157.3,
+            "H": 194.5,
+            "I": 9.703,
+            "J": 17.46,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 376.4,
+            "O": 7.33,
+            "P": "250 / 980",
+            "Q": "460/3",
+            "R": 291.8,
+            "S": 400,
+            "T": 101,
+            "U": 13078,
+            "V": "203.3 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 150,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0022",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3160TSJ17XFB",
+            "C": "QTC3160TSJ17VSD",
+            "D": 160,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 167.6,
+            "H": 202.3,
+            "I": 9.942,
+            "J": 17.49,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 400,
+            "O": 21.4,
+            "P": "150 / 625",
+            "Q": "200-208/3",
+            "R": 749,
+            "S": 800,
+            "T": 98,
+            "U": 8494,
+            "V": "232.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 160,
+            "ELECTRICAL": "200-208/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0023",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3160TSJ46XFB",
+            "C": "QTC3160TSJ46VSD",
+            "D": 160,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 167.6,
+            "H": 202.3,
+            "I": 9.942,
+            "J": 17.49,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 400,
+            "O": 21.4,
+            "P": "150 / 625",
+            "Q": "460/3",
+            "R": 370,
+            "S": 400,
+            "T": 98,
+            "U": 8494,
+            "V": "232.7 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 160,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0024",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4185S",
+            "C": "QTC4185SXXX46R",
+            "D": 185,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 186.8,
+            "H": 227.8,
+            "I": 9.84,
+            "J": 18.32,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 447.1,
+            "O": 15.2,
+            "P": "200 / 790",
+            "Q": "460/3",
+            "R": 346.4,
+            "S": 500,
+            "T": 102,
+            "U": 13713,
+            "V": "247 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 185,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0025",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3205THJ46XFB",
+            "C": "QTC3205THJ46VSD",
+            "D": 205,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 192.8,
+            "H": 222.9,
+            "I": 10.38,
+            "J": 18.46,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 460.3,
+            "O": 18.4,
+            "P": "230 / 625",
+            "Q": "460/3",
+            "R": 366,
+            "S": 400,
+            "T": 98,
+            "U": 10119,
+            "V": "274.8 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 205,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0026",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4210S",
+            "C": "QTC4210SXXX46R",
+            "D": 210,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 217.2,
+            "H": 261.8,
+            "I": 9.955,
+            "J": 18.65,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 519.8,
+            "O": 19.9,
+            "P": "200 / 790",
+            "Q": "460/3",
+            "R": 392.1,
+            "S": 500,
+            "T": 102,
+            "U": 14599,
+            "V": "291.2 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 210,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0027",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC3225THJ46XIB",
+            "C": "QTC3225THJ46VSD",
+            "D": 225,
+            "E": "6 SCROLL / 2 CKT",
+            "F": "R-454B",
+            "G": 216,
+            "H": 241.6,
+            "I": 10.73,
+            "J": 18.53,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 515.5,
+            "O": 18.3,
+            "P": "230 / 650",
+            "Q": "460/3",
+            "R": 470,
+            "S": 500,
+            "T": 100,
+            "U": 10606,
+            "V": "274.8 x 88.3 x 94.2"
+          },
+          "filterData": {
+            "SIZE": 225,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "SCROLL",
+            "REFRIGERANT": "R-454B"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0028",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4230S",
+            "C": "QTC4230SXXX46R",
+            "D": 230,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 228,
+            "H": 281.3,
+            "I": 9.727,
+            "J": 18.57,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 545.7,
+            "O": 14.2,
+            "P": "250 / 980",
+            "Q": "460/3",
+            "R": 425,
+            "S": 600,
+            "T": 101,
+            "U": 14991,
+            "V": "291.2 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 230,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0029",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4270S",
+            "C": "QTC4270SXXX46R",
+            "D": 270,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 268.2,
+            "H": 324,
+            "I": 9.933,
+            "J": 19.16,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 641.8,
+            "O": 19.7,
+            "P": "300 / 1170",
+            "Q": "460/3",
+            "R": 484.9,
+            "S": 600,
+            "T": 103,
+            "U": 18488,
+            "V": "335.2 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 270,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    },
+    {
+      "id": "sel_0030",
+      "rows": [
+        {
+          "scheduleData": {
+            "A": "QUANTECH",
+            "B": "QTC4340S",
+            "C": "QTC4340SXXX46R",
+            "D": 340,
+            "E": "2 VSD SCREW / 2 CKT",
+            "F": "R-513A",
+            "G": 351,
+            "H": 429.3,
+            "I": 9.81,
+            "J": 18.79,
+            "K": 95,
+            "L": 54,
+            "M": 44,
+            "N": 840,
+            "O": 17.7,
+            "P": "410 / 1600",
+            "Q": "460/3",
+            "R": 642.2,
+            "S": 800,
+            "T": 105,
+            "U": 21632,
+            "V": "423.1 x 88.3 x 94.6"
+          },
+          "filterData": {
+            "SIZE": 340,
+            "ELECTRICAL": "460/3",
+            "COMPRESSOR TYPE": "VSD SCREW",
+            "REFRIGERANT": "R-513A"
+          },
+          "documentationData": {}
+        }
+      ]
+    }
+  ],
+  "scheduleNotes": {
+    "format": "list",
+    "notes": [
+      "Performance at AHRI 550/590 conditions: 54°F entering / 44°F leaving water, 95°F ambient, 0.0001 fouling factor, sea level.",
+      "Stocked unit - confirm availability with Hoffman & Hoffman before release.",
+      "Unit supplied with factory options per the stock unit submittal; refer to the submittal for the included option list."
+    ]
+  },
+  "_meta": {
+    "sourceFile": "STOCKED CHILLERS DATA.xlsx",
+    "generatedAt": "2026-10-20T14:56:09",
+    "dataRowCount": 30,
+    "selectionCount": 30
+  }
+}

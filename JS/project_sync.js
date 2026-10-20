@@ -162,7 +162,8 @@
         }
         return withTimeout(api('GET', 'api/me'), INIT_TIMEOUT_MS)
             .then(function (who) {
-                me = { email: String(who.email || '').toLowerCase(), admin: !!who.admin };
+                me = { email: String(who.email || '').toLowerCase(), admin: !!who.admin,
+                       internal: !!who.internal };
                 if (!me.email) throw new Error('no identity');
                 return withTimeout(api('GET', 'api/projects'), INIT_TIMEOUT_MS);
             })
@@ -264,9 +265,11 @@
         notify: notify,
         flush: flush,
         isEnabled: function () { return enabled; },
-        /** { email, admin } for the signed-in user, or null. */
+        /** { email, admin, internal } for the signed-in user, or null. */
         me: function () { return me; },
         isAdmin: function () { return !!(me && me.admin); },
+        /** H&H staff - may see internal-only sections (server/firm-access.js). */
+        isInternal: function () { return !!(me && me.internal); },
         lastError: function () { return lastError; }
     };
 })();

@@ -1409,6 +1409,8 @@ WHAT'S IN THE GRID
             'mini_splits':            'MINI SPLIT SCHEDULE',
             'multi_position_splits':  'MULTI POSITION SPLIT SCHEDULE',
             'gas_splits':             'GAS SPLIT SCHEDULE',
+            'water_source_heat_pumps': 'WATER SOURCE HEAT PUMP SCHEDULE',
+            'stocked_chillers':       'AIR-COOLED CHILLER SCHEDULE',
             'vfds':                   'VFD SCHEDULE',
             'diffusers':              'DIFFUSER SCHEDULE',
             'gps':                    'AIR IONIZATION DEVICE SCHEDULES'
@@ -2520,6 +2522,8 @@ WHAT'S IN THE GRID
             'mini_splits': 'Mini Splits',
             'multi_position_splits': 'Unitary & Light Commercial Split Systems',
             'gas_splits': 'Gas Splits',
+            'water_source_heat_pumps': 'Water Source Heat Pumps',
+            'stocked_chillers': 'Air-Cooled Chillers',
             'vfds': 'VFDs',
             'diffusers': 'Diffusers'
         };

@@ -88,6 +88,30 @@
             tileClass: 'tile-gas-splits'
         },
         {
+            // Bosch CL / CF / CP / EC at AHRI water-loop ratings - see the
+            // SOURCES tab of DATA/DATA FILES/WATER SOURCE HEAT PUMP DATA.xlsx.
+            productKey: 'water_source_heat_pumps',
+            displayName: 'WATER SOURCE HEAT PUMPS',
+            jsonFile: 'DATA/JSON/water_source_heat_pumps.json',
+            pictureFile: 'DATA/PICTURES/WATER SOURCE HEAT PUMPS.jpg',
+            assetsFolder: 'ASSETS/WATER SOURCE HEAT PUMPS',
+            tileClass: 'tile-water-source-heat-pumps',
+            autoTagPrefix: 'WSHP-'
+        },
+        {
+            // Quantech air-cooled chillers H&H holds in stock. Visible to
+            // everyone, engineers included. To make it H&H-only again, add
+            // internalOnly: true here and list the JSON in worker/index.js
+            // INTERNAL_ONLY (+ run_worker_first in wrangler.jsonc).
+            productKey: 'stocked_chillers',
+            displayName: 'STOCKED CHILLERS',
+            jsonFile: 'DATA/JSON/stocked_chillers.json',
+            pictureFile: 'DATA/PICTURES/CHILLERS.jpg',
+            assetsFolder: 'ASSETS/STOCKED CHILLERS',
+            tileClass: 'tile-stocked-chillers',
+            autoTagPrefix: 'CH-'
+        },
+        {
             productKey: 'marvair',
             displayName: 'MARVAIR VERTICAL WALL MOUNT',
             jsonFile: 'DATA/JSON/marvair.json',
@@ -274,8 +298,15 @@
     var productDataCache = {};
 
     HHpro.Data = {
+        /**
+         * Products this user can browse (home tiles, Design Search, model
+         * lookup). Sections flagged internalOnly are H&H-staff only; the
+         * Worker also refuses their data file to everyone else, so this is
+         * only about not showing a tile that can't load.
+         */
         getProducts: function () {
-            return PRODUCTS.slice();
+            var internal = !!(HHpro.ProjectSync && HHpro.ProjectSync.isInternal());
+            return PRODUCTS.filter(function (p) { return internal || !p.internalOnly; });
         },
 
         getProduct: function (productKey) {

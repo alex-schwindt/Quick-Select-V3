@@ -110,6 +110,48 @@ PRODUCT_CONFIGS = {
             ],
         },
     },
+    # Bosch CL / CF / CP / EC water-source heat pumps at AHRI/ISO 13256-1
+    # water-loop ratings; built from the Bosch engineering submittal sheets
+    # (the workbook's SOURCES tab records page references and derivations).
+    "WATER SOURCE HEAT PUMP DATA.xlsx": {
+        "productType": "WATER SOURCE HEAT PUMPS",
+        "outputFileName": "water_source_heat_pumps.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "WATER SOURCE HEAT PUMPS",
+        "searchSchema": {
+            "displayName": "Water Source Heat Pumps",
+            "description": "Water-to-air heat pumps (Bosch CL, CF, CP 0.5-6 ton and EC 6-30 ton) at AHRI water-loop ratings. Enter design loads and the page returns models that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Nominal Tons",          "col": "D", "unit": "tons",  "defaultTolerance": 10},
+                {"label": "Cooling Capacity",      "col": "I", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Heating Capacity",      "col": "M", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Airflow",               "col": "F", "unit": "CFM",   "defaultTolerance": 10},
+                {"label": "Water Flow",            "col": "Q", "unit": "GPM",   "defaultTolerance": 10},
+            ],
+        },
+    },
+    # Quantech QTC3 / QTC4 air-cooled chillers H&H holds in stock, one row
+    # per stock unit, from the selection reports in the quantech-cut-sheets
+    # R2 bucket (SOURCES tab). Visible to all users, engineers included.
+    "STOCKED CHILLERS DATA.xlsx": {
+        "productType": "STOCKED CHILLERS",
+        "outputFileName": "stocked_chillers.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "STOCKED CHILLERS",
+        "searchSchema": {
+            "displayName": "Stocked Chillers",
+            "description": "Quantech air-cooled chillers H&H holds in stock, at AHRI 550/590 conditions (54/44°F, 95°F ambient). Enter design loads and the page returns stock units that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Cooling Capacity", "col": "G", "unit": "tons", "defaultTolerance": 10},
+                {"label": "Water Flow",       "col": "N", "unit": "GPM",  "defaultTolerance": 15},
+                {"label": "EER",              "col": "I", "unit": "",     "defaultTolerance": 10},
+            ],
+        },
+    },
     "MARVAIR DATA.xlsx": {
         "productType": "MARVAIR VERTICAL WALL MOUNT",
         "outputFileName": "marvair.json",

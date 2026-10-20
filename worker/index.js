@@ -14,13 +14,21 @@
                            doesn't confirm the firm exists
      /api/me, /api/projects*, /api/admin/*
                         -> saved projects in D1 (server/projects.js)
+     INTERNAL_ONLY files -> H&H staff only (firm-access.js "internal");
+                           everyone else gets a plain 404
 
    Who gets which firm: server/firm-access.js. Who is an admin:
    server/admins.js. Identity check: server/access.js.
    ============================================================ */
 
-import { accessEmail, firmsFor } from '../server/access.js';
+import { accessEmail, firmsFor, isInternal } from '../server/access.js';
 import { handleProjects } from '../server/projects.js';
+
+// Site files only H&H staff may load (each must also be listed under
+// "run_worker_first" in wrangler.jsonc so requests reach this script).
+// Empty today - add a section's JSON path here (and mark the product
+// internalOnly in JS/data.js) to make it H&H-only.
+const INTERNAL_ONLY = new Set([]);
 
 const NO_STORE = { 'Cache-Control': 'private, no-store' };
 
@@ -56,6 +64,13 @@ export default {
         const { pathname } = new URL(request.url);
         if (pathname === '/api/firms') return apiFirms(request, env);
         if (pathname.startsWith('/firms/')) return firmFile(request, env, pathname);
+        if (INTERNAL_ONLY.has(pathname)) {
+            if (!isInternal(await accessEmail(request, env))) return notFound();
+            const res = await env.ASSETS.fetch(request);
+            const out = new Response(res.body, res);
+            out.headers.set('Cache-Control', 'private, no-store');
+            return out;
+        }
         if (pathname.startsWith('/api/')) {
             const res = await handleProjects(request, env, pathname, await accessEmail(request, env));
             return res || notFound();

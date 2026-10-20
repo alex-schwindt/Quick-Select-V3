@@ -20,6 +20,12 @@ export default {
         '@hoffman-hoffman.com'
     ],
 
+    // H&H staff: can see internal-only sections (e.g. Stocked Chillers -
+    // H&H inventory). Same entry format as below.
+    internal: [
+        '@hoffman-hoffman.com'
+    ],
+
     // firm key -> people/domains allowed that firm's layouts.
     // TODO: fill in each firm's email domain or individual addresses.
     firms: {

@@ -118,6 +118,11 @@ function matches(email, entries) {
     });
 }
 
+/** True for H&H staff (firm-access.js "internal"). */
+export function isInternal(email) {
+    return !!email && matches(email, FIRM_ACCESS.internal);
+}
+
 /**
  * Firm keys this email may use (never includes 'hoffman', which
  * everyone gets client-side).

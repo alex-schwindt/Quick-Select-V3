@@ -9,7 +9,7 @@
    The browser keeps its own copy in localStorage and syncs here
    (JS/project_sync.js), so the app stays fast and works offline.
 
-     GET    /api/me                      -> { email, admin }
+     GET    /api/me                      -> { email, admin, internal }
      GET    /api/projects                -> { projects:[...], deleted:{id:deletedAt}, order:[...] }
      PUT    /api/projects/<id>           -> save one project (newer updatedAt wins)
      DELETE /api/projects/<id>           -> delete (kept as a tombstone so other
@@ -23,6 +23,7 @@
    ============================================================ */
 
 import ADMINS from './admins.js';
+import { isInternal } from './access.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json', 'Cache-Control': 'private, no-store' };
 const MAX_PROJECT_BYTES = 1024 * 1024;     // D1 rows top out at 2 MB; real projects are a few KB
@@ -171,7 +172,7 @@ export async function handleProjects(request, env, pathname, email) {
     const method = request.method;
     if (pathname === '/api/me') {
         if (!email) return json({ error: 'not signed in' }, 401);
-        return json({ email, admin: isAdmin(email) });
+        return json({ email, admin: isAdmin(email), internal: isInternal(email) });
     }
 
     const own = pathname === '/api/projects' || pathname.startsWith('/api/projects/') ||
