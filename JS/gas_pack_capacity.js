@@ -2,11 +2,9 @@
    HHpro - Gas Pack RTU capacity tables (HHpro.GasPackCapacity)
    ------------------------------------------------------------
    Backs the condition-aware Gas Pack RTU section of Design
-   Search. Every number on the schedule today came from a
-   selection Eric ran by hand at one condition (80/67 EAT, 95
-   ambient, 0.5" ESP); these tables let the site answer for any
-   condition TempMaster publishes, without re-running the software
-   for every combination.
+   Search. The schedule rows are these same tables at one
+   standard condition (80/67 EAT, 95 ambient, 400 CFM/ton); the
+   search answers for any condition TempMaster publishes.
 
    Data: DATA/JSON/gas_pack_capacity.json (built by
    convert_to_json.py from "TempMaster RTU Capacity Tables.xlsx" -

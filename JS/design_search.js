@@ -46,11 +46,10 @@
     };
 
     // Gas Pack RTUs get a purpose-built form rather than the schema-driven
-    // one: every number on their schedule came from a selection run by hand
-    // at one condition, so the useful question is "what does this cabinet do
-    // at MY condition", not "which stored row is closest". The defaults are
-    // the conditions those manual selections used, so an untouched form
-    // reproduces the schedule.
+    // one: every row on their schedule sits at one standard condition, so the
+    // useful question is "what does this cabinet do at MY condition", not
+    // "which stored row is closest". The defaults are that standard
+    // condition (80/67 EAT, 95 ambient).
     function freshGasPackState() {
         return {
             tons: null, electrical: null, motor: null,
@@ -1410,7 +1409,7 @@
     // Columns of the Design Search result schedule. Deliberately NOT the
     // product schedule: this table reports only what was asked for plus the
     // values derived from it, so nothing here can be mistaken for the
-    // manually-run selection stored on the product page.
+    // standard-condition row stored on the product page.
     var GP_COLUMNS = [
         { label: 'Model', get: function (r) { return r.model; }, cls: 'gp-col-model' },
         { label: 'Nom Tons', get: function (r) { return r.tons; } },

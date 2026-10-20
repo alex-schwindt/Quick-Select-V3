@@ -5,14 +5,16 @@
    base.js. What lives here is HHpro.GasPackDesign: the bridge
    between a Design Search result and the schedule row it maps to.
 
-   Every number on the Gas Pack schedule came from a selection run
-   by hand in TempMaster's software at one condition (80/67 EAT, 95
-   ambient, 0.5" ESP). Design Search can now answer for any
-   condition TempMaster publishes, so a selected result carries a
-   "design values" payload back to the schedule. The row then
-   offers a toggle between the two:
+   Every row on the Gas Pack schedule is generated from TempMaster's
+   technical guides at standard conditions (80/67 F EAT, 95 F
+   ambient, 400 CFM/ton - see the SOURCES tab of GAS PACKS
+   DATA.xlsx). Design Search reads the same tables at any condition
+   TempMaster publishes, so a selected result carries a "design
+   values" payload back to the schedule. The row then offers a
+   toggle between the two:
 
-     Standard  - exactly what was run by hand. Never modified.
+     Standard  - the row as generated at standard conditions.
+                 Never modified.
      Design    - the values from the capacity tables at the
                  condition that was searched.
 
@@ -59,9 +61,9 @@
 
     var WARNING =
         'These values come from TempMaster’s published capacity tables at your design ' +
-        'condition, not from the selection run in TempMaster’s software. The Submittal PDF ' +
-        'on this site still shows the STANDARD unit selection — it will not reflect ' +
-        'these numbers.';
+        'condition. The standard values on this schedule are the same tables at 80/67 °F ' +
+        'entering air and 95 °F ambient. The Submittal PDF on this site shows the STANDARD ' +
+        'values — it will not reflect these numbers.';
 
     // Sensible heat rate for standard air.
     var AIR_CONST = 1.08;
@@ -165,12 +167,11 @@
     /**
      * The schedule row a Design Search result should land on.
      *
-     * Matched on cabinet + voltage + heat size + hot gas reheat, and
-     * DELIBERATELY NOT on the motor: the schedule carries one blower per
-     * cabinet, so a result on the other static level has no row of its own.
-     * The toggle writes the result's model number (blower letter rewritten)
-     * instead - which is why the model shown changes when Design values
-     * are on.
+     * Matched on cabinet + voltage + heat size + hot gas reheat, with the
+     * blower preferred but not required: the schedule carries standard and
+     * high static rows, but if a result's blower has no row the nearest one
+     * is used and the toggle writes the result's model number (blower letter
+     * rewritten) instead.
      */
     function matchSelection(data, result) {
         var G = HHpro.GasPackCapacity;
@@ -324,8 +325,8 @@
                 btn.title = on
                     ? 'Showing capacity-table values at ' + entry.payload.cooling.eatDb + '/' +
                       entry.payload.cooling.eatWb + ' °F EAT, ' + entry.payload.cooling.ambient +
-                      ' °F ambient. Click to show the standard selection. ' + WARNING
-                    : 'Showing the standard selection run in TempMaster’s software. ' +
+                      ' °F ambient. Click to show the standard values. ' + WARNING
+                    : 'Showing the standard values (80/67 °F EAT, 95 °F ambient). ' +
                       'Click to show your design-condition values.';
             }
             return btn;
@@ -412,9 +413,81 @@
         return box;
     }
 
+    // -----------------------------------------------------------------
+    // Saved-item migration
+    // -----------------------------------------------------------------
+    /**
+     * Saved project / cart items point at a schedule row by selectionId
+     * (sel_0001 ...), which follows row order - so when the schedule is
+     * regenerated, an old item can silently land on a different unit.
+     * Each item also keeps its label ("3 TON KJ037N06D2BEAAA5A1"), so a
+     * stale item is re-pointed to the row with the same cabinet, voltage,
+     * blower, heat size and reheat, and its label refreshed. Items whose
+     * old model can't be read (pre-TempMaster Daikin numbers) are left as
+     * they are. Runs at startup, before the cart loads.
+     */
+    var PROJECTS_KEY = 'hhpro_projects';
+    var ACTIVE_KEY = 'hhpro_active_cart';
+
+    function itemsUsingGasPacks(list) {
+        return (list || []).some(function (it) { return it && it.productKey === PRODUCT; });
+    }
+
+    function migrateSavedItems() {
+        var projects, active;
+        try { projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}') || {}; } catch (e) { projects = {}; }
+        try { active = JSON.parse(sessionStorage.getItem(ACTIVE_KEY) || 'null'); } catch (e) { active = null; }
+        var needs = Object.keys(projects).some(function (id) { return itemsUsingGasPacks(projects[id].items); }) ||
+                    (active && itemsUsingGasPacks(active.items));
+        if (!needs || !HHpro.Data || !HHpro.GasPackCapacity) return Promise.resolve(0);
+
+        return HHpro.Data.loadProduct(PRODUCT).then(function (data) {
+            var G = HHpro.GasPackCapacity;
+            var cols = resolveColumns(data);
+            var byId = {}, byKey = {};
+            (data.selections || []).forEach(function (sel) {
+                var sd = sel.rows && sel.rows[0] && sel.rows[0].scheduleData;
+                var p = sd && G.parseModel(sd[cols.model]);
+                byId[sel.id] = sd ? String(sd[cols.model]) : null;
+                if (p) byKey[[p.cabinet, p.voltage, p.motor, p.heatCode, p.hgrh].join('|')] = sel;
+            });
+            var fixed = 0;
+            function fix(items) {
+                var changed = false;
+                (items || []).forEach(function (it) {
+                    if (!it || it.productKey !== PRODUCT) return;
+                    var oldModel = String(it.label || '').trim().split(/\s+/).pop();
+                    if (!oldModel || byId[it.selectionId] === oldModel) return;   // still points at its unit
+                    var p = G.parseModel(oldModel);
+                    var sel = p && byKey[[p.cabinet, p.voltage, p.motor, p.heatCode, p.hgrh].join('|')];
+                    if (!sel) return;
+                    it.selectionId = sel.id;
+                    it.label = HHpro.Cart.computeLabel(HHpro.Data.getProduct(PRODUCT), sel, data);
+                    changed = true;
+                    fixed++;
+                });
+                return changed;
+            }
+            var now = new Date().toISOString();
+            Object.keys(projects).forEach(function (id) {
+                if (fix(projects[id].items)) projects[id].updatedAt = now;   // so sync pushes it
+            });
+            var activeChanged = active && fix(active.items);
+            if (fixed) {
+                try { localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects)); } catch (e) { /* full */ }
+                if (activeChanged) {
+                    try { sessionStorage.setItem(ACTIVE_KEY, JSON.stringify(active)); } catch (e) { /* full */ }
+                }
+                if (HHpro.ProjectSync) HHpro.ProjectSync.notify();
+            }
+            return fixed;
+        }).catch(function () { return 0; });
+    }
+
     HHpro.GasPackDesign = {
         PRODUCT: PRODUCT,
         WARNING: WARNING,
+        migrateSavedItems: migrateSavedItems,
         resolveColumns: resolveColumns,
         payloadFor: payloadFor,
         scheduleModels: scheduleModels,

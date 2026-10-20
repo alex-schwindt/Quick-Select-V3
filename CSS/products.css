@@ -1025,8 +1025,10 @@
 /* The water source heat pump photo is a tall portrait shot of one unit on
    a black background. Cover-cropping it to the 4:3 tile would cut off the
    top and bottom of the unit, so show the whole photo on the tile's black
-   well instead. */
-.tile.tile-water-source-heat-pumps .tile-image img {
+   well instead. The chiller photo (398 x 335, also on black) is a little
+   taller than 4:3 and gets the same treatment. */
+.tile.tile-water-source-heat-pumps .tile-image img,
+.tile.tile-stocked-chillers .tile-image img {
     object-fit: contain;
 }
 

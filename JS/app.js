@@ -34,6 +34,10 @@
     // quietly when unavailable), then open the overview.
     function init() {
         Promise.all([HHpro.Templates.loadFirms(), HHpro.ProjectSync.init()]).then(function (res) {
+            // Re-point saved gas pack items if the schedule was regenerated
+            // (gas_packs.js) - before the cart reads them.
+            return HHpro.GasPackDesign.migrateSavedItems().then(function () { return res; });
+        }).then(function (res) {
             HHpro.State.setAllowedEngineers(['hoffman'].concat(res[0]));
             HHpro.State.setLoggedIn(true);
             HHpro.App.showView('main');

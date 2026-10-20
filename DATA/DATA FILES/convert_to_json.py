@@ -94,10 +94,9 @@ PRODUCT_CONFIGS = {
         "dataStartRow": 5,
         "supportsMultiRow": False,
         "assetsFolder": "GAS PACKS",
-        # Sold under the TempMaster label. Column A is MAKE.
-        "brandOverrides": [
-            {"cols": ["A"], "frm": "DAIKIN", "to": "TEMPMASTER"},
-        ],
+        # Rows are generated from the TempMaster technical guides at standard
+        # conditions (the workbook's SOURCES tab) and carry the TEMPMASTER
+        # make directly, so no brand override is needed.
         "searchSchema": {
             "displayName": "Gas Pack RTUs",
             "description": "Packaged rooftop units. Enter design loads and the page returns models that meet the targets within your tolerance.",
@@ -516,8 +515,7 @@ def convert_capacity_tables(input_path, output_path):
 #                   combinations plus the indoor motor HP.
 #
 # Only the power supplies in GAS_PACK_VOLTAGES are carried (the ones the
-# schedule uses); the workbook also holds 575 V, which can be switched on by
-# adding it there. Combinations printed "-" in the guide - and cells left
+# schedule offers: 208/230, 460 and 575 V). Combinations printed "-" in the guide - and cells left
 # blank as misprints - are simply omitted, so the site only ever sees rated
 # data.
 #
@@ -528,7 +526,7 @@ GAS_PACK_CAPACITY_FILE = "TempMaster RTU Capacity Tables.xlsx"
 GAS_PACK_CAPACITY_OUTPUT = "gas_pack_capacity.json"
 
 # Workbook "Power Supply" -> the VOLT/PH spelling used by GAS PACKS DATA.
-GAS_PACK_VOLTAGES = {"208/230/3/60": "208/3", "460/3/60": "460/3"}
+GAS_PACK_VOLTAGES = {"208/230/3/60": "208/3", "460/3/60": "460/3", "575/3/60": "575/3"}
 # Cabinet prefix -> Efficiency filter value (matches GAS PACKS DATA's
 # EFFICIENCY column) and whether hot gas reheat is orderable on it. All three
 # TempMaster lines are standard efficiency and offer factory reheat on every

@@ -357,7 +357,7 @@
         main.appendChild(statusLine);
 
         // Standing warning while any row on this schedule is showing
-        // capacity-table values instead of the selection run by hand.
+        // design-condition values instead of its standard-condition values.
         if (HHpro.GasPackDesign &&
             product.productKey === HHpro.GasPackDesign.PRODUCT) {
             main.appendChild(HHpro.GasPackDesign.buildWarningBanner());
