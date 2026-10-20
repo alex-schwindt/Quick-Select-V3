@@ -25,3 +25,6 @@ __pycache__/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Manufacturer catalogs used as source data (large, published elsewhere)
+DATA/DATA FILES/*.pdf

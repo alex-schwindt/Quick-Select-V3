@@ -1392,7 +1392,10 @@
             coolTotal: target('coolTotal'),
             coolSensible: target('coolSensible'),
             heatRise: target('heatRise'),
-            convOutlet: gp.convOutlet, powerExhaust: gp.powerExhaust
+            convOutlet: gp.convOutlet, powerExhaust: gp.powerExhaust,
+            // Result model numbers are the schedule's own, with only the
+            // searched characters rewritten (see gas_pack_capacity.js).
+            templates: HHpro.GasPackDesign.scheduleModels(state.productData)
         };
         var out = HHpro.GasPackCapacity.search(criteria);
         state.results = {
@@ -1411,7 +1414,9 @@
     var GP_COLUMNS = [
         { label: 'Model', get: function (r) { return r.model; }, cls: 'gp-col-model' },
         { label: 'Nom Tons', get: function (r) { return r.tons; } },
-        { label: 'Efficiency', get: function (r) { return r.efficiency === 'HIGH' ? 'High' : 'Low'; } },
+        { label: 'Efficiency', get: function (r) {
+            return HHpro.GasPackCapacity.EFFICIENCY_LABELS[r.efficiency] || r.efficiency;
+        } },
         { label: 'Volt/PH', get: function (r) { return r.voltage; } },
         { label: 'Motor', get: function (r) { return r.motorLabel; } },
         { label: 'HGRH', get: function (r) { return r.hgrh; } },
@@ -1469,9 +1474,10 @@
         });
         wrap.appendChild(btn);
 
-        // The schedule row is keyed on the standard-static model, so when a
-        // high-static result is selected the row it lands on is spelled
-        // differently. Say so here rather than let it surprise them.
+        // The schedule row may be spelled differently from the result (a
+        // different blower or reheat option), in which case switching to
+        // design values renames it. Say so here rather than let it surprise
+        // them.
         var note = document.createElement('span');
         note.className = 'design-gp-match';
         if (!match) {
@@ -1484,7 +1490,7 @@
             note.title = (schedModel === r.model)
                 ? 'Selects this row on the Gas Pack RTU schedule.'
                 : 'Selects schedule row ' + schedModel + '; switching to design values ' +
-                  'renames it ' + r.model + ' for the high-static motor.';
+                  'renames it ' + r.model + ' to match this result.';
         }
         wrap.appendChild(note);
         return wrap;

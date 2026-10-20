@@ -451,37 +451,51 @@ def convert_capacity_tables(input_path, output_path):
 # -----------------------------------------------------------------------------
 # GAS PACK RTU CAPACITY TABLES
 # -----------------------------------------------------------------------------
-# "Daikin LC RTU Capacity Tables.xlsx" - four sheets covering the DSG
-# (standard efficiency) and DHG (high efficiency) packaged rooftops, extracted
-# from Daikin's spec sheets. It drives the condition-aware Gas Pack RTU section
-# of Design Search, which is why the output is keyed by CABINET (DSG036,
-# DHG090, ...) rather than by schedule model number: a cooling table is
-# published per cabinet and applies to every voltage and motor built on it.
+# "TempMaster RTU Capacity Tables.xlsx" - four sheets covering the TempMaster
+# Omni Pro KJ (3-12.5 ton), Omni Choice LV (15-27.5 ton) and Omni Select RV
+# (27.5-50 ton) packaged rooftops, extracted from TempMaster's technical
+# guides (its Notes sheet records the sources and every value that was
+# derived rather than printed - e.g. RV MCA/MOP are calculated). It drives the
+# condition-aware Gas Pack RTU section of Design Search, which is why the
+# output is keyed by CABINET (KJ037, LV15, ...) rather than by schedule model
+# number: a cooling table is published per cabinet and applies to every
+# voltage and motor built on it.
 #
 #   Cooling         long form, one row per EAT-DB / EAT-WB / OA-DB / CFM combo
-#                   -> MBh, S/T, delta-T. Rows whose model name carries
-#                   "(70% - Low Stage)" are the two-stage units' low-stage
-#                   table and are stored separately under "lowStage".
-#   Gas Heating     one row per cabinet + heat size (Low/Medium/High).
-#   Electrical Data one row per full model number (cabinet + voltage digit +
-#                   motor code), holding MCA/MOP for all four
-#                   convenience-outlet / power-exhaust combinations plus the
-#                   indoor motor HP.
+#                   -> MBh, S/T, delta-T. (A model name carrying
+#                   "(70% - Low Stage)" would be stored separately under
+#                   "lowStage"; the TempMaster guides publish no low-stage
+#                   cooling tables, so none appear today.)
+#   Gas Heating     one row per cabinet + heat size (Low/Medium/High), with
+#                   the model-number heat code (N06, N(S)1, ...) that lets the
+#                   site tie a schedule model back to its heat size.
+#   Electrical Data one row per cabinet + motor + power supply, holding MCA/MOP
+#                   for all four convenience-outlet / power-exhaust
+#                   combinations plus the indoor motor HP.
 #
-# Only 208/230-3-60 (voltage digit 3) and 460-3-60 (digit 4) are carried; the
-# workbook never held 575V or single phase. Combinations printed "-" in the
-# spec sheet - and the three cells Daikin misprinted as 240.0, which are blank
-# in the workbook - are simply omitted, so the site only ever sees rated data.
+# Only the power supplies in GAS_PACK_VOLTAGES are carried (the ones the
+# schedule uses); the workbook also holds 575 V, which can be switched on by
+# adding it there. Combinations printed "-" in the guide - and cells left
+# blank as misprints - are simply omitted, so the site only ever sees rated
+# data.
+#
+# The superseded "Daikin LC RTU Capacity Tables.xlsx" is no longer read.
 # -----------------------------------------------------------------------------
 
-GAS_PACK_CAPACITY_FILE = "Daikin LC RTU Capacity Tables.xlsx"
+GAS_PACK_CAPACITY_FILE = "TempMaster RTU Capacity Tables.xlsx"
 GAS_PACK_CAPACITY_OUTPUT = "gas_pack_capacity.json"
 
-# Model-number voltage digit -> the VOLT/PH spelling used by GAS PACKS DATA.
-GAS_PACK_VOLTAGES = {"3": "208/3", "4": "460/3"}
-# Cabinet prefix -> the Efficiency filter value on the Design Search form.
-# DSG is Daikin's standard-efficiency line, DHG the high-efficiency one.
-GAS_PACK_EFFICIENCY = {"DSG": "LOW", "DHG": "HIGH"}
+# Workbook "Power Supply" -> the VOLT/PH spelling used by GAS PACKS DATA.
+GAS_PACK_VOLTAGES = {"208/230/3/60": "208/3", "460/3/60": "460/3"}
+# Cabinet prefix -> Efficiency filter value (matches GAS PACKS DATA's
+# EFFICIENCY column) and whether hot gas reheat is orderable on it. All three
+# TempMaster lines are standard efficiency and offer factory reheat on every
+# size (KJ refrigeration option E/H/L/P, LV 4/6/L, RV 4/D).
+GAS_PACK_FAMILIES = {
+    "KJ": {"efficiency": "STANDARD", "hgrh": True},
+    "LV": {"efficiency": "STANDARD", "hgrh": True},
+    "RV": {"efficiency": "STANDARD", "hgrh": True},
+}
 
 _RANGE_RE = re.compile(r"^\s*(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)\s*$")
 
@@ -530,28 +544,61 @@ def _gp_headers(ws):
 
 
 def _gp_cabinet(model):
-    """'DSG036*D' / 'DHG036* (70% - Low Stage)' / 'DSG0363D' -> 'DSG036'."""
-    return str(model).split("*")[0].strip()[:6]
+    """'KJ037' / 'LV15' / 'KJ037 (70% - Low Stage)' -> 'KJ037' / 'LV15'."""
+    return str(model).split("(")[0].strip()
+
+
+def _gp_heat_code(code):
+    """Heat Code cell -> the token a schedule model number carries for it.
+
+    KJ: 'N06' -> '06' (heat capacity, model characters 7-8).
+    LV: 'N(S)1' -> '1' (heat size digit, model character 6).
+    """
+    s = str(code or "").strip().upper()
+    if s.startswith("N(S)"):
+        return s[4:]
+    return s[1:] if len(s) > 1 and s[0].isalpha() else s
+
+
+_HP_FRACTION = re.compile(r"^\s*(?:(\d+)-)?(\d+)/(\d+)\s*$")
+
+
+def _gp_hp(v):
+    """Motor HP as a number: 1.5, '2', '1-1/2' -> 1.5, '3/4' -> 0.75."""
+    if v is None or v == "":
+        return None
+    if isinstance(v, (int, float)):
+        return _gp_trim(float(v))
+    m = _HP_FRACTION.match(str(v))
+    if m:
+        whole = int(m.group(1) or 0)
+        return _gp_trim(round(whole + int(m.group(2)) / int(m.group(3)), 3))
+    try:
+        return _gp_trim(float(str(v).strip()))
+    except ValueError:
+        return None
 
 
 def convert_gas_pack_capacity(input_path, output_path):
-    """Convert the LC RTU capacity workbook to a cabinet-keyed JSON.
+    """Convert the RTU capacity workbook to a cabinet-keyed JSON.
 
     Output shape:
       {
         "cabinets": {
-          "DSG036": {
-            "family": "DSG", "efficiency": "LOW", "tons": 3,
+          "KJ037": {
+            "family": "KJ", "efficiency": "STANDARD", "hgrh": true, "tons": 3,
             "axes":    {"eatDb":[...], "eatWb":[...], "oaCooling":[...], "airflow":[...]},
             "cooling": {"<eatDb>|<eatWb>|<oaCooling>|<airflow>": [total, sensible, LAT], ...},
             "lowStage": {"axes": {...}, "cooling": {...}},   # two-stage cabinets only
-            "heat": [{"size": "Low", "inputHigh": 45, "outputHigh": 36.45,
-                      "inputLow": 33.75, "outputLow": 27.38,
-                      "riseHigh": [15,45], "riseLow": [5,35], "thermalEff": 80}, ...],
-            "electrical": {"208/3": {"D": {...}, "W": {...}}, "460/3": {...}}
+            "heat": [{"size": "Low", "code": "06", "inputHigh": 60, "outputHigh": 49,
+                      "inputLow": 45, "outputLow": 36.8,
+                      "riseHigh": [20,50], "riseLow": null, "thermalEff": 81}, ...],
+            "electrical": {"208/3": {"B": {...}, "D": {...}}, "460/3": {...}}
           }, ...
         }
       }
+    Motor keys are the model-number blower letter: B standard, C medium,
+    D high static.
     Capacities are BTU/h (the workbook is MBh) to match the schedule columns.
     LAT is EAT-DB minus the published delta-T.
     """
@@ -563,9 +610,11 @@ def convert_gas_pack_capacity(input_path, output_path):
     def cab(name):
         e = cabinets.get(name)
         if e is None:
+            fam = GAS_PACK_FAMILIES.get(name[:2], {})
             e = cabinets[name] = {
-                "family": name[:3],
-                "efficiency": GAS_PACK_EFFICIENCY.get(name[:3], "LOW"),
+                "family": name[:2],
+                "efficiency": fam.get("efficiency", "STANDARD"),
+                "hgrh": bool(fam.get("hgrh")),
                 "tons": None,
                 "axes": {"eatDb": set(), "eatWb": set(),
                          "oaCooling": set(), "airflow": set()},
@@ -618,9 +667,14 @@ def convert_gas_pack_capacity(input_path, output_path):
 
         key = "|".join(_num_key(v) for v in (db, wbt, oa, cfm))
         lat_raw = db - dt
+        # Prefer the published sensible MBh where the workbook carries it:
+        # rebuilding it from the 3-place S/T ratio drifts by a few BTU/h.
+        sens = row[h["Sensible MBh"] - 1] if "Sensible MBh" in h else None
+        if not isinstance(sens, (int, float)):
+            sens = round(mbh * st, 3)
         table[key] = [
             int(round(mbh * 1000)),
-            int(round(round(mbh * st, 3) * 1000)),
+            int(round(sens * 1000)),
             int(lat_raw) if float(lat_raw).is_integer() else round(lat_raw, 2),
         ]
 
@@ -636,6 +690,8 @@ def convert_gas_pack_capacity(input_path, output_path):
             entry["tons"] = row[h["Tons"] - 1]
         entry["heat"].append({
             "size": row[h["Gas Heat"] - 1],
+            "code": (_gp_heat_code(row[h["Heat Code"] - 1])
+                     if "Heat Code" in h else None),
             "inputHigh": _gp_trim(row[h["Input - High Stage (MBH)"] - 1]),
             "outputHigh": _gp_trim(row[h["Output - High Stage (MBH)"] - 1]),
             "inputLow": _gp_trim(row[h["Input - Low Stage (MBH)"] - 1]),
@@ -653,22 +709,24 @@ def convert_gas_pack_capacity(input_path, output_path):
         model = row[h["Model"] - 1]
         if not model:
             continue
-        model = str(model).strip()
-        volt = GAS_PACK_VOLTAGES.get(model[6:7])
-        motor = model[7:8]
+        name = _gp_cabinet(model)
+        supply = str(row[h["Power Supply"] - 1] or "").strip()
+        volt = GAS_PACK_VOLTAGES.get(supply)
+        # "B - Standard Static" -> "B" (the model-number blower letter).
+        motor = str(row[h["Motor"] - 1] or "").strip()[:1].upper()
         if not volt or not motor:
             continue
-        entry = cab(_gp_cabinet(model))
+        entry = cab(name)
         if entry["tons"] is None:
             entry["tons"] = row[h["Tons"] - 1]
-        hp = row[h["Indoor Motor HP"] - 1] if "Indoor Motor HP" in h else None
+        hp = _gp_hp(row[h["Indoor Motor HP"] - 1]) if "Indoor Motor HP" in h else None
         if hp is None:
-            no_hp.append(model)
+            no_hp.append(f"{name} {motor} {volt}")
         entry["electrical"].setdefault(volt, {})[motor] = {
-            "model": model,
+            "model": f"{name} {motor} {volt}",
             "mca": _gp_first_num(row[h["MCA - Base Unit"] - 1]),
             "mop": _gp_first_num(row[h["MOP - Base Unit"] - 1]),
-            "hp": _gp_trim(hp) if hp is not None else None,
+            "hp": hp,
             "convFla": _gp_first_num(row[h["Conv. Outlet FLA"] - 1]),
             "peFla": _gp_first_num(row[h["Power Exhaust FLA"] - 1]),
             "mcaConv": _gp_first_num(row[h["MCA - w/ Conv. Outlet"] - 1]),
@@ -689,10 +747,10 @@ def convert_gas_pack_capacity(input_path, output_path):
             entry["lowStage"] = {"axes": low_axes, "cooling": low_cooling}
         entry["motors"] = sorted({m for v in entry["electrical"].values() for m in v})
         if not entry["cooling"]:
-            # DSG150 today: SS-DSG7-R32 reprints the DSG120 tables under the
-            # DSG150 heading, so no real 12.5-ton standard-efficiency cooling
-            # data exists. Keep the cabinet (its heating and electrical are
-            # sound) and flag it so the UI can say why rather than go quiet.
+            # A cabinet with heating/electrical rows but no cooling table
+            # (the Daikin DSG150 was one: its spec sheet reprinted the DSG120
+            # tables). Keep the cabinet and flag it so the UI can say why
+            # rather than go quiet.
             entry["coolingUnavailable"] = True
             no_cooling.append(name)
 

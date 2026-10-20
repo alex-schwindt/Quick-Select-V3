@@ -9,11 +9,19 @@
    for every combination.
 
    Data: DATA/JSON/gas_pack_capacity.json (built by
-   convert_to_json.py from "Daikin LC RTU Capacity Tables.xlsx").
-   Keyed by CABINET - DSG036, DHG090, ... - because TempMaster
-   publishes one cooling table per cabinet that applies to every
-   voltage and motor built on it. Voltage and motor only change
-   the electrical block.
+   convert_to_json.py from "TempMaster RTU Capacity Tables.xlsx" -
+   the Omni Pro KJ, Omni Choice LV and Omni Select RV technical
+   guides). Keyed by CABINET - KJ037, LV15, RV30, ... - because
+   TempMaster publishes one cooling table per cabinet that applies
+   to every voltage and motor built on it. Voltage and motor only
+   change the electrical block.
+
+   TempMaster model numbers are 18 characters, most of them
+   option codes (economizer, sensors, filters, ...) the tables
+   say nothing about. So a result's model number is never built
+   from scratch: it starts from the matching model on the
+   schedule and only the characters the search decides - blower,
+   voltage, heat size, hot gas reheat - are rewritten.
 
    The off-grid policy (worst-case, never interpolate) lives in
    capacity_core.js and is shared with Multi Position Splits.
@@ -35,18 +43,50 @@
     var cache = null;
     var loadPromise = null;
 
-    // Only standard and high static are offered. Medium (L) exists on the
-    // 7.5-12.5 ton cabinets but is not something Eric quotes, and the main
-    // schedule carries no L models at all.
-    var OFFERED_MOTORS = ['D', 'W'];
-    var MOTOR_LABELS = { D: 'Standard Static', W: 'High Static' };
-    // Heat-size letter in a schedule model number -> the Gas Heating sheet's
-    // size name (DSG0363D**M** is the medium heat exchanger).
-    var HEAT_LETTERS = { L: 'Low', M: 'Medium', H: 'High' };
+    // Motor keys are the static level as TempMaster's blower letter spells
+    // it on the LV/RV: B standard, C medium, D high. Only standard and high
+    // are offered - medium exists on the LV and RV (its electrical data is in
+    // the JSON) but is not something Eric quotes, and the schedule carries
+    // none.
+    var OFFERED_MOTORS = ['B', 'D'];
+    var MOTOR_LABELS = { B: 'Standard Static', C: 'Medium Static', D: 'High Static' };
     var HEAT_TO_LETTER = { Low: 'L', Medium: 'M', High: 'H' };
-    var EFFICIENCY_LABELS = { LOW: 'Low', HIGH: 'High' };
-    // Hot gas reheat is a DHG-only option, and only up to 12.5 tons.
-    var HGRH_MAX_TONS = 12.5;
+    var EFFICIENCY_LABELS = { LOW: 'Low', STANDARD: 'Standard', HIGH: 'High' };
+
+    // ---- TempMaster model-number layouts ----------------------------
+    // Character positions (0-based) from the nomenclature pages of the
+    // KJ, LV and RV technical guides. RV shares the LV positions but has
+    // its own refrigeration codes.
+    //
+    // KJ blower letters come in standard/high pairs per drive type
+    // (belt B/D, VFD-VAV E/G, ... IntelliSpeed P/R ...), so a static
+    // change keeps the drive type the schedule row was built with.
+    var KJ_BLOWER_PAIRS = [['B', 'D'], ['E', 'G'], ['H', 'K'], ['L', 'N'],
+                           ['P', 'R'], ['S', 'U'], ['V', 'X']];
+    var LAYOUTS = {
+        KJ: {
+            re: /^KJ\d{3}[CENS]\d{2}[A-Z][245]/,
+            cabinet: [0, 5], heatType: 5, heat: [6, 8], blower: 8, voltage: 9,
+            refrigeration: 14,
+            // Refrigeration option without reheat -> the same option with it.
+            reheat: { A: 'E', B: 'L', C: 'P', F: 'H' }
+        },
+        LV: {
+            re: /^LV\d{2}[CENST]\d[BCD][A-Z][245BDE]/,
+            cabinet: [0, 4], heatType: 4, heat: [5, 6], blower: 6, voltage: 8,
+            refrigeration: 14,
+            reheat: { 1: '4', 3: '6', 8: 'L' }
+        },
+        RV: {
+            re: /^RV\d{2}[CENST]\d[BCD][A-Z][245BDE]/,
+            cabinet: [0, 4], heatType: 4, heat: [5, 6], blower: 6, voltage: 8,
+            refrigeration: 14,
+            // 1 standard -> 4 modulating HGR; A service valves -> D HGR + SV
+            reheat: { 1: '4', A: 'D' }
+        }
+    };
+    var VOLTAGE_DIGITS = { 2: '208/3', B: '208/3', 4: '460/3', D: '460/3', 5: '575/3', E: '575/3' };
+    var DIGIT_FOR_VOLTAGE = { '208/3': '2', '460/3': '4', '575/3': '5' };
 
     // Sensible heat rate for standard air: BTU/h = 1.08 x CFM x deltaT.
     var AIR_CONST = 1.08;
@@ -81,31 +121,116 @@
     // -----------------------------------------------------------------
     // Model numbers
     // -----------------------------------------------------------------
+    function layoutFor(s) {
+        var layout = LAYOUTS[s.slice(0, 2)];
+        return (layout && layout.re.test(s)) ? layout : null;
+    }
+
+    // Blower letter -> static level key (B/C/D) used by the electrical data.
+    function staticLevel(layout, letter) {
+        if (layout !== LAYOUTS.KJ) return letter;          // LV/RV: B/C/D already
+        for (var i = 0; i < KJ_BLOWER_PAIRS.length; i++) {
+            if (KJ_BLOWER_PAIRS[i][0] === letter) return 'B';
+            if (KJ_BLOWER_PAIRS[i][1] === letter) return 'D';
+        }
+        return null;
+    }
+
+    // Static level -> blower letter, keeping the template's drive type.
+    function blowerLetter(layout, templateLetter, level) {
+        if (layout !== LAYOUTS.KJ) return level;
+        for (var i = 0; i < KJ_BLOWER_PAIRS.length; i++) {
+            if (KJ_BLOWER_PAIRS[i].indexOf(templateLetter) !== -1) {
+                return level === 'B' ? KJ_BLOWER_PAIRS[i][0] : KJ_BLOWER_PAIRS[i][1];
+            }
+        }
+        return level === 'B' ? 'B' : 'D';
+    }
+
+    function hasReheat(layout, letter) {
+        return Object.keys(layout.reheat).some(function (k) { return layout.reheat[k] === letter; });
+    }
+
+    /** The heat size (Low/Medium/High) a cabinet's heat code means. */
+    function heatSizeFor(cabinet, code) {
+        var cab = cabinets()[cabinet];
+        var match = cab && (cab.heat || []).filter(function (h) { return h.code === code; })[0];
+        return match ? match.size : null;
+    }
+
     /**
-     * Split a schedule model number into its parts.
-     * 'DSG0363DM' -> { cabinet:'DSG036', voltage:'208/3', motor:'D',
-     *                  heatLetter:'M', heat:'Medium' }
-     * Returns null for anything that isn't a gas pack model number.
+     * Split a schedule model number into the parts the capacity tables
+     * care about.
+     * 'KJ049N08D2BEAAA5A1' -> { cabinet:'KJ049', voltage:'208/3', motor:'D',
+     *                           heatCode:'08', heat:'Medium', hgrh:false }
+     * Returns null for anything that isn't a TempMaster gas pack model.
      */
     function parseModel(model) {
         var s = String(model || '').trim().toUpperCase();
-        if (!/^D[SH]G\d{3}[34][DLW][LMH]?$/.test(s)) return null;
-        var letter = s.charAt(8) || null;
+        var layout = layoutFor(s);
+        if (!layout) return null;
+        var cabinet = s.slice(layout.cabinet[0], layout.cabinet[1]);
+        var heatCode = s.slice(layout.heat[0], layout.heat[1]);
         return {
-            cabinet: s.slice(0, 6),
-            voltage: s.charAt(6) === '3' ? '208/3' : '460/3',
-            motor: s.charAt(7),
-            heatLetter: letter,
-            heat: letter ? HEAT_LETTERS[letter] : null
+            cabinet: cabinet,
+            voltage: VOLTAGE_DIGITS[s.charAt(layout.voltage)] || null,
+            motor: staticLevel(layout, s.charAt(layout.blower)),
+            heatCode: heatCode,
+            heat: heatSizeFor(cabinet, heatCode),
+            hgrh: hasReheat(layout, s.charAt(layout.refrigeration))
         };
     }
 
-    /** Rebuild a model number from its parts (the motor letter is what the
-     *  design-values toggle rewrites when High Static is chosen). */
-    function buildModel(parts) {
-        var volt = parts.voltage === '460/3' ? '4' : '3';
-        var letter = parts.heatLetter || HEAT_TO_LETTER[parts.heat] || '';
-        return parts.cabinet + volt + parts.motor + letter;
+    function setChar(s, pos, ch) {
+        return (ch && pos < s.length) ? s.slice(0, pos) + ch + s.slice(pos + 1) : s;
+    }
+
+    /**
+     * Model number for a result: the closest schedule model for the same
+     * cabinet, with blower, voltage, heat size and reheat rewritten to the
+     * result's. Every other option code is kept as the schedule has it.
+     * parts = { cabinet, voltage, motor, heat, hgrh:'YES'|'NO' }
+     * templates = schedule model numbers (any order). A cabinet with no row
+     * on the schedule (RV27 today) borrows a sibling cabinet's model from
+     * the same family, with the capacity digits rewritten. With no template
+     * in the family at all, returns the cabinet name - a model number can't
+     * be invented without the option codes.
+     */
+    function buildModel(parts, templates) {
+        var heatCode = null;
+        var cab = cabinets()[parts.cabinet];
+        (cab && cab.heat || []).forEach(function (h) { if (h.size === parts.heat) heatCode = h.code; });
+        var wantHgrh = String(parts.hgrh || 'NO').toUpperCase() === 'YES';
+        var family = parts.cabinet.slice(0, 2);
+
+        var best = null;
+        (templates || []).forEach(function (m) {
+            var p = parseModel(m);
+            if (!p || p.cabinet.slice(0, 2) !== family) return;
+            var score = (p.cabinet === parts.cabinet ? 0 : 8) +
+                        (p.voltage === parts.voltage ? 0 : 4) + (p.heatCode === heatCode ? 0 : 2) +
+                        (p.hgrh === wantHgrh ? 0 : 1) + (p.motor === parts.motor ? 0 : 0.5);
+            if (!best || score < best.score) best = { model: String(m).trim().toUpperCase(), score: score };
+        });
+        if (!best) return parts.cabinet;
+
+        var s = best.model;
+        var layout = layoutFor(s);
+        s = parts.cabinet + s.slice(layout.cabinet[1]);
+        s = setChar(s, layout.voltage, DIGIT_FOR_VOLTAGE[parts.voltage]);
+        s = setChar(s, layout.blower, blowerLetter(layout, s.charAt(layout.blower), parts.motor));
+        if (heatCode && heatCode.length === layout.heat[1] - layout.heat[0]) {
+            s = s.slice(0, layout.heat[0]) + heatCode + s.slice(layout.heat[1]);
+        }
+        var refrig = s.charAt(layout.refrigeration);
+        if (wantHgrh && !hasReheat(layout, refrig) && layout.reheat[refrig]) {
+            s = setChar(s, layout.refrigeration, layout.reheat[refrig]);
+        } else if (!wantHgrh && hasReheat(layout, refrig)) {
+            Object.keys(layout.reheat).forEach(function (k) {
+                if (layout.reheat[k] === refrig) s = setChar(s, layout.refrigeration, k);
+            });
+        }
+        return s;
     }
 
     // -----------------------------------------------------------------
@@ -131,8 +256,8 @@
                 return { value: m, label: MOTOR_LABELS[m] };
             }),
             ambients: nums(ambients),
-            // Low before High -- ascending efficiency, not alphabetical.
-            efficiencies: ['LOW', 'HIGH'].filter(function (e) { return effs[e]; })
+            // Ascending efficiency, not alphabetical.
+            efficiencies: ['LOW', 'STANDARD', 'HIGH'].filter(function (e) { return effs[e]; })
                 .map(function (e) { return { value: e, label: EFFICIENCY_LABELS[e] }; })
         };
     }
@@ -235,8 +360,9 @@
      *   eatDb, eatWb,                                // degF, required
      *   cfm:{value,tol}, coolTotal:{value,tol}, coolSensible:{value,tol},
      *   heatRise:{value,tol},
-     *   convOutlet, powerExhaust                     // booleans
-     * }
+     *   convOutlet, powerExhaust,                    // booleans
+     *   templates                                    // schedule model numbers,
+     * }                                              //   for result model numbers
      *
      * Returns { results:[...], skipped:[{cabinet, reason}] } with results
      * sorted best-match first. One result per cabinet + voltage + motor +
@@ -259,13 +385,14 @@
             if (c.tons != null && Number(cab.tons) !== Number(c.tons)) return;
             if (c.efficiency && cab.efficiency !== c.efficiency) return;
 
-            // Hot gas reheat is not in the capacity tables at all - it is a
-            // factory option that exists as its own row in the schedule, and
-            // it does not change cooling capacity. So it is expanded here
+            // Hot gas reheat is not in the cooling tables - it is a factory
+            // option that exists as its own row in the schedule, and it does
+            // not change cooling-mode capacity. So it is expanded here
             // rather than filtered: a cabinet that can be built either way
             // yields BOTH variants when the filter is left on All, because
-            // both are genuinely orderable units.
-            var hgrhCapable = (cab.family === 'DHG' && Number(cab.tons) <= HGRH_MAX_TONS);
+            // both are genuinely orderable units. Which cabinets offer it
+            // comes from the converter (GAS_PACK_FAMILIES).
+            var hgrhCapable = !!cab.hgrh;
             if (c.hgrh === 'YES' && !hgrhCapable) return;
             var hgrhOptions = c.hgrh ? [c.hgrh] : (hgrhCapable ? ['NO', 'YES'] : ['NO']);
 
@@ -324,7 +451,8 @@
                                 efficiency: cab.efficiency,
                                 tons: cab.tons,
                                 model: buildModel({ cabinet: name, voltage: voltage,
-                                                    motor: motor, heat: heat.size }),
+                                                    motor: motor, heat: heat.size,
+                                                    hgrh: hgrh }, c.templates),
                                 voltage: voltage,
                                 motor: motor,
                                 motorLabel: MOTOR_LABELS[motor],
@@ -381,7 +509,7 @@
         electricalFor: electricalFor,
         search: search,
         MOTOR_LABELS: MOTOR_LABELS,
-        HEAT_LETTERS: HEAT_LETTERS
+        EFFICIENCY_LABELS: EFFICIENCY_LABELS
     };
 
     core.register(PRODUCT, HHpro.GasPackCapacity);

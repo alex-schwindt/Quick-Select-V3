@@ -150,14 +150,27 @@
         };
     }
 
+    /** Every model number on the schedule (Design Search builds result
+     *  model numbers from these). */
+    function scheduleModels(data) {
+        var cols = resolveColumns(data);
+        var out = [];
+        (data && data.selections || []).forEach(function (sel) {
+            var sd = sel.rows && sel.rows[0] && sel.rows[0].scheduleData;
+            if (sd && sd[cols.model]) out.push(String(sd[cols.model]));
+        });
+        return out;
+    }
+
     /**
      * The schedule row a Design Search result should land on.
      *
      * Matched on cabinet + voltage + heat size + hot gas reheat, and
-     * DELIBERATELY NOT on the motor: the schedule only carries standard-static
-     * (D) models, so a high-static result has no row of its own. The toggle
-     * rewrites the motor letter in the model number instead - which is why
-     * the model shown changes when Design values are on.
+     * DELIBERATELY NOT on the motor: the schedule carries one blower per
+     * cabinet, so a result on the other static level has no row of its own.
+     * The toggle writes the result's model number (blower letter rewritten)
+     * instead - which is why the model shown changes when Design values
+     * are on.
      */
     function matchSelection(data, result) {
         var G = HHpro.GasPackCapacity;
@@ -173,8 +186,7 @@
             if (parts.heat !== result.heat.size) return;
             var rowHgrh = cols.hgrh ? String(sd[cols.hgrh] || 'NO').toUpperCase() : 'NO';
             var score = (rowHgrh === String(result.hgrh).toUpperCase()) ? 0 : 1;
-            // Prefer a row already on the requested motor, though today
-            // every row is D.
+            // Prefer a row already on the requested motor.
             if (parts.motor !== result.motor) score += 0.5;
             if (!best || score < best.score) best = { selection: sel, score: score, parts: parts };
         });
@@ -224,10 +236,9 @@
         put('voltage', payload.voltage);
         put('mca', payload.electrical.mca);
         put('mop', payload.electrical.mop);
-        // The eight DSG 3-6 ton high-static models have no published indoor
-        // motor HP yet (SS-DSG3-R32 was not to hand when the tables were
-        // built). Show a dash rather than leave the standard-static value
-        // sitting under a high-static model number.
+        // Every TempMaster cabinet publishes indoor motor HP, but keep the
+        // guard: a dash beats leaving the other motor's HP under this
+        // model number if a future table lacks it.
         if (cols.hp) out[cols.hp] = (payload.electrical.hp == null) ? '-' : payload.electrical.hp;
 
         return out;
@@ -406,6 +417,7 @@
         WARNING: WARNING,
         resolveColumns: resolveColumns,
         payloadFor: payloadFor,
+        scheduleModels: scheduleModels,
         matchSelection: matchSelection,
         overridesFor: overridesFor,
         set: setDesign,
