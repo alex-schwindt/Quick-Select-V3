@@ -308,8 +308,8 @@
                 })
                 .then(function (data) {
                     // Very large products (grilles) are split across
-                    // multiple JSON files to stay under Cloudflare
-                    // Pages' 25 MiB per-file limit. The main file lists
+                    // multiple JSON files to stay under Cloudflare's
+                    // 25 MiB per-file asset limit. The main file lists
                     // its continuation files (selections-only chunks in
                     // the same folder); fetch them all and re-join the
                     // selections in order before caching.

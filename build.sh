@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Cloudflare Pages build (build command: bash build.sh, output: dist).
+# Cloudflare Workers Builds build command (`bash build.sh`); wrangler.jsonc
+# then deploys dist/ as the Worker's static assets.
 #
 # Copies ONLY the files the site serves into dist/. Everything else in
 # the repo - the Excel source workbooks, DATA/ENGINEER SCHEDULES, the
@@ -16,8 +17,9 @@ cp -R DATA/JSON DATA/PICTURES dist/DATA/
 cp -R ASSETS/FONTS dist/ASSETS/
 cp ASSETS/favicon.svg dist/ASSETS/
 
-# Without a 404.html, Pages answers every missing path with index.html
-# and a 200, so a broken file link would silently load the homepage.
+# Served for missing paths with a real 404 (wrangler.jsonc
+# not_found_handling), so a broken file link fails visibly rather than
+# silently loading the homepage.
 cat > dist/404.html <<'HTML'
 <!DOCTYPE html>
 <html lang="en">

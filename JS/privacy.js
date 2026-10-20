@@ -6,7 +6,7 @@
    The short version, and the reason this page can be so short:
    HHpro is a static site. Sign-in is Cloudflare Access (email),
    which sets its own session cookie and keeps a sign-in log H&H
-   admins can see; the only server code (functions/) reads the
+   admins can see; the only server code (worker/) reads the
    signed-in email to pick which firm layouts to serve and stores
    nothing. Beyond that: no analytics and no third-party requests -
    Inter is self-hosted precisely so that stays true (see the

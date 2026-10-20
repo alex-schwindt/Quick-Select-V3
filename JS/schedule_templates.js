@@ -161,7 +161,7 @@
     // Each engineering firm's layouts live in firms/<key>/templates.js
     // and call register() when loaded. Those files are only served to
     // users allowed that firm (Cloudflare Access signs the user in,
-    // functions/firms/_middleware.js checks their email against
+    // worker/index.js checks their email against
     // server/firm-access.js), so this file names no firms at all and a
     // firm that never registered simply doesn't exist for this user.
     //
@@ -224,7 +224,7 @@
          * Ask the server which firms this user may use and load those
          * firms' template files. Resolves with the loaded firm keys
          * (never rejects - any failure just means standard layout only,
-         * e.g. opening the site locally without the Pages Functions).
+         * e.g. opening the site locally without the Worker).
          */
         loadFirms: function () {
             if (!window.fetch || !window.Promise || location.protocol === 'file:') {

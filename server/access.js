@@ -1,5 +1,5 @@
 /* ============================================================
-   HHpro - Cloudflare Access identity check (Pages Functions)
+   HHpro - Cloudflare Access identity check (used by worker/index.js)
    ------------------------------------------------------------
    Every request that reaches the site has passed Cloudflare Access,
    which attaches a signed token (JWT) naming the signed-in user.
@@ -7,7 +7,7 @@
    than trusting the header, so a request that somehow skipped
    Access (e.g. an unprotected preview URL) gets nothing.
 
-   Required Pages environment variables (Settings > Variables):
+   Required variables (set in wrangler.jsonc "vars"):
      ACCESS_TEAM_DOMAIN  e.g. hoffman.cloudflareaccess.com
      ACCESS_AUD          the Access application's "Application
                          Audience (AUD) Tag"
@@ -15,8 +15,8 @@
    only).
 
    Local development only: DEV_ACCESS_EMAIL in .dev.vars (never in
-   the Pages dashboard) skips verification and acts as that user
-   under `npx wrangler pages dev dist`.
+   wrangler.jsonc or the dashboard) skips verification and acts as
+   that user under `bash build.sh && npx wrangler dev`.
    ============================================================ */
 
 import FIRM_ACCESS from './firm-access.js';

@@ -2,7 +2,7 @@
    HHpro - Saber schedule templates
    ------------------------------------------------------------
    Served ONLY to users allowed this firm: Cloudflare Access signs
-   the user in, then functions/firms/_middleware.js checks their
+   the user in, then worker/index.js checks their
    email against server/firm-access.js before this file is sent.
    Loaded by HHpro.Templates.loadFirms() (JS/schedule_templates.js),
    which also documents the template model used below.

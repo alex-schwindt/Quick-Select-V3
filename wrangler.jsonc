@@ -1,0 +1,35 @@
+// Cloudflare Worker config for HHpro (quickselect.hhtrecho.com).
+//
+// Deploys on every push to master (Workers Builds): the dashboard runs the
+// build command `bash build.sh`, which copies only the files the site serves
+// into dist/, then `npx wrangler deploy` publishes dist/ plus worker/index.js.
+// Nothing outside dist/ (Excel workbooks, engineer schedules, server/) is
+// ever uploaded as a site file.
+{
+  "name": "quick-select-v3",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-09-14",
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Missing files get dist/404.html with a real 404, not the homepage.
+    "not_found_handling": "404-page",
+    // Only these paths run the Worker; everything else is served straight
+    // from the assets (no Worker invocation, no cost).
+    "run_worker_first": ["/api/*", "/firms/*"]
+  },
+
+  // Cloudflare Access application the site sits behind (one app covers both
+  // quickselect.hhtrecho.com and the workers.dev address). Not secrets: the
+  // team domain and audience tag are public in every login redirect. Used by
+  // server/access.js to verify each request's signed Access token.
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "wispy-glitter-fd02.cloudflareaccess.com",
+    "ACCESS_AUD": "e7a0ff4c8b88079eed4f34b2763debb74bac4af2b1e638e22b9d146b66ba409e"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
