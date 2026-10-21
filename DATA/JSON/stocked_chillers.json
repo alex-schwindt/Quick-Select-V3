@@ -285,7 +285,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3040THJ17VSD"
+          }
         }
       ]
     },
@@ -323,7 +325,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3040THJ46VSD"
+          }
         }
       ]
     },
@@ -361,7 +365,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3050THJ17VSD"
+          }
         }
       ]
     },
@@ -399,7 +405,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3050THJ46VSD"
+          }
         }
       ]
     },
@@ -437,7 +445,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3055THJ17VSD"
+          }
         }
       ]
     },
@@ -475,7 +485,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3055THJ46VSD"
+          }
         }
       ]
     },
@@ -513,7 +525,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3060THJ17VSD"
+          }
         }
       ]
     },
@@ -551,7 +565,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3060THJ46VSD"
+          }
         }
       ]
     },
@@ -589,7 +605,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3070TSJ46VSD"
+          }
         }
       ]
     },
@@ -627,7 +645,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3075TSJ46VSD"
+          }
         }
       ]
     },
@@ -665,7 +685,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3085TSJ17VSD"
+          }
         }
       ]
     },
@@ -703,7 +725,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3085TSJ46VSD"
+          }
         }
       ]
     },
@@ -741,7 +765,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3095TSJ17PC"
+          }
         }
       ]
     },
@@ -779,7 +805,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3095TSJ46VSD"
+          }
         }
       ]
     },
@@ -817,7 +845,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3110TSJ17VSD"
+          }
         }
       ]
     },
@@ -855,7 +885,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3110TSJ46VSD"
+          }
         }
       ]
     },
@@ -893,7 +925,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3129THJ17VSD"
+          }
         }
       ]
     },
@@ -931,7 +965,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3129THJ46VSD"
+          }
         }
       ]
     },
@@ -969,7 +1005,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3140TSJ17VSD"
+          }
         }
       ]
     },
@@ -1007,7 +1045,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3140TSJ46VSD"
+          }
         }
       ]
     },
@@ -1045,7 +1085,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4150SXXX46R"
+          }
         }
       ]
     },
@@ -1083,7 +1125,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3160TSJ17VSD"
+          }
         }
       ]
     },
@@ -1121,7 +1165,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3160TSJ46VSD"
+          }
         }
       ]
     },
@@ -1159,7 +1205,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4185SXXX46R"
+          }
         }
       ]
     },
@@ -1197,7 +1245,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3205THJ46VSD"
+          }
         }
       ]
     },
@@ -1235,7 +1285,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4210SXXX46R"
+          }
         }
       ]
     },
@@ -1273,7 +1325,9 @@
             "COMPRESSOR TYPE": "SCROLL",
             "REFRIGERANT": "R-454B"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC3225THJ46VSD"
+          }
         }
       ]
     },
@@ -1311,7 +1365,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4230SXXX46R"
+          }
         }
       ]
     },
@@ -1349,7 +1405,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4270SXXX46R"
+          }
         }
       ]
     },
@@ -1387,7 +1445,9 @@
             "COMPRESSOR TYPE": "VSD SCREW",
             "REFRIGERANT": "R-513A"
           },
-          "documentationData": {}
+          "documentationData": {
+            "SUBMITTAL": "QTC4340SXXX46R"
+          }
         }
       ]
     }
@@ -1402,7 +1462,7 @@
   },
   "_meta": {
     "sourceFile": "STOCKED CHILLERS DATA.xlsx",
-    "generatedAt": "2026-10-20T14:56:09",
+    "generatedAt": "2026-10-21T09:54:55",
     "dataRowCount": 30,
     "selectionCount": 30
   }

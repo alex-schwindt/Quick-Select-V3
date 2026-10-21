@@ -17,8 +17,20 @@
     "not_found_handling": "404-page",
     // Only these paths run the Worker; everything else is served straight
     // from the assets (no Worker invocation, no cost).
-    "run_worker_first": ["/api/*", "/firms/*"]
+    "run_worker_first": ["/api/*", "/firms/*", "/ASSETS/*"]
   },
+
+  // Product documentation (submittals, manuals, Revit, CAD) lives in R2, not
+  // in Git or dist/. The Worker serves it at /ASSETS/<key> to signed-in users
+  // only; the bucket has no public URL. Bucket keys mirror the old local
+  // layout, e.g. "MINI SPLITS/SUBMITTALS/<model>.pdf". Created 10/21/2026
+  // with `npx wrangler r2 bucket create hhpro-assets`.
+  "r2_buckets": [
+    {
+      "binding": "DOCS",
+      "bucket_name": "hhpro-assets"
+    }
+  ],
 
   // Cloudflare Access application the site sits behind (one app covers both
   // quickselect.hhtrecho.com and the workers.dev address). Not secrets: the

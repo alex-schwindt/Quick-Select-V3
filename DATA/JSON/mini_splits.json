@@ -519,7 +519,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-1A__MO1CS-H09B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -582,7 +584,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-2A__MO1CS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -645,7 +649,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-1A__MO1CS-H12B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -708,7 +714,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-2A__MO1CS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -771,7 +779,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H18B-2A__MO1CS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -834,7 +844,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H24B-2A__MO1CS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -897,7 +909,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H30B-2A__MO1CS-H30B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -960,7 +974,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSBNS-H36B-2A__MO1CS-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -1023,7 +1039,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H06B-2A__MO1HS-H06B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1086,7 +1104,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1149,7 +1169,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1212,7 +1234,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H15B-2A__MO1HS-H15B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -1275,7 +1299,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -1338,7 +1364,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1HS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -1401,7 +1429,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H33B-2A__MO1HS-H33B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -1464,7 +1494,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEES-H09B-1A__MO1ES-H09B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1527,7 +1559,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1590,7 +1624,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEES-H12B-1A__MO1ES-H12B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1653,7 +1689,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1716,7 +1754,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEEU-H15B-2A__MO1ES-H15B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -1779,7 +1819,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 65,
@@ -1842,7 +1884,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1ES-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -1905,7 +1949,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEEU-H30B-2A__MO1BS-H30B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -1968,7 +2014,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSEEU-H36B-2A__MO1BS-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -2031,7 +2079,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSESU-H06B-2A__MO1SS-H06B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2094,7 +2144,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSESU-H09B-2A__MO1SS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2157,7 +2209,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSESU-H12B-2A__MO1SS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2220,7 +2274,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSESU-H18B-2A__MO1SS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -2283,7 +2339,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-1A__MO1BS-H09B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2346,7 +2404,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-2A__MO1BS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2409,7 +2469,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-1A__MO1BS-H12B-1A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2472,7 +2534,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-2A__MO1BS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2535,7 +2599,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H18B-2A__MO1BS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -2598,7 +2664,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H24B-2A__MO1BS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -2661,7 +2729,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H30B-2A__MO1BS-H30B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -2724,7 +2794,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MSGNS-H36B-2A__MO1BS-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -2787,7 +2859,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2850,7 +2924,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -2913,7 +2989,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -2976,7 +3054,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H06B-2A__MO1HS-H06B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3039,7 +3119,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3102,7 +3184,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3165,7 +3249,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -3228,7 +3314,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3291,7 +3379,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3354,7 +3444,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -3417,7 +3509,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1ES-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -3480,7 +3574,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1BU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -3543,7 +3639,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1BU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -3606,7 +3704,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3669,7 +3769,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -3732,7 +3834,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -3795,7 +3899,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1HS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -3858,7 +3964,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1HU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -3921,7 +4029,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1HU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -3984,7 +4094,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4047,7 +4159,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4110,7 +4224,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4173,7 +4289,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4236,7 +4354,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -4299,7 +4419,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -4362,7 +4484,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1ES-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -4425,7 +4549,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1BU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -4488,7 +4614,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1BU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -4551,7 +4679,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1BU-H60B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -4614,7 +4744,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H06B-2A__MO1HS-H06B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 33,
@@ -4677,7 +4809,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4740,7 +4874,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 33,
@@ -4803,7 +4939,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -4866,7 +5004,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 33,
@@ -4929,7 +5069,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -4992,7 +5134,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -5055,7 +5199,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1HS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -5118,7 +5264,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1HU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -5181,7 +5329,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1HU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -5244,7 +5394,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1HU-H60B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -5307,7 +5459,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1ES-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -5370,7 +5524,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1ES-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -5433,7 +5589,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -5496,7 +5654,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1HS-H09B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -5559,7 +5719,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1HS-H12B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 49,
@@ -5622,7 +5784,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -5685,7 +5849,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1ES-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -5748,7 +5914,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1ES-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -5811,7 +5979,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1BU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -5874,7 +6044,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1BU-H60B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -5937,7 +6109,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1HS-H18B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 66,
@@ -6000,7 +6174,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1HS-H24B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 82,
@@ -6063,7 +6239,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1HU-H36B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -6126,7 +6304,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1HU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -6189,7 +6369,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1HU-H60B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -6252,7 +6434,9 @@
             "TYPE (INDOOR UNIT #4)": "-",
             "TYPE (INDOOR UNIT #5)": "-"
           },
-          "documentationData": {},
+          "documentationData": {
+            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1BU-H48B-2A"
+          },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
             "MAX VERTICAL SEPARATION (ODU TO IDU) (FT)": 98,
@@ -6283,7 +6467,7 @@
   },
   "_meta": {
     "sourceFile": "MINI SPLIT DATA.xlsx",
-    "generatedAt": "2026-10-21T08:52:26",
+    "generatedAt": "2026-10-21T09:54:54",
     "dataRowCount": 92,
     "selectionCount": 92
   }
