@@ -1,7 +1,7 @@
 {
   "productType": "MULTI POSITION SPLITS",
   "assetsFolder": "MULTI POSITION SPLITS",
-  "scheduleTitle": "SPLIT SYSTEM SCHEDULE",
+  "scheduleTitle": "UNITARY & LIGHT COMMERCIAL SPLIT SYSTEM SCHEDULE",
   "supportsMultiRowSelections": false,
   "searchSchema": {
     "displayName": "Unitary & Light Commercial Split Systems",
@@ -76,7 +76,7 @@
       [
         {
           "col": "A",
-          "value": "SPLIT SYSTEM SCHEDULE",
+          "value": "UNITARY & LIGHT COMMERCIAL SPLIT SYSTEM SCHEDULE",
           "colspan": 30,
           "rowspan": 1
         }
@@ -40565,7 +40565,7 @@
   },
   "_meta": {
     "sourceFile": "MULTI POSITION SPLIT DATA.xlsx",
-    "generatedAt": "2026-10-20T09:44:35",
+    "generatedAt": "2026-10-21T08:52:26",
     "dataRowCount": 580,
     "selectionCount": 580
   }

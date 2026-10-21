@@ -84,6 +84,11 @@ from openpyxl.utils import get_column_letter, column_index_from_string
 #   brandOverrides     Optional. Rewrites the MAKE cells on the way out, for
 #                      lines sold under a different label than the one typed
 #                      into the workbook. See BRAND OVERRIDES below.
+#   idColumns          Optional. Column letters (first row of a selection)
+#                      whose values form the selection id, e.g. the model
+#                      columns - so saved projects keep pointing at the same
+#                      unit when the schedule is regenerated. Without it,
+#                      ids follow row order (sel_0001 ...).
 # -----------------------------------------------------------------------------
 
 PRODUCT_CONFIGS = {
@@ -96,7 +101,9 @@ PRODUCT_CONFIGS = {
         "assetsFolder": "GAS PACKS",
         # Rows are generated from the TempMaster technical guides at standard
         # conditions (the workbook's SOURCES tab) and carry the TEMPMASTER
-        # make directly, so no brand override is needed.
+        # make directly, so no brand override is needed. Ids from the model
+        # number so saved projects survive regeneration.
+        "idColumns": ["B"],
         "searchSchema": {
             "displayName": "Gas Pack RTUs",
             "description": "Packaged rooftop units. Enter design loads and the page returns models that meet the targets within your tolerance.",
@@ -106,6 +113,31 @@ PRODUCT_CONFIGS = {
                 {"label": "Sensible Cooling Capacity","col": "H", "unit": "BTU/h", "defaultTolerance": 10},
                 {"label": "Heating Output",           "col": "O", "unit": "MBH",   "defaultTolerance": 10},
                 {"label": "Airflow",                  "col": "D", "unit": "CFM",   "defaultTolerance": 10},
+            ],
+        },
+    },
+    # TempMaster packaged heat pumps (Omni Core WQ/WY/WX, Omni Pro WP, Omni
+    # Choice MV) generated from the technical guides at standard conditions
+    # (the workbook's SOURCES tab). Rows that differ only in electric heat
+    # fold into a kW dropdown on the site (data.js kwVariants). Ids from the
+    # model number + heater kit so saved projects survive regeneration.
+    "PACKAGED HEAT PUMP DATA.xlsx": {
+        "productType": "PACKAGED HEAT PUMPS",
+        "outputFileName": "packaged_heat_pumps.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "PACKAGED HEAT PUMPS",
+        "idColumns": ["B", "X"],
+        "searchSchema": {
+            "displayName": "Packaged Heat Pumps",
+            "description": "TempMaster packaged heat pump rooftop units (3-25 ton). Enter design loads and the page returns models that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Nominal Tons",              "col": "C", "unit": "tons",  "defaultTolerance": 10},
+                {"label": "Total Cooling Capacity",    "col": "H", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Sensible Cooling Capacity", "col": "I", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Heating Capacity @ 47°F",   "col": "P", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Airflow",                   "col": "D", "unit": "CFM",   "defaultTolerance": 10},
             ],
         },
     },
@@ -177,14 +209,17 @@ PRODUCT_CONFIGS = {
         "dataStartRow": 7,
         "supportsMultiRow": True,
         "assetsFolder": "MINI SPLITS",
+        # Midea single-zone systems (built from the Midea submittal data
+        # sheets; workbook SOURCES tab). Ids from the indoor + outdoor model
+        # columns so saved projects survive regeneration.
+        "idColumns": ["M", "V"],
         "searchSchema": {
             "displayName": "Mini Splits",
-            "description": "Ductless split systems (1:1 and multi-zone). Enter per-zone capacity targets; results include systems with at least one indoor unit matching.",
+            "description": "Midea ductless single-zone heat pump systems. Enter capacity targets and the page returns systems that meet them within your tolerance.",
             "targets": [
-                {"label": "Indoor Unit Cooling Capacity",             "col": "D", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Indoor Unit Sensible Capacity",            "col": "E", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Indoor Unit Heating Capacity (Heat Pump)", "col": "G", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Indoor Unit Airflow",                      "col": "A", "unit": "CFM",   "defaultTolerance": 15},
+                {"label": "Cooling Capacity",              "col": "D", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Heating Capacity (Heat Pump)",  "col": "F", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Indoor Unit Airflow",           "col": "A", "unit": "CFM",   "defaultTolerance": 15},
             ],
         },
     },
@@ -1205,6 +1240,28 @@ def extract_selections(ws, groups, schedule_cols, filter_cols, doc_cols,
     return selections
 
 
+def assign_stable_ids(selections, id_columns):
+    """Replace the row-order ids (sel_0001 ...) with ids built from the
+    first row's values in `id_columns` (e.g. the model number columns).
+
+    Saved projects point at selections by id. Row-order ids mean that
+    regenerating a schedule - new rows, re-sorted rows - silently moves
+    saved items onto different units; model-based ids survive it. Ids
+    that would collide get a numeric suffix (and a warning)."""
+    seen = {}
+    for sel in selections:
+        sd = sel["rows"][0]["scheduleData"] if sel["rows"] else {}
+        parts = [re.sub(r"[^A-Za-z0-9.-]+", "-", str(sd.get(c, "")).strip()).strip("-") for c in id_columns]
+        base = "sel_" + "_".join(p for p in parts if p)
+        n = seen.get(base, 0) + 1
+        seen[base] = n
+        sel["id"] = base if n == 1 else f"{base}_{n}"
+    dupes = {k: v for k, v in seen.items() if v > 1}
+    if dupes:
+        print(f"  WARNING: {len(dupes)} id(s) shared by more than one row "
+              f"(suffixed): {', '.join(list(dupes)[:5])}")
+
+
 # -----------------------------------------------------------------------------
 # BRAND OVERRIDES
 # -----------------------------------------------------------------------------
@@ -1692,6 +1749,9 @@ def convert_file(input_path, config, output_path):
     brand_changes = apply_brand_overrides(selections, config.get("brandOverrides"))
     if config.get("brandOverrides"):
         print(f"  brand override: {brand_changes} MAKE cell(s) rewritten")
+
+    if config.get("idColumns"):
+        assign_stable_ids(selections, config["idColumns"])
 
     schedule_notes = extract_schedule_notes(wb, config.get("notesFormat"))
 

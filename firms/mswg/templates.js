@@ -79,29 +79,29 @@
                 // Indoor units are powered from the outdoor single-point
                 // feed, so fan-motor volts/phase mirror the outdoor service
                 // (which multi-zone selections only store on sub-row 0).
-                { scope: 'row', derive: function (g) { return voltOnly(g.cellAt('S', 0)); } },
-                { scope: 'row', derive: function (g) { return phaseOnly(g.cellAt('S', 0)); } },
+                { scope: 'row', derive: function (g) { return voltOnly(g.cellAt('R', 0)); } },
+                { scope: 'row', derive: function (g) { return phaseOnly(g.cellAt('R', 0)); } },
                 { scope: 'row', derive: function (g) { return slash(g.cell('B'), g.cell('C')); } },
                 { scope: 'row', derive: function (g) { return g.cell('D'); } },
+                { scope: 'row', derive: function (g) { return '-'; } },
+                { scope: 'item', derive: function (g) { return firstNumber(g.cell('Q')); } },
                 { scope: 'row', derive: function (g) { return g.cell('E'); } },
-                { scope: 'item', derive: function (g) { return firstNumber(g.cell('R')); } },
                 { scope: 'row', derive: function (g) { return g.cell('F'); } },
-                { scope: 'row', derive: function (g) { return g.cell('G'); } },
                 // Heating COP: no data source yet
                 { scope: 'item', derive: function () { return '-'; } },
                 // --- Outdoor unit ---
                 { scope: 'item', editable: true, fieldKey: 'mswg_min_odu_tag', derive: function (g) { return s(g.item.tag); } },
-                { scope: 'item', derive: function (g) { return g.cell('Q'); } },
+                { scope: 'item', derive: function (g) { return g.cell('P'); } },
                 // Outdoor fan No. / FLA(ea): no data source yet
                 { scope: 'item', derive: function () { return '-'; } },
                 { scope: 'item', derive: function () { return '-'; } },
+                { scope: 'item', derive: function (g) { return g.cell('S'); } },
                 { scope: 'item', derive: function (g) { return g.cell('T'); } },
-                { scope: 'item', derive: function (g) { return g.cell('U'); } },
-                { scope: 'item', derive: function (g) { return voltOnly(g.cell('S')); } },
-                { scope: 'item', derive: function (g) { return phaseOnly(g.cell('S')); } },
+                { scope: 'item', derive: function (g) { return voltOnly(g.cell('R')); } },
+                { scope: 'item', derive: function (g) { return phaseOnly(g.cell('R')); } },
                 // --- Model columns + remarks ---
-                { scope: 'row', derive: function (g) { return g.cell('N'); } },
-                { scope: 'item', derive: function (g) { return g.cell('W'); } },
+                { scope: 'row', derive: function (g) { return g.cell('M'); } },
+                { scope: 'item', derive: function (g) { return g.cell('V'); } },
                 { scope: 'item', derive: function () { return '1-9'; } }
             ],
             notesTitle: '',

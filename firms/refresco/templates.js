@@ -58,16 +58,16 @@
             ],
             columns: [
                 { scope: 'row', derive: function (g) { return s(g.item.indoorTags && g.item.indoorTags[g.rowIndex]); } },
-                { scope: 'row', derive: function (g) { return combine(g.cell('M'), g.cell('N')); } },
+                { scope: 'row', derive: function (g) { return combine(g.cell('L'), g.cell('M')); } },
                 { scope: 'item', editable: true, fieldKey: 'refresco_ms_serves' },
                 { scope: 'row', derive: function (g) { return g.cell('A'); } },
                 { scope: 'row', editable: true, fieldKey: 'refresco_ms_min_oa_cfm' },
                 { scope: 'row', derive: function (g) { return g.cell('D'); } },
                 { scope: 'row', derive: function (g) { return g.cell('B'); } },
                 { scope: 'row', derive: function (g) { return g.cell('C'); } },
-                { scope: 'row', derive: function (g) { return g.cell('G'); } },
-                { scope: 'row', derive: function (g) { return g.cell('P'); } },
-                { scope: 'item', derive: function (g) { return firstNumber(g.cell('R')); } },
+                { scope: 'row', derive: function (g) { return g.cell('F'); } },
+                { scope: 'row', derive: function (g) { return g.cell('O'); } },
+                { scope: 'item', derive: function (g) { return firstNumber(g.cell('Q')); } },
                 // Indoor units fed from the outdoor single-point feed have
                 // no independent service, so BOTH the indoor VOLT/PH and
                 // MCA/MOCP read "-" (the real feed lives in the SINGLE POINT
@@ -75,15 +75,15 @@
                 // source; if a unit were ever independently powered it would
                 // fall back to showing its own voltage.
                 { scope: 'item', derive: function (g) {
-                    return /powered from outdoor/i.test(g.cell('J'))
-                        ? '-' : voltPh(g.cell('S'));
+                    return /powered from outdoor/i.test(g.cell('I'))
+                        ? '-' : voltPh(g.cell('R'));
                 } },
                 { scope: 'item', derive: function () { return '-'; } },
                 { scope: 'item', derive: function (g) { return s(g.item.tag); } },
-                { scope: 'item', derive: function (g) { return combine(g.cell('V'), g.cell('W')); } },
-                { scope: 'item', derive: function (g) { return g.cell('Q'); } },
-                { scope: 'item', derive: function (g) { return voltPh(g.cell('S')); } },
-                { scope: 'item', derive: function (g) { return slash(g.cell('T'), g.cell('U')); } }
+                { scope: 'item', derive: function (g) { return combine(g.cell('U'), g.cell('V')); } },
+                { scope: 'item', derive: function (g) { return g.cell('P'); } },
+                { scope: 'item', derive: function (g) { return voltPh(g.cell('R')); } },
+                { scope: 'item', derive: function (g) { return slash(g.cell('S'), g.cell('T')); } }
             ],
             notesTitle: '',
             // One bordered note box, text on multiple rows (matches the

@@ -1405,9 +1405,10 @@ WHAT'S IN THE GRID
         if (template && template.title) return template.title;
         var titles = {
             'gas_packs':              'PACKAGED ROOFTOP UNIT SCHEDULE',
+            'packaged_heat_pumps':    'PACKAGED HEAT PUMP SCHEDULE',
             'marvair':                'VERTICAL WALL MOUNTED PACKAGED SCHEDULE',
             'mini_splits':            'MINI SPLIT SCHEDULE',
-            'multi_position_splits':  'MULTI POSITION SPLIT SCHEDULE',
+            'multi_position_splits':  'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEM SCHEDULE',
             'gas_splits':             'GAS SPLIT SCHEDULE',
             'water_source_heat_pumps': 'WATER SOURCE HEAT PUMP SCHEDULE',
             'stocked_chillers':       'AIR-COOLED CHILLER SCHEDULE',
@@ -2518,6 +2519,7 @@ WHAT'S IN THE GRID
         if (product && product.name) return product.name;
         var fallback = {
             'gas_packs': 'Gas Pack RTUs',
+            'packaged_heat_pumps': 'Packaged Heat Pumps',
             'marvair': 'Marvair Vertical Wall Mount',
             'mini_splits': 'Mini Splits',
             'multi_position_splits': 'Unitary & Light Commercial Split Systems',

@@ -814,9 +814,11 @@
     // Adding a new product here is the only change needed when its
     // refrigerant data lands in JSON.
     var MODEL_COLS_BY_PRODUCT = {
+        // Midea layout (sensible capacity column removed, so these sit one
+        // letter left of the old Daikin layout's M/N and V/W).
         'mini_splits': {
-            indoor:  { make: 'M', model: 'N' },
-            outdoor: { make: 'V', model: 'W' }
+            indoor:  { make: 'L', model: 'M' },
+            outdoor: { make: 'U', model: 'V' }
         },
         'multi_position_splits': {
             indoor:  { make: 'A', model: 'B' },

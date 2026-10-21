@@ -39,6 +39,25 @@
             tileClass: 'tile-gas-packs'
         },
         {
+            // TempMaster Omni Core / Pro / Choice heat pumps from the technical
+            // guides - see the SOURCES tab of DATA/DATA FILES/PACKAGED HEAT
+            // PUMP DATA.xlsx. Electric heat options fold into a kW dropdown that
+            // swaps the model number (WP factory heat), heater kit and MCA/MOCP.
+            productKey: 'packaged_heat_pumps',
+            displayName: 'PACKAGED HEAT PUMPS',
+            jsonFile: 'DATA/JSON/packaged_heat_pumps.json',
+            pictureFile: 'DATA/PICTURES/PACKAGED HEAT PUMPS.jpg',
+            assetsFolder: 'ASSETS/PACKAGED HEAT PUMPS',
+            tileClass: 'tile-packaged-heat-pumps',
+            autoTagPrefix: 'RTU-',
+            kwVariants: {
+                variantColumn: 'V',
+                dependentColumns: ['B', 'W', 'X', 'AB', 'AC'],
+                filterName: 'ELECTRIC HEAT',
+                defaultValue: '-'
+            }
+        },
+        {
             productKey: 'mini_splits',
             displayName: 'MINI SPLITS',
             jsonFile: 'DATA/JSON/mini_splits.json',
@@ -49,14 +68,15 @@
             // on the browse page (see JS/mini_splits.js). `type` must
             // match a TYPE (INDOOR UNIT #1) filter value exactly -
             // clicking a card filters the schedule to that indoor type.
-            // Photos are the indoor-unit shots from the submittal PDFs,
-            // flood-filled onto black like the Price "(Black)" renders.
+            // Photos are the indoor-unit shots from the Midea submittal
+            // PDFs, flood-filled onto black like the Price "(Black)" renders.
             typeGallery: [
-                { type: 'Wall Mounted',          picture: 'DATA/PICTURES/MINI SPLIT TYPES/Wall Mounted.jpg' },
-                { type: 'Cassette',              picture: 'DATA/PICTURES/MINI SPLIT TYPES/Cassette.jpg' },
-                { type: 'Ducted Concealed',      picture: 'DATA/PICTURES/MINI SPLIT TYPES/Ducted Concealed.jpg' },
-                { type: 'Floor Mounted (Black)', picture: 'DATA/PICTURES/MINI SPLIT TYPES/Floor Mounted (Black).jpg' },
-                { type: 'Floor Mounted (White)', picture: 'DATA/PICTURES/MINI SPLIT TYPES/Floor Mounted (White).jpg' }
+                { type: 'Wall Mounted',        picture: 'DATA/PICTURES/MINI SPLIT TYPES/Wall Mounted (Midea).jpg' },
+                { type: 'One-Way Cassette',    picture: 'DATA/PICTURES/MINI SPLIT TYPES/One-Way Cassette.jpg' },
+                { type: 'Round Flow Cassette', picture: 'DATA/PICTURES/MINI SPLIT TYPES/Round Flow Cassette.jpg' },
+                { type: 'Slim Duct',           picture: 'DATA/PICTURES/MINI SPLIT TYPES/Slim Duct.jpg' },
+                { type: 'Console',             picture: 'DATA/PICTURES/MINI SPLIT TYPES/Console.jpg' },
+                { type: 'Ceiling & Floor',     picture: 'DATA/PICTURES/MINI SPLIT TYPES/Ceiling & Floor.jpg' }
             ]
         },
         {

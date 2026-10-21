@@ -131,4 +131,62 @@
         }
         return null;
     }
+
+    // -----------------------------------------------------------------
+    // Saved-item check (runs at startup, before the cart loads)
+    // -----------------------------------------------------------------
+    // The mini split data moved from Daikin to Midea (Oct 2026) and its
+    // selection ids are now built from the model numbers. A saved item
+    // whose id no longer exists is a discontinued (Daikin) system: there's
+    // no one-to-one Midea replacement to point it at, and schedules and
+    // exports already skip unresolvable items, so it is only relabelled
+    // so the user can see why it dropped off.
+    var PRODUCT = 'mini_splits';
+    var PROJECTS_KEY = 'hhpro_projects';
+    var ACTIVE_KEY = 'hhpro_active_cart';
+    var FLAG = 'NO LONGER AVAILABLE - ';
+
+    function flagDiscontinuedItems() {
+        var projects, active;
+        try { projects = JSON.parse(localStorage.getItem(PROJECTS_KEY) || '{}') || {}; } catch (e) { projects = {}; }
+        try { active = JSON.parse(sessionStorage.getItem(ACTIVE_KEY) || 'null'); } catch (e) { active = null; }
+        function uses(list) {
+            return (list || []).some(function (it) { return it && it.productKey === PRODUCT; });
+        }
+        var needs = Object.keys(projects).some(function (id) { return uses(projects[id].items); }) ||
+                    (active && uses(active.items));
+        if (!needs || !HHpro.Data) return Promise.resolve(0);
+
+        return HHpro.Data.loadProduct(PRODUCT).then(function (data) {
+            var ids = {};
+            (data.selections || []).forEach(function (s) { ids[s.id] = true; });
+            var flagged = 0;
+            function fix(items) {
+                var changed = false;
+                (items || []).forEach(function (it) {
+                    if (!it || it.productKey !== PRODUCT || ids[it.selectionId]) return;
+                    if (String(it.label || '').indexOf(FLAG) === 0) return;
+                    it.label = FLAG + (it.label || it.selectionId);
+                    changed = true;
+                    flagged++;
+                });
+                return changed;
+            }
+            var now = new Date().toISOString();
+            Object.keys(projects).forEach(function (id) {
+                if (fix(projects[id].items)) projects[id].updatedAt = now;   // so sync pushes it
+            });
+            var activeChanged = active && fix(active.items);
+            if (flagged) {
+                try { localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects)); } catch (e) { /* full */ }
+                if (activeChanged) {
+                    try { sessionStorage.setItem(ACTIVE_KEY, JSON.stringify(active)); } catch (e) { /* full */ }
+                }
+                if (HHpro.ProjectSync) HHpro.ProjectSync.notify();
+            }
+            return flagged;
+        }).catch(function () { return 0; });
+    }
+
+    HHpro.MiniSplits = { flagDiscontinuedItems: flagDiscontinuedItems };
 })();
