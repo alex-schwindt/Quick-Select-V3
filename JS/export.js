@@ -2520,7 +2520,7 @@ WHAT'S IN THE GRID
         var fallback = {
             'gas_packs': 'Gas Pack RTUs',
             'packaged_heat_pumps': 'Packaged Heat Pumps',
-            'marvair': 'Marvair Vertical Wall Mount',
+            'marvair': 'Airsys Vertical Wall Mount',
             'mini_splits': 'Mini Splits',
             'multi_position_splits': 'Unitary & Light Commercial Split Systems',
             'gas_splits': 'Gas Splits',

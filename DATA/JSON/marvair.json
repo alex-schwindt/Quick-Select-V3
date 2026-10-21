@@ -1,10 +1,10 @@
 {
-  "productType": "MARVAIR VERTICAL WALL MOUNT",
+  "productType": "AIRSYS VERTICAL WALL MOUNT",
   "assetsFolder": "MARVAIR",
   "scheduleTitle": "VERTICAL WALL MOUNTED PACKAGED AIR HANDLING UNIT SCHEDULE",
   "supportsMultiRowSelections": false,
   "searchSchema": {
-    "displayName": "Marvair Vertical Wall Mount",
+    "displayName": "Airsys Vertical Wall Mount",
     "description": "Vertical wall-mount packaged air handling units. Enter design loads and the page returns models that meet the targets within your tolerance.",
     "targets": [
       {
@@ -18500,7 +18500,7 @@
   },
   "_meta": {
     "sourceFile": "MARVAIR DATA.xlsx",
-    "generatedAt": "2026-10-20T09:44:23",
+    "generatedAt": "2026-10-21T13:56:41",
     "dataRowCount": 490,
     "selectionCount": 490
   }

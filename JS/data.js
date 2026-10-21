@@ -46,7 +46,8 @@
             productKey: 'packaged_heat_pumps',
             displayName: 'PACKAGED HEAT PUMPS',
             jsonFile: 'DATA/JSON/packaged_heat_pumps.json',
-            pictureFile: 'DATA/PICTURES/PACKAGED HEAT PUMPS.jpg',
+            // Same cabinet as the gas packs from the outside.
+            pictureFile: 'DATA/PICTURES/GAS PACK RTUS.jpg',
             assetsFolder: 'ASSETS/PACKAGED HEAT PUMPS',
             tileClass: 'tile-packaged-heat-pumps',
             autoTagPrefix: 'RTU-',
@@ -133,7 +134,7 @@
         },
         {
             productKey: 'marvair',
-            displayName: 'MARVAIR VERTICAL WALL MOUNT',
+            displayName: 'AIRSYS VERTICAL WALL MOUNT',
             jsonFile: 'DATA/JSON/marvair.json',
             pictureFile: 'DATA/PICTURES/MARVAIR VERTICAL WALL MOUNT.jpg',
             assetsFolder: 'ASSETS/MARVAIR',
@@ -151,6 +152,7 @@
         },
         {
             productKey: 'vfds',
+            retired: true,
             displayName: 'VFDs',
             jsonFile: 'DATA/JSON/vfds.json',
             pictureFile: 'DATA/PICTURES/VFDs.jpg',
@@ -180,6 +182,7 @@
         },
         {
             productKey: 'diffusers',
+            retired: true,
             displayName: 'DIFFUSERS',
             jsonFile: 'DATA/JSON/diffusers.json',
             pictureFile: 'DATA/PICTURES/DIFFUSERS.jpg',
@@ -234,6 +237,7 @@
         },
         {
             productKey: 'grilles',
+            retired: true,
             displayName: 'GRILLES',
             jsonFile: 'DATA/JSON/grilles.json',
             pictureFile: 'DATA/PICTURES/GRILLES.jpg',
@@ -275,6 +279,7 @@
         },
         {
             productKey: 'gps',
+            retired: true,
             displayName: 'Bipolar Ionization',
             // Short label used in export filenames (productTabLabel).
             name: 'Bipolar Ionization',
@@ -320,13 +325,18 @@
     HHpro.Data = {
         /**
          * Products this user can browse (home tiles, Design Search, model
-         * lookup). Sections flagged internalOnly are H&H-staff only; the
+         * lookup). Sections flagged retired (lines not sold in Nashville)
+         * are hidden from browsing, but getProduct still resolves them so
+         * items already saved in projects keep rendering and exporting.
+         * Sections flagged internalOnly are H&H-staff only; the
          * Worker also refuses their data file to everyone else, so this is
          * only about not showing a tile that can't load.
          */
         getProducts: function () {
             var internal = !!(HHpro.ProjectSync && HHpro.ProjectSync.isInternal());
-            return PRODUCTS.filter(function (p) { return internal || !p.internalOnly; });
+            return PRODUCTS.filter(function (p) {
+                return !p.retired && (internal || !p.internalOnly);
+            });
         },
 
         getProduct: function (productKey) {

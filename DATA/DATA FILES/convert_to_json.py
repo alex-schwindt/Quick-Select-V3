@@ -184,14 +184,14 @@ PRODUCT_CONFIGS = {
         },
     },
     "MARVAIR DATA.xlsx": {
-        "productType": "MARVAIR VERTICAL WALL MOUNT",
+        "productType": "AIRSYS VERTICAL WALL MOUNT",
         "outputFileName": "marvair.json",
         "headerRows": 2,
         "dataStartRow": 4,
         "supportsMultiRow": False,
         "assetsFolder": "MARVAIR",
         "searchSchema": {
-            "displayName": "Marvair Vertical Wall Mount",
+            "displayName": "Airsys Vertical Wall Mount",
             "description": "Vertical wall-mount packaged air handling units. Enter design loads and the page returns models that meet the targets within your tolerance.",
             "targets": [
                 {"label": "Nominal Size",             "col": "C", "unit": "tons",  "defaultTolerance": 10},
