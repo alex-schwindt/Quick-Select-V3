@@ -34,7 +34,7 @@
             productKey: 'gas_packs',
             displayName: 'GAS PACK RTUS',
             jsonFile: 'DATA/JSON/gas_packs.json',
-            pictureFile: 'DATA/PICTURES/GAS PACK RTUS.jpg',
+            pictureFile: 'DATA/PICTURES/TempMaster_Omni_Core_black_bg.jpg',
             assetsFolder: 'ASSETS/GAS PACKS',
             tileClass: 'tile-gas-packs'
         },
