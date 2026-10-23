@@ -107,9 +107,13 @@
         // responsive auto-fill grid as before.
         var grid = document.createElement('div');
         grid.className = 'tile-grid';
-        HHpro.Data.getProducts().forEach(function (product) {
-            grid.appendChild(createProductTile(product));
-        });
+        // Coming-soon sections go last; everything else keeps registry order.
+        var products = HHpro.Data.getProducts();
+        products.filter(function (p) { return !p.comingSoon; })
+            .concat(products.filter(function (p) { return p.comingSoon; }))
+            .forEach(function (product) {
+                grid.appendChild(createProductTile(product));
+            });
         main.appendChild(grid);
 
         // Soft staggered reveal as the overview paints in.
