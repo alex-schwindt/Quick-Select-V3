@@ -167,14 +167,14 @@ PRODUCT_CONFIGS = {
     # per stock unit, from the selection reports in the quantech-cut-sheets
     # R2 bucket (SOURCES tab). Visible to all users, engineers included.
     "STOCKED CHILLERS DATA.xlsx": {
-        "productType": "STOCKED CHILLERS",
+        "productType": "AIR COOLED CHILLERS",
         "outputFileName": "stocked_chillers.json",
         "headerRows": 3,
         "dataStartRow": 5,
         "supportsMultiRow": False,
         "assetsFolder": "STOCKED CHILLERS",
         "searchSchema": {
-            "displayName": "Stocked Chillers",
+            "displayName": "Air Cooled Chillers",
             "description": "Quantech air-cooled chillers H&H holds in stock, at AHRI 550/590 conditions (54/44°F, 95°F ambient). Enter design loads and the page returns stock units that meet the targets within your tolerance.",
             "targets": [
                 {"label": "Cooling Capacity", "col": "G", "unit": "tons", "defaultTolerance": 10},
@@ -887,6 +887,7 @@ DOC_COLUMN_MAP = [
     ("ENGINEERING MANUAL",  {"folder": "ENGINEERING MANUALS",  "fileExtension": "pdf"}),
     ("INSTALLATION MANUAL", {"folder": "INSTALLATION MANUALS", "fileExtension": "pdf"}),
     ("OPERATION MANUAL",    {"folder": "OPERATION MANUAL",     "fileExtension": "pdf"}),
+    ("SERVICE MANUAL",      {"folder": "SERVICE MANUALS",      "fileExtension": "pdf"}),
     ("CAPACITY TABLE",      {"folder": "CAPACITY TABLES",      "fileExtension": "pdf"}),
     ("CONTROLS OPTIONS",    {"folder": "CONTROLS",             "fileExtension": "pdf"}),
     ("SUBMITTAL",           {"folder": "SUBMITTALS",           "fileExtension": "pdf"}),

@@ -250,6 +250,19 @@
         tile.appendChild(image);
         tile.appendChild(body);
 
+        // Sections being rebuilt (data.js comingSoon) show greyed out with
+        // a banner and don't open.
+        if (product.comingSoon) {
+            tile.disabled = true;
+            tile.classList.add('tile-coming-soon');
+            tile.title = product.displayName + ' - coming soon';
+            var banner = document.createElement('div');
+            banner.className = 'tile-coming-soon-banner';
+            banner.textContent = 'Coming soon';
+            tile.appendChild(banner);
+            return tile;
+        }
+
         tile.addEventListener('click', function () {
             HHpro.App.showView('product', { productKey: product.productKey });
         });

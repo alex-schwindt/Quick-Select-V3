@@ -195,6 +195,53 @@
     }
 }
 
+/* Sections being rebuilt (data.js comingSoon): greyed out, no hover
+   lift or zoom, with a diagonal COMING SOON ribbon across the corner. */
+.tile.tile-coming-soon {
+    cursor: not-allowed;
+}
+
+/* Dim the photo and label, not the tile, so the ribbon stays bright. */
+.tile.tile-coming-soon .tile-image,
+.tile.tile-coming-soon .tile-body {
+    opacity: 0.45;
+}
+
+.tile.tile-coming-soon:hover,
+.tile.tile-coming-soon:active {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--color-border);
+}
+
+.tile.tile-coming-soon::after {
+    display: none;
+}
+
+.tile.tile-coming-soon .tile-image img,
+.tile.tile-coming-soon:hover .tile-image img {
+    filter: grayscale(1);
+    transform: none;
+}
+
+.tile-coming-soon-banner {
+    position: absolute;
+    top: 26px;
+    right: -46px;
+    width: 190px;
+    transform: rotate(45deg);
+    background-color: var(--color-primary, #1f6fb2);
+    color: #fff;
+    text-align: center;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
 /* Label area below the image */
 .tile-body {
     padding: var(--space-md);

@@ -348,15 +348,15 @@
       "fileExtension": "pdf"
     },
     {
-      "name": "ENGINEERING MANUAL (OUTDOOR UNIT)",
+      "name": "SERVICE MANUAL (OUTDOOR UNIT)",
       "col": "AT",
-      "folder": "ENGINEERING MANUALS",
+      "folder": "SERVICE MANUALS",
       "fileExtension": "pdf"
     },
     {
-      "name": "ENGINEERING MANUAL (INDOOR UNIT)",
+      "name": "SERVICE MANUAL (INDOOR UNIT)",
       "col": "AU",
-      "folder": "ENGINEERING MANUALS",
+      "folder": "SERVICE MANUALS",
       "fileExtension": "pdf"
     },
     {
@@ -520,7 +520,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-1A__MO1CS-H09B-1A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-1A__MO1CS-H09B-1A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -585,7 +587,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-2A__MO1CS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H09B-2A__MO1CS-H09B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -650,7 +654,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-1A__MO1CS-H12B-1A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-1A__MO1CS-H12B-1A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -715,7 +721,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-2A__MO1CS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H12B-2A__MO1CS-H12B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -780,7 +788,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H18B-2A__MO1CS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H18B-2A__MO1CS-H18B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -845,7 +855,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H24B-2A__MO1CS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H24B-2A__MO1CS-H24B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -910,7 +922,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H30B-2A__MO1CS-H30B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H30B-2A__MO1CS-H30B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -975,7 +989,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSBNS-H36B-2A__MO1CS-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MSBNS-H36B-2A__MO1CS-H36B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSBNS Infini L Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1040,7 +1056,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H06B-2A__MO1HS-H06B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H06B-2A__MO1HS-H06B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1105,7 +1124,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1170,7 +1192,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1235,7 +1260,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H15B-2A__MO1HS-H15B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H15B-2A__MO1HS-H15B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1300,7 +1328,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1365,7 +1396,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1HS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1HS-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1430,7 +1464,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H33B-2A__MO1HS-H33B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H33B-2A__MO1HS-H33B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1495,7 +1532,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEES-H09B-1A__MO1ES-H09B-1A"
+            "SUBMITTAL (SYSTEM)": "MSEES-H09B-1A__MO1ES-H09B-1A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1560,7 +1600,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1625,7 +1668,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEES-H12B-1A__MO1ES-H12B-1A"
+            "SUBMITTAL (SYSTEM)": "MSEES-H12B-1A__MO1ES-H12B-1A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1690,7 +1736,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1755,7 +1804,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEEU-H15B-2A__MO1ES-H15B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEEU-H15B-2A__MO1ES-H15B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1820,7 +1872,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1885,7 +1940,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1ES-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEHU-H24B-2A__MO1ES-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -1950,7 +2008,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEEU-H30B-2A__MO1BS-H30B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEEU-H30B-2A__MO1BS-H30B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2015,7 +2076,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSEEU-H36B-2A__MO1BS-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MSEEU-H36B-2A__MO1BS-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSEHU-MSEES-MSEEU All Easy Pro Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2080,7 +2144,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSESU-H06B-2A__MO1SS-H06B-2A"
+            "SUBMITTAL (SYSTEM)": "MSESU-H06B-2A__MO1SS-H06B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSESU All Easy Pro High End Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2145,7 +2211,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSESU-H09B-2A__MO1SS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MSESU-H09B-2A__MO1SS-H09B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSESU All Easy Pro High End Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2210,7 +2278,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSESU-H12B-2A__MO1SS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MSESU-H12B-2A__MO1SS-H12B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSESU All Easy Pro High End Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2275,7 +2345,9 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSESU-H18B-2A__MO1SS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MSESU-H18B-2A__MO1SS-H18B-2A",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea All Easy Pro Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSESU All Easy Pro High End Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2340,7 +2412,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-1A__MO1BS-H09B-1A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-1A__MO1BS-H09B-1A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2405,7 +2480,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-2A__MO1BS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H09B-2A__MO1BS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2470,7 +2548,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-1A__MO1BS-H12B-1A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-1A__MO1BS-H12B-1A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2535,7 +2616,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-2A__MO1BS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H12B-2A__MO1BS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2600,7 +2684,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H18B-2A__MO1BS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H18B-2A__MO1BS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2665,7 +2752,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H24B-2A__MO1BS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H24B-2A__MO1BS-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2730,7 +2820,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H30B-2A__MO1BS-H30B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H30B-2A__MO1BS-H30B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2795,7 +2888,10 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MSGNS-H36B-2A__MO1BS-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MSGNS-H36B-2A__MO1BS-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Infinite Wall Mounted Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MSGNS Infinite Wall Mounted Installation Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2860,7 +2956,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2925,7 +3025,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -2990,7 +3094,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3055,7 +3163,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H06B-2A__MO1HS-H06B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H06B-2A__MO1HS-H06B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3120,7 +3232,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3185,7 +3301,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3250,7 +3370,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MCAHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea One-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCAHU One-Way Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3315,7 +3439,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3380,7 +3508,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3445,7 +3577,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3510,7 +3646,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1ES-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1ES-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3575,7 +3715,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1BU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1BU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3640,7 +3784,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1BU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1BU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3705,7 +3853,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3770,7 +3922,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3835,7 +3991,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3900,7 +4060,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1HS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHU-H24B-2A__MO1HS-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -3965,7 +4129,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1HU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHS-H36B-2A__MO1HU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4030,7 +4198,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1HU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MCDHS-H48B-2A__MO1HU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Four-Way Cassette Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MCDHU-MCDHS Compact Round Flow Cassette Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4095,7 +4267,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4160,7 +4336,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4225,7 +4405,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4290,7 +4474,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4355,7 +4543,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4420,7 +4612,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4485,7 +4681,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1ES-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1ES-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4550,7 +4750,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1BU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1BU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4615,7 +4819,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1BU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1BU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4680,7 +4888,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1BU-H60B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1BU-H60B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4745,7 +4957,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H06B-2A__MO1HS-H06B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H06B-2A__MO1HS-H06B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4810,7 +5026,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4875,7 +5095,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -4940,7 +5164,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5005,7 +5233,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5070,7 +5302,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5135,7 +5371,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MDLHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Low Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDLHU Low Static Slim Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5200,7 +5440,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1HS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHU-H24B-2A__MO1HS-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5265,7 +5509,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1HU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H36B-2A__MO1HU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5330,7 +5578,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1HU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H48B-2A__MO1HU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5395,7 +5647,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1HU-H60B-2A"
+            "SUBMITTAL (SYSTEM)": "MDHHS-H60B-2A__MO1HU-H60B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea High Static Duct Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MDHHU-MDHHS High Static Duct Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5460,7 +5716,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1ES-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1ES-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5525,7 +5785,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1ES-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1ES-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5590,7 +5854,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5655,7 +5923,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1HS-H09B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H09B-2A__MO1HS-H09B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5720,7 +5992,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1HS-H12B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H12B-2A__MO1HS-H12B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5785,7 +6061,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MFAHU-H16B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Console Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFAHU Floor Standing Console Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5850,7 +6130,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1ES-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1ES-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5915,7 +6199,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1ES-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1ES-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -5980,7 +6268,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1BU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1BU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6045,7 +6337,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1BU-H60B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1BU-H60B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6110,7 +6406,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1HS-H18B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHU-H18B-2A__MO1HS-H18B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6175,7 +6475,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1HS-H24B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHU-H24B-2A__MO1HS-H24B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6240,7 +6544,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1HU-H36B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H36B-2A__MO1HU-H36B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6305,7 +6613,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1HU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1HU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6370,7 +6682,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1HU-H60B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H60B-2A__MO1HU-H60B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6435,7 +6751,11 @@
             "TYPE (INDOOR UNIT #5)": "-"
           },
           "documentationData": {
-            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1BU-H48B-2A"
+            "SUBMITTAL (SYSTEM)": "MFBHS-H48B-2A__MO1BU-H48B-2A",
+            "SERVICE MANUAL (OUTDOOR UNIT)": "Midea Single-Zone Outdoor Unit Service Manual",
+            "SERVICE MANUAL (INDOOR UNIT)": "Midea Ceiling and Floor Service Manual",
+            "INSTALLATION MANUAL (SYSTEM)": "Midea MFBHU-MFBHS Ceiling and Floor Installation Manual",
+            "OPERATION MANUAL": "Midea Light Commercial Indoor Owners Manual"
           },
           "refrigerantData": {
             "REFRIGERANT": "R-454B",
@@ -6467,7 +6787,7 @@
   },
   "_meta": {
     "sourceFile": "MINI SPLIT DATA.xlsx",
-    "generatedAt": "2026-10-21T09:54:54",
+    "generatedAt": "2026-10-23T10:22:23",
     "dataRowCount": 92,
     "selectionCount": 92
   }

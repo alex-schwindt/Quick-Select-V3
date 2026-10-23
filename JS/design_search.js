@@ -178,7 +178,7 @@
             // Products flagged in data.js (GPS: per-sub-schedule column
             // sets make tolerance targets meaningless) stay out of the
             // category picker entirely.
-            if (p.excludeFromDesignSearch) return;
+            if (p.excludeFromDesignSearch || p.comingSoon) return;
             var opt = document.createElement('option');
             opt.value = p.productKey;
             opt.textContent = p.displayName || p.productKey;

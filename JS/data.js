@@ -82,6 +82,10 @@
         },
         {
             productKey: 'multi_position_splits',
+            // Being rebuilt for the Nashville line card (Fraser-Johnston): tile shows greyed out with a
+            // COMING SOON banner and isn't clickable; kept out of Design
+            // Search and the model lookup. Remove to reopen the section.
+            comingSoon: true,
             displayName: 'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEMS',
             jsonFile: 'DATA/JSON/multi_position_splits.json',
             pictureFile: 'DATA/PICTURES/MULTI POSITION SPLITS.jpg',
@@ -102,6 +106,8 @@
         },
         {
             productKey: 'gas_splits',
+            // Daikin data, hidden until rebuilt for the Nashville line card.
+            retired: true,
             displayName: 'GAS SPLITS',
             jsonFile: 'DATA/JSON/gas_splits.json',
             pictureFile: 'DATA/PICTURES/GAS SPLITS.jpg',
@@ -125,7 +131,7 @@
             // internalOnly: true here and list the JSON in worker/index.js
             // INTERNAL_ONLY (+ run_worker_first in wrangler.jsonc).
             productKey: 'stocked_chillers',
-            displayName: 'STOCKED CHILLERS',
+            displayName: 'AIR COOLED CHILLERS',
             jsonFile: 'DATA/JSON/stocked_chillers.json',
             pictureFile: 'DATA/PICTURES/CHILLERS.jpg',
             assetsFolder: 'ASSETS/STOCKED CHILLERS',
@@ -134,6 +140,10 @@
         },
         {
             productKey: 'marvair',
+            // Being rebuilt with Airsys data: tile shows greyed out with a
+            // COMING SOON banner and isn't clickable; kept out of Design
+            // Search and the model lookup. Remove to reopen the section.
+            comingSoon: true,
             displayName: 'AIRSYS VERTICAL WALL MOUNT',
             jsonFile: 'DATA/JSON/marvair.json',
             pictureFile: 'DATA/PICTURES/MARVAIR VERTICAL WALL MOUNT.jpg',

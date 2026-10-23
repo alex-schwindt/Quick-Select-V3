@@ -253,7 +253,9 @@
         if (indexBuilding) return indexBuilding;
 
         indexBuilding = Promise.all(
-            HHpro.Data.getProducts().map(function (product) {
+            HHpro.Data.getProducts().filter(function (product) {
+                return !product.comingSoon;     // sections being rebuilt
+            }).map(function (product) {
                 return HHpro.Data.loadProduct(product.productKey)
                     .then(function (data) { return { product: product, data: data }; })
                     .catch(function () { return null; });
