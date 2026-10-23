@@ -890,6 +890,10 @@ DOC_COLUMN_MAP = [
     ("CAPACITY TABLE",      {"folder": "CAPACITY TABLES",      "fileExtension": "pdf"}),
     ("CONTROLS OPTIONS",    {"folder": "CONTROLS",             "fileExtension": "pdf"}),
     ("SUBMITTAL",           {"folder": "SUBMITTALS",           "fileExtension": "pdf"}),
+    # Generic (blank) manufacturer submittal data sheets: listed under Docs
+    # but kept off the Submittal button, which is for unit-specific
+    # submittals. Same SUBMITTALS folder in the bucket.
+    ("PRODUCT DATA SHEET",  {"folder": "SUBMITTALS",           "fileExtension": "pdf"}),
     ("REVIT",               {"folder": "REVIT",                "fileExtension": "zip"}),
     ("CAD",                 {"folder": "CAD",                  "fileExtension": "zip"}),
 ]
