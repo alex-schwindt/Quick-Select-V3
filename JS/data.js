@@ -160,6 +160,30 @@
                 defaultValue: 0
             }
         },
+        // Planned sections - placeholder tiles only (no data file yet), shown
+        // greyed out with a COMING SOON banner. Drop a JPG at pictureFile to
+        // give a tile its photo.
+        {
+            productKey: 'fan_coils',
+            displayName: 'FAN COILS',
+            pictureFile: 'DATA/PICTURES/FAN COILS.jpg',
+            tileClass: 'tile-fan-coils',
+            comingSoon: true
+        },
+        {
+            productKey: 'vavs',
+            displayName: 'VAVs',
+            pictureFile: 'DATA/PICTURES/VAVs.jpg',
+            tileClass: 'tile-vavs',
+            comingSoon: true
+        },
+        {
+            productKey: 'air_handler_design_request',
+            displayName: 'AIR HANDLER DESIGN REQUEST',
+            pictureFile: 'DATA/PICTURES/AIR HANDLER DESIGN REQUEST.jpg',
+            tileClass: 'tile-air-handler-design-request',
+            comingSoon: true
+        },
         {
             productKey: 'vfds',
             retired: true,
