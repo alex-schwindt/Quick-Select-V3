@@ -359,8 +359,10 @@
      *   cfm:{value,tol}, coolTotal:{value,tol}, coolSensible:{value,tol},
      *   heatRise:{value,tol},
      *   convOutlet, powerExhaust,                    // booleans
-     *   templates                                    // schedule model numbers,
-     * }                                              //   for result model numbers
+     *   templates,                                   // schedule model numbers,
+     *                                                //   for result model numbers
+     *   voltages                                     // optional: only these voltages
+     * }
      *
      * Returns { results:[...], skipped:[{cabinet, reason}] } with results
      * sorted best-match first. One result per cabinet + voltage + motor +
@@ -425,6 +427,7 @@
             // Voltage x motor x heat size -> one result each.
             Object.keys(cab.electrical || {}).forEach(function (voltage) {
                 if (c.electrical && voltage !== c.electrical) return;
+                if (c.voltages && c.voltages.indexOf(voltage) === -1) return;
                 OFFERED_MOTORS.forEach(function (motor) {
                     if (c.motor && motor !== c.motor) return;
                     var elec = electricalFor(name, voltage, motor, c);

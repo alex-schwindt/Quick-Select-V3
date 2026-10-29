@@ -86,6 +86,18 @@
         count.textContent = list.length + ' project' + (list.length === 1 ? '' : 's') + ' · ' +
             Object.keys(owners).length + ' user' + (Object.keys(owners).length === 1 ? '' : 's');
         head.appendChild(count);
+
+        // Excel download of the projects currently listed (filter applied).
+        var exportBtn = document.createElement('button');
+        exportBtn.type = 'button';
+        exportBtn.className = 'admin-copy-btn admin-export-btn';
+        exportBtn.title = 'Download the projects listed below as an Excel file';
+        exportBtn.appendChild(HHpro.UI.icon('download'));
+        var exportLbl = document.createElement('span');
+        exportLbl.textContent = 'Export to Excel';
+        exportBtn.appendChild(exportLbl);
+        exportBtn.addEventListener('click', function () { exportXlsx(visibleRows(), exportBtn, status); });
+        head.appendChild(exportBtn);
         main.appendChild(head);
 
         var search = document.createElement('input');
@@ -105,12 +117,16 @@
         wrap.className = 'admin-table-wrap';
         main.appendChild(wrap);
 
-        function draw() {
-            wrap.innerHTML = '';
+        function visibleRows() {
             var q = filterText.trim().toLowerCase();
-            var rows = list.filter(function (p) {
+            return list.filter(function (p) {
                 return !q || p.owner.indexOf(q) !== -1 || String(p.name || '').toLowerCase().indexOf(q) !== -1;
             });
+        }
+
+        function draw() {
+            wrap.innerHTML = '';
+            var rows = visibleRows();
             if (!rows.length) {
                 wrap.appendChild(message(list.length ? 'No projects match that filter.' : 'No projects have been saved yet.'));
                 return;
@@ -159,6 +175,69 @@
         });
         table.appendChild(tbody);
         return table;
+    }
+
+    // Excel export: one row per project, built with the schedule exporter's
+    // xlsx writer (export.js) so the file matches the site's other downloads.
+    function exportXlsx(rows, btn, status) {
+        if (!rows.length) {
+            status.textContent = 'No projects to export.';
+            return;
+        }
+        if (!HHpro.Export || !HHpro.Export.xlsxBlobFromSections) {
+            status.textContent = 'Excel export isn’t available on this page.';
+            return;
+        }
+        function stamp(iso) {
+            var d = new Date(iso);
+            if (isNaN(d)) return '';
+            function pad(n) { return (n < 10 ? '0' : '') + n; }
+            return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
+                ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+        }
+        function productList(products) {
+            return Object.keys(products || {}).sort().map(function (k) {
+                var label = HHpro.Export.productTabLabel ? HHpro.Export.productTabLabel(k) : k;
+                return label + ' (' + products[k] + ')';
+            }).join(', ');
+        }
+        var headers = ['Account (Email)', 'Project', 'Schedule Layout', 'Items', 'Products', 'Created', 'Last Saved'];
+        var data = rows.map(function (p) {
+            return [p.owner, p.name || '(untitled)', engineerLabel(p.engineer), p.items,
+                    productList(p.products), stamp(p.createdAt), stamp(p.updatedAt)];
+        });
+        var widths = headers.map(function (h, i) {
+            return Math.min(60, Math.max(h.length, data.reduce(function (m, r) {
+                return Math.max(m, String(r[i] == null ? '' : r[i]).length);
+            }, 0)) + 2);
+        });
+        var grid = {
+            rows: [headers.map(function (h) { return { value: h, bold: true }; })].concat(
+                data.map(function (r) {
+                    return r.map(function (v, i) { return { value: v, align: i === 3 ? null : 'left' }; });
+                })),
+            merges: [], titleRowCount: 0, numHeaderRows: 1, dataEndRow: data.length + 1,
+            colCount: headers.length, colWidths: widths
+        };
+        btn.disabled = true;
+        status.textContent = 'Preparing Excel file…';
+        HHpro.Export.xlsxBlobFromSections([{ title: 'Projects', grid: grid }])
+            .then(function (blob) {
+                var d = new Date();
+                var name = 'HHpro Projects ' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) +
+                    '-' + ('0' + d.getDate()).slice(-2) + '.xlsx';
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+                status.textContent = 'Exported ' + rows.length + ' project' + (rows.length === 1 ? '' : 's') + '.';
+            })
+            .catch(function () { status.textContent = 'Could not build the Excel file.'; })
+            .then(function () { btn.disabled = false; });
     }
 
     function copyProject(p, btn, status) {

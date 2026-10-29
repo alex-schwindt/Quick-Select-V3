@@ -164,6 +164,19 @@
         return out;
     }
 
+    /** Voltages the schedule carries (e.g. ['208/3', '460/3']). Design
+     *  Search offers and returns only these, so a voltage left out of the
+     *  schedule (converter excludeRows) stays out of the search too. */
+    function scheduleVoltages(data) {
+        var G = HHpro.GasPackCapacity;
+        var seen = {};
+        scheduleModels(data).forEach(function (m) {
+            var parts = G.parseModel(m);
+            if (parts && parts.voltage) seen[parts.voltage] = true;
+        });
+        return Object.keys(seen).sort();
+    }
+
     /**
      * The schedule row a Design Search result should land on.
      *
@@ -491,6 +504,7 @@
         resolveColumns: resolveColumns,
         payloadFor: payloadFor,
         scheduleModels: scheduleModels,
+        scheduleVoltages: scheduleVoltages,
         matchSelection: matchSelection,
         overridesFor: overridesFor,
         set: setDesign,

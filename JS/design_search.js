@@ -705,6 +705,11 @@
         var G = HHpro.GasPackCapacity;
         var opts = G.formOptions();
         var gp = state.gasPack;
+        // Offer only the voltages the schedule carries (575 V is hidden for now).
+        if (state.productData) {
+            var schedVolts = HHpro.GasPackDesign.scheduleVoltages(state.productData);
+            opts.electrical = opts.electrical.filter(function (v) { return schedVolts.indexOf(v) !== -1; });
+        }
 
         var box = document.createElement('section');
         box.className = 'design-search-section design-capacity-section';
@@ -1394,7 +1399,8 @@
             convOutlet: gp.convOutlet, powerExhaust: gp.powerExhaust,
             // Result model numbers are the schedule's own, with only the
             // searched characters rewritten (see gas_pack_capacity.js).
-            templates: HHpro.GasPackDesign.scheduleModels(state.productData)
+            templates: HHpro.GasPackDesign.scheduleModels(state.productData),
+            voltages: HHpro.GasPackDesign.scheduleVoltages(state.productData)
         };
         var out = HHpro.GasPackCapacity.search(criteria);
         state.results = {

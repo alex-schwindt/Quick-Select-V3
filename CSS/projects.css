@@ -458,6 +458,14 @@
     cursor: wait;
 }
 
+/* Export button sits at the right end of the title bar. */
+.admin-export-btn {
+    margin-left: auto;
+    align-self: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
+}
+
 .admin-copy-btn svg {
     width: 14px;
     height: 14px;

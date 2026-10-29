@@ -247,6 +247,12 @@
       "col": "AD",
       "folder": "ENGINEERING MANUALS",
       "fileExtension": "pdf"
+    },
+    {
+      "name": "INSTALLATION MANUAL",
+      "col": "AE",
+      "folder": "INSTALLATION MANUALS",
+      "fileExtension": "pdf"
     }
   ],
   "refrigerantColumns": [],
@@ -286,7 +292,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3040THJ17VSD"
+            "SUBMITTAL": "QTC3040THJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -326,7 +334,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3040THJ46VSD"
+            "SUBMITTAL": "QTC3040THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -366,7 +376,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3050THJ17VSD"
+            "SUBMITTAL": "QTC3050THJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -406,7 +418,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3050THJ46VSD"
+            "SUBMITTAL": "QTC3050THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -446,7 +460,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3055THJ17VSD"
+            "SUBMITTAL": "QTC3055THJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -486,7 +502,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3055THJ46VSD"
+            "SUBMITTAL": "QTC3055THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -526,7 +544,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3060THJ17VSD"
+            "SUBMITTAL": "QTC3060THJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -566,7 +586,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3060THJ46VSD"
+            "SUBMITTAL": "QTC3060THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -606,7 +628,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3070TSJ46VSD"
+            "SUBMITTAL": "QTC3070TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -646,7 +670,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3075TSJ46VSD"
+            "SUBMITTAL": "QTC3075TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -686,7 +712,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3085TSJ17VSD"
+            "SUBMITTAL": "QTC3085TSJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -726,7 +754,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3085TSJ46VSD"
+            "SUBMITTAL": "QTC3085TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -766,7 +796,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3095TSJ17PC"
+            "SUBMITTAL": "QTC3095TSJ17PC",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -806,7 +838,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3095TSJ46VSD"
+            "SUBMITTAL": "QTC3095TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -846,7 +880,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3110TSJ17VSD"
+            "SUBMITTAL": "QTC3110TSJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -886,7 +922,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3110TSJ46VSD"
+            "SUBMITTAL": "QTC3110TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -926,7 +964,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3129THJ17VSD"
+            "SUBMITTAL": "QTC3129THJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -966,7 +1006,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3129THJ46VSD"
+            "SUBMITTAL": "QTC3129THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1006,7 +1048,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3140TSJ17VSD"
+            "SUBMITTAL": "QTC3140TSJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1046,7 +1090,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3140TSJ46VSD"
+            "SUBMITTAL": "QTC3140TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1086,7 +1132,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4150SXXX46R"
+            "SUBMITTAL": "QTC4150SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1126,7 +1174,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3160TSJ17VSD"
+            "SUBMITTAL": "QTC3160TSJ17VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1166,7 +1216,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3160TSJ46VSD"
+            "SUBMITTAL": "QTC3160TSJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1206,7 +1258,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4185SXXX46R"
+            "SUBMITTAL": "QTC4185SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1246,7 +1300,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3205THJ46VSD"
+            "SUBMITTAL": "QTC3205THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1286,7 +1342,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4210SXXX46R"
+            "SUBMITTAL": "QTC4210SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1326,7 +1384,9 @@
             "REFRIGERANT": "R-454B"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC3225THJ46VSD"
+            "SUBMITTAL": "QTC3225THJ46VSD",
+            "ENGINEERING MANUAL": "Quantech QTC3 Engineering Guide QTC3-EG6",
+            "INSTALLATION MANUAL": "Quantech QTC3 IOM QTC3-NM1"
           }
         }
       ]
@@ -1366,7 +1426,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4230SXXX46R"
+            "SUBMITTAL": "QTC4230SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1406,7 +1468,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4270SXXX46R"
+            "SUBMITTAL": "QTC4270SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1446,7 +1510,9 @@
             "REFRIGERANT": "R-513A"
           },
           "documentationData": {
-            "SUBMITTAL": "QTC4340SXXX46R"
+            "SUBMITTAL": "QTC4340SXXX46R",
+            "ENGINEERING MANUAL": "Quantech QTC4 Engineering Guide QTC4-EG2",
+            "INSTALLATION MANUAL": "Quantech QTC4 IOM QTC4-NM2"
           }
         }
       ]
@@ -1462,7 +1528,7 @@
   },
   "_meta": {
     "sourceFile": "STOCKED CHILLERS DATA.xlsx",
-    "generatedAt": "2026-10-23T09:58:06",
+    "generatedAt": "2026-10-29T15:16:02",
     "dataRowCount": 30,
     "selectionCount": 30
   }

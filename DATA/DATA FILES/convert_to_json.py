@@ -89,6 +89,10 @@ from openpyxl.utils import get_column_letter, column_index_from_string
 #                      columns - so saved projects keep pointing at the same
 #                      unit when the schedule is regenerated. Without it,
 #                      ids follow row order (sel_0001 ...).
+#   excludeRows        Optional. {column letter: [values]} - selections whose
+#                      first row holds one of those values in that schedule
+#                      column are left out of the JSON (the workbook keeps
+#                      them), e.g. {"U": ["575/3"]} to hide 575 V units.
 # -----------------------------------------------------------------------------
 
 PRODUCT_CONFIGS = {
@@ -104,6 +108,8 @@ PRODUCT_CONFIGS = {
         # make directly, so no brand override is needed. Ids from the model
         # number so saved projects survive regeneration.
         "idColumns": ["B"],
+        # 575 V units hidden for now (still in the workbook).
+        "excludeRows": {"U": ["575/3"]},
         "searchSchema": {
             "displayName": "Gas Pack RTUs",
             "description": "Packaged rooftop units. Enter design loads and the page returns models that meet the targets within your tolerance.",
@@ -129,6 +135,8 @@ PRODUCT_CONFIGS = {
         "supportsMultiRow": False,
         "assetsFolder": "PACKAGED HEAT PUMPS",
         "idColumns": ["B", "X"],
+        # 575 V units hidden for now (still in the workbook).
+        "excludeRows": {"AA": ["575/3"]},
         "searchSchema": {
             "displayName": "Packaged Heat Pumps",
             "description": "TempMaster packaged heat pump rooftop units (3-25 ton). Enter design loads and the page returns models that meet the targets within your tolerance.",
@@ -1754,6 +1762,15 @@ def convert_file(input_path, config, output_path):
     brand_changes = apply_brand_overrides(selections, config.get("brandOverrides"))
     if config.get("brandOverrides"):
         print(f"  brand override: {brand_changes} MAKE cell(s) rewritten")
+
+    if config.get("excludeRows"):
+        before = len(selections)
+        selections = [
+            sel for sel in selections
+            if not any(str((sel["rows"][0]["scheduleData"].get(col)) or "") in [str(v) for v in values]
+                       for col, values in config["excludeRows"].items())
+        ]
+        print(f"  excludeRows: left out {before - len(selections)} selection(s)")
 
     if config.get("idColumns"):
         assign_stable_ids(selections, config["idColumns"])

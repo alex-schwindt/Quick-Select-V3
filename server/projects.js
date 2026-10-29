@@ -145,12 +145,17 @@ async function adminList(db) {
     return json({
         projects: rows.results.map((r) => {
             let items = 0, engineer = null;
+            const products = {};        // productKey -> item count (admin Excel export)
             try {
                 const d = JSON.parse(r.data);
                 items = Array.isArray(d.items) ? d.items.length : 0;
                 engineer = d.engineer || null;
+                (d.items || []).forEach((it) => {
+                    const k = (it && it.productKey) || 'other';
+                    products[k] = (products[k] || 0) + 1;
+                });
             } catch (e) { /* summary only */ }
-            return { owner: r.owner, id: r.id, name: r.name, items, engineer,
+            return { owner: r.owner, id: r.id, name: r.name, items, engineer, products,
                      createdAt: r.created_at, updatedAt: r.updated_at };
         })
     });
