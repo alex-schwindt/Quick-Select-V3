@@ -381,6 +381,16 @@
         var initialVisible = getVisibleFilters(product.productKey, data, filterValues);
         initialVisible.forEach(function (fc) { filterValues[fc.name] = null; });
 
+        // Optional per-product starting filters (product.initialFilters,
+        // e.g. VAVs open on one series instead of rendering every row).
+        // Skipped when arriving to find a specific model or selection,
+        // which could sit outside the starting filter.
+        if (product.initialFilters && !modelFilter && !(params && params.focusSelectionId)) {
+            Object.keys(product.initialFilters).forEach(function (name) {
+                filterValues[name] = String(product.initialFilters[name]);
+            });
+        }
+
         // Per-product intro section (diffuser model gallery). The api
         // lets the section read + drive the filter state and re-sync
         // itself after every filter change.

@@ -203,11 +203,26 @@
             }
         },
         {
+            // Enviro-Tec VAV terminals (SDR single duct, VFR parallel and CRB
+            // series fan-powered) from the ETI catalogs - see the SOURCES tab
+            // of DATA/DATA FILES/VAV DATA.xlsx.
             productKey: 'vavs',
             displayName: 'VAVs',
+            jsonFile: 'DATA/JSON/vavs.json',
             pictureFile: 'DATA/PICTURES/VAVs.jpg',
+            assetsFolder: 'ASSETS/VAVS',
             tileClass: 'tile-vavs',
-            comingSoon: true
+            autoTagPrefix: 'VAV-',
+            // ~6,400 rows across the three series; open on one so the
+            // first render stays quick.
+            initialFilters: { 'TYPE': 'SDR SINGLE DUCT' },
+            // Electric heat kW dropdown on the -EH rows; heater amps and the
+            // calculated MCA / MOP change with it.
+            kwVariants: {
+                variantColumn: 'V',
+                dependentColumns: ['Y', 'Z', 'AA'],
+                filterName: 'ELECTRIC HEAT'
+            }
         },
         {
             productKey: 'air_handler_design_request',

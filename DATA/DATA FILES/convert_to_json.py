@@ -220,6 +220,27 @@ PRODUCT_CONFIGS = {
             ],
         },
     },
+    "VAV DATA.xlsx": {
+        "productType": "VAVs",
+        "outputFileName": "vavs.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "VAVS",
+        # ~32 MB in one file, over the 25 MiB asset limit - split like grilles.
+        "splitParts": 2,
+        "idColumns": ["B", "E", "H", "I", "N", "P", "W", "V"],
+        "searchSchema": {
+            "displayName": "VAVs",
+            "description": "Enviro-Tec VAV terminal units (SDR single duct, VFR parallel and CRB series fan-powered) at catalog rating points. Enter the design airflow and heating load and the page returns units that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Max Primary Airflow", "col": "E", "unit": "CFM", "defaultTolerance": 10},
+                {"label": "Fan Airflow",         "col": "H", "unit": "CFM", "defaultTolerance": 10},
+                {"label": "HW Heating Capacity", "col": "Q", "unit": "MBH", "defaultTolerance": 10},
+                {"label": "Electric Heat",       "col": "V", "unit": "kW",  "defaultTolerance": 10},
+            ],
+        },
+    },
     "AIRSYS DATA.xlsx": {
         "productType": "AIRSYS VERTICAL WALL MOUNT",
         "outputFileName": "airsys.json",
