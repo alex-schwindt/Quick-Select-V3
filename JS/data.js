@@ -139,12 +139,31 @@
             autoTagPrefix: 'CH-'
         },
         {
-            productKey: 'marvair',
-            // Being rebuilt with Airsys data: tile shows greyed out with a
-            // COMING SOON banner and isn't clickable; kept out of Design
-            // Search and the model lookup. Remove to reopen the section.
-            comingSoon: true,
+            // AIRSYS School Air Solutions (Focus IQ indoor / BackPack outdoor)
+            // from the AIRSYS specification sheet and data sheets - see the
+            // SOURCES tab of DATA/DATA FILES/AIRSYS DATA.xlsx.
+            productKey: 'airsys',
             displayName: 'AIRSYS VERTICAL WALL MOUNT',
+            jsonFile: 'DATA/JSON/airsys.json',
+            pictureFile: 'DATA/PICTURES/AIRSYS VERTICAL WALL MOUNT.jpg',
+            assetsFolder: 'ASSETS/AIRSYS',
+            tileClass: 'tile-airsys',
+            autoTagPrefix: 'HP-',
+            // Heater kW dropdown; the model number (heater digits) and
+            // MCA / MOCP change with it.
+            kwVariants: {
+                variantColumn: 'R',
+                dependentColumns: ['B', 'T', 'U'],
+                filterName: 'ELECTRIC HEAT',
+                defaultValue: 0
+            }
+        },
+        {
+            productKey: 'marvair',
+            // Marvair isn't sold in Nashville; replaced by the AIRSYS section
+            // above. Hidden, but still resolvable for saved project items.
+            retired: true,
+            displayName: 'MARVAIR VERTICAL WALL MOUNT',
             jsonFile: 'DATA/JSON/marvair.json',
             pictureFile: 'DATA/PICTURES/MARVAIR VERTICAL WALL MOUNT.jpg',
             assetsFolder: 'ASSETS/MARVAIR',

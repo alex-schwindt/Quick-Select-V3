@@ -1407,6 +1407,7 @@ WHAT'S IN THE GRID
             'gas_packs':              'PACKAGED ROOFTOP UNIT SCHEDULE',
             'packaged_heat_pumps':    'PACKAGED HEAT PUMP SCHEDULE',
             'marvair':                'VERTICAL WALL MOUNTED PACKAGED SCHEDULE',
+            'airsys':                 'VERTICAL WALL MOUNTED HEAT PUMP SCHEDULE',
             'mini_splits':            'MINI SPLIT SCHEDULE',
             'multi_position_splits':  'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEM SCHEDULE',
             'gas_splits':             'GAS SPLIT SCHEDULE',
@@ -2520,7 +2521,8 @@ WHAT'S IN THE GRID
         var fallback = {
             'gas_packs': 'Gas Pack RTUs',
             'packaged_heat_pumps': 'Packaged Heat Pumps',
-            'marvair': 'Airsys Vertical Wall Mount',
+            'marvair': 'Marvair Vertical Wall Mount',
+            'airsys': 'Airsys Vertical Wall Mount',
             'mini_splits': 'Mini Splits',
             'multi_position_splits': 'Unitary & Light Commercial Split Systems',
             'gas_splits': 'Gas Splits',

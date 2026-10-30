@@ -191,15 +191,40 @@ PRODUCT_CONFIGS = {
             ],
         },
     },
-    "MARVAIR DATA.xlsx": {
+    # AIRSYS School Air Solutions classroom heat pumps (Focus IQ indoor,
+    # BackPack outdoor) from the AIRSYS data sheets (the workbook's SOURCES
+    # tab). Capacities are published as ranges, so no tolerance targets.
+    # Ids from the full model number (it encodes voltage, heat exchanger,
+    # ventilation and heater) so saved projects survive regeneration.
+    "AIRSYS DATA.xlsx": {
         "productType": "AIRSYS VERTICAL WALL MOUNT",
+        "outputFileName": "airsys.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "AIRSYS",
+        "idColumns": ["B"],
+        "searchSchema": {
+            "displayName": "Airsys Vertical Wall Mount",
+            "description": "AIRSYS School Air Solutions variable-speed classroom heat pumps (Focus IQ indoor, BackPack outdoor) at nominal ratings. Enter design loads and the page returns models that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Nominal Tons",              "col": "D", "unit": "tons",  "defaultTolerance": 10},
+                {"label": "Total Cooling Capacity",    "col": "I", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Sensible Cooling Capacity", "col": "J", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Heating Capacity @ 47°F",   "col": "N", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Airflow",                   "col": "F", "unit": "CFM",   "defaultTolerance": 10},
+            ],
+        },
+    },
+    "MARVAIR DATA.xlsx": {
+        "productType": "MARVAIR VERTICAL WALL MOUNT",
         "outputFileName": "marvair.json",
         "headerRows": 2,
         "dataStartRow": 4,
         "supportsMultiRow": False,
         "assetsFolder": "MARVAIR",
         "searchSchema": {
-            "displayName": "Airsys Vertical Wall Mount",
+            "displayName": "Marvair Vertical Wall Mount",
             "description": "Vertical wall-mount packaged air handling units. Enter design loads and the page returns models that meet the targets within your tolerance.",
             "targets": [
                 {"label": "Nominal Size",             "col": "C", "unit": "tons",  "defaultTolerance": 10},
