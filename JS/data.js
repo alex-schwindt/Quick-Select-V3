@@ -183,11 +183,24 @@
         // greyed out with a COMING SOON banner. Drop a JPG at pictureFile to
         // give a tile its photo.
         {
+            // Enviro-Tec fan coils (HL, HP, CDV, VF/VL, VH) from the ETI
+            // catalogs - see the SOURCES tab of DATA/DATA FILES/FAN COIL
+            // DATA.xlsx.
             productKey: 'fan_coils',
             displayName: 'FAN COILS',
+            jsonFile: 'DATA/JSON/fan_coils.json',
             pictureFile: 'DATA/PICTURES/FAN COILS.jpg',
+            assetsFolder: 'ASSETS/FAN COILS',
             tileClass: 'tile-fan-coils',
-            comingSoon: true
+            autoTagPrefix: 'FCU-',
+            // Electric heat kW dropdown ('-' = no heat); heat type, heater
+            // amps and the calculated MCA / MOP change with it.
+            kwVariants: {
+                variantColumn: 'R',
+                dependentColumns: ['N', 'S', 'V', 'W'],
+                filterName: 'ELECTRIC HEAT',
+                defaultValue: '-'
+            }
         },
         {
             productKey: 'vavs',

@@ -196,6 +196,30 @@ PRODUCT_CONFIGS = {
     # tab). Capacities are published as ranges, so no tolerance targets.
     # Ids from the full model number (it encodes voltage, heat exchanger,
     # ventilation and heater) so saved projects survive regeneration.
+    # Enviro-Tec fan coils (HL, HP, CDV, VF/VL, VH) from the ETI catalogs at
+    # AHRI 440 ratings (the workbook's SOURCES tab). Electric heat sizes fold
+    # into a kW dropdown on the site (data.js kwVariants). Ids from model,
+    # motor, coil rows, voltage, heat type and kW so saved projects survive
+    # regeneration.
+    "FAN COIL DATA.xlsx": {
+        "productType": "FAN COILS",
+        "outputFileName": "fan_coils.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "FAN COILS",
+        "idColumns": ["B", "G", "I", "T", "N", "R"],
+        "searchSchema": {
+            "displayName": "Fan Coils",
+            "description": "Enviro-Tec fan coil units at AHRI 440 ratings. Enter design loads and the page returns models that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Total Cooling Capacity",    "col": "J", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Sensible Cooling Capacity", "col": "K", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Airflow",                   "col": "F", "unit": "CFM",   "defaultTolerance": 10},
+                {"label": "HW Heating Capacity",       "col": "O", "unit": "MBH",   "defaultTolerance": 10},
+            ],
+        },
+    },
     "AIRSYS DATA.xlsx": {
         "productType": "AIRSYS VERTICAL WALL MOUNT",
         "outputFileName": "airsys.json",
