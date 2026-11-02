@@ -201,6 +201,23 @@ PRODUCT_CONFIGS = {
     # into a kW dropdown on the site (data.js kwVariants). Ids from model,
     # motor, coil rows, voltage, heat type and kW so saved projects survive
     # regeneration.
+    "CAMBRIDGE DATA.xlsx": {
+        "productType": "CAMBRIDGE DIRECT-FIRED HEATERS",
+        "outputFileName": "cambridge.json",
+        "headerRows": 3,
+        "dataStartRow": 5,
+        "supportsMultiRow": False,
+        "assetsFolder": "CAMBRIDGE",
+        "idColumns": ["B", "C", "D", "E", "F", "G", "H", "N", "R"],
+        "searchSchema": {
+            "displayName": "Cambridge Direct-Fired Heaters",
+            "description": "Cambridge direct gas-fired make-up air, ventilation and space heating units at catalog airflow / static points. Enter the design airflow and burner input and the page returns units that meet the targets within your tolerance.",
+            "targets": [
+                {"label": "Airflow",       "col": "E", "unit": "CFM", "defaultTolerance": 10},
+                {"label": "Burner Input",  "col": "I", "unit": "MBH", "defaultTolerance": 10},
+            ],
+        },
+    },
     "FAN COIL DATA.xlsx": {
         "productType": "FAN COILS",
         "outputFileName": "fan_coils.json",

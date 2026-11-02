@@ -225,6 +225,27 @@
             }
         },
         {
+            // Cambridge direct gas-fired heaters (M-Series, Spec Air, S-Series,
+            // SA-Series) from the engineering specification manuals - see the
+            // SOURCES tab of DATA/DATA FILES/CAMBRIDGE DATA.xlsx.
+            productKey: 'cambridge',
+            displayName: 'CAMBRIDGE DIRECT-FIRED HEATERS',
+            jsonFile: 'DATA/JSON/cambridge.json',
+            pictureFile: 'DATA/PICTURES/CAMBRIDGE.jpg',
+            assetsFolder: 'ASSETS/CAMBRIDGE',
+            tileClass: 'tile-cambridge',
+            autoTagPrefix: 'MAU-',
+            // ~18,500 rows; open on the make-up air units.
+            initialFilters: { 'TYPE': 'M-SERIES MAKE-UP AIR (DRAW-THRU)' },
+            // Temperature rise dropdown; burner input / length and the gas
+            // train pressures change with it.
+            kwVariants: {
+                variantColumn: 'H',
+                dependentColumns: ['I', 'J', 'K', 'L', 'M'],
+                filterName: 'TEMP RISE'
+            }
+        },
+        {
             productKey: 'air_handler_design_request',
             displayName: 'AIR HANDLER DESIGN REQUEST',
             pictureFile: 'DATA/PICTURES/AIR HANDLER DESIGN REQUEST.jpg',
