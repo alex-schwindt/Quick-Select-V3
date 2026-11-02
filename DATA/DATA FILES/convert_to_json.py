@@ -253,7 +253,7 @@ PRODUCT_CONFIGS = {
             "targets": [
                 {"label": "Max Airflow",      "col": "E", "unit": "CFM", "defaultTolerance": 10},
                 {"label": "Heating Airflow",  "col": "F", "unit": "CFM", "defaultTolerance": 10},
-                {"label": "Heating Capacity", "col": "M", "unit": "MBH", "defaultTolerance": 10},
+                {"label": "Heating Capacity", "col": "K", "unit": "MBH", "defaultTolerance": 10},
             ],
         },
     },

@@ -222,7 +222,7 @@
             // calculated MCA / MOP change with it.
             kwVariants: {
                 variantColumn: 'J',
-                dependentColumns: ['H', 'M', 'N', 'O', 'P', 'Q', 'T', 'U', 'V'],
+                dependentColumns: ['H', 'K', 'M', 'O', 'P', 'Q', 'T', 'U', 'V'],
                 filterName: 'HEAT SIZE'
             }
         },
