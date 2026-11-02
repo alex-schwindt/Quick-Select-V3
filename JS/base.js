@@ -327,6 +327,9 @@
         // --- Shared mutable state ---
         var filterValues = {};
         var autoSelectedNames = {};
+        // Typed value for product.nearestFilter (e.g. fan coil airflow);
+        // null = box empty, no narrowing.
+        var nearestValue = null;
         // Optional model-substring filter passed in from the quick-lookup
         // search ("show only selections containing this model"). Cleared
         // by the chip's clear button. Initialized from params, so a
@@ -467,6 +470,7 @@
 
         function onClearAllFilters() {
             Object.keys(filterValues).forEach(function (k) { filterValues[k] = null; });
+            nearestValue = null;
             autoSelectedNames = {};
             applyFilterChange();
         }
@@ -499,7 +503,15 @@
         function renderFilterBar() {
             var visible = getVisibleFilters(product.productKey, data, filterValues);
             pruneFilterValues(filterValues, visible);
-            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters);
+            var nearest = product.nearestFilter ? {
+                label: product.nearestFilter.label,
+                value: nearestValue,
+                onChange: function (v) {
+                    nearestValue = v;
+                    refreshSchedule();      // bar stays put so the box keeps focus
+                }
+            } : null;
+            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters, nearest);
             filterBarContainer.innerHTML = '';
             filterBarContainer.appendChild(bar);
         }
@@ -539,6 +551,9 @@
             var visible = applyFilters(data.selections || [], filterValues);
             if (modelFilter) {
                 visible = applyModelFilter(visible, modelFilter, data);
+            }
+            if (product.nearestFilter && nearestValue !== null) {
+                visible = applyNearestFilter(visible, product.nearestFilter, nearestValue);
             }
             updateStatus(visible.length, (data.selections || []).length);
             if (visible.length === 0) {
@@ -699,7 +714,7 @@
     // Filter bar
     // ---------------------------------------------------------------
 
-    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll) {
+    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll, nearest) {
         var bar = document.createElement('div');
         bar.className = 'filter-bar';
 
@@ -757,6 +772,42 @@
             bar.appendChild(group);
         });
 
+        // Numeric "nearest match" box (product.nearestFilter). Typing
+        // narrows the schedule after a short pause; the bar isn't rebuilt,
+        // so focus and the caret stay in the box.
+        if (nearest) {
+            var nGroup = document.createElement('div');
+            nGroup.className = 'filter-group';
+            var nLabel = document.createElement('label');
+            nLabel.className = 'filter-label';
+            nLabel.textContent = nearest.label;
+            var nInput = document.createElement('input');
+            nInput.type = 'number';
+            nInput.min = '0';
+            nInput.inputMode = 'numeric';
+            nInput.className = 'filter-select filter-number';
+            nInput.placeholder = 'Enter value';
+            if (nearest.value !== null) {
+                nInput.value = String(nearest.value);
+                nInput.classList.add('is-active');
+                nGroup.classList.add('is-active');
+            }
+            var nTimer = null;
+            nInput.addEventListener('input', function () {
+                clearTimeout(nTimer);
+                nTimer = setTimeout(function () {
+                    var v = parseFloat(nInput.value);
+                    var val = isFinite(v) && v > 0 ? v : null;
+                    nInput.classList.toggle('is-active', val !== null);
+                    nGroup.classList.toggle('is-active', val !== null);
+                    nearest.onChange(val);
+                }, 350);
+            });
+            nGroup.appendChild(nLabel);
+            nGroup.appendChild(nInput);
+            bar.appendChild(nGroup);
+        }
+
         var clearGroup = document.createElement('div');
         clearGroup.className = 'filter-group';
         var spacerLabel = document.createElement('div');
@@ -774,6 +825,36 @@
         bar.appendChild(clearGroup);
 
         return bar;
+    }
+
+    /**
+     * product.nearestFilter: keep, within each group (rows sharing the
+     * groupFilters values and groupColumns schedule values), only the
+     * selections whose `column` value is the closest at or below `target`
+     * and the closest at or above it. A group entirely above or below the
+     * target keeps just its one nearest value.
+     */
+    function applyNearestFilter(selections, cfg, target) {
+        function sd(sel) { return (sel.rows && sel.rows[0] && sel.rows[0].scheduleData) || {}; }
+        function fd(sel) { return (sel.rows && sel.rows[0] && sel.rows[0].filterData) || {}; }
+        function groupKey(sel) {
+            return (cfg.groupFilters || []).map(function (n) { return String(fd(sel)[n]); })
+                .concat((cfg.groupColumns || []).map(function (c) { return String(sd(sel)[c]); }))
+                .join('|');
+        }
+        var bounds = {};   // groupKey -> { lo, hi }
+        selections.forEach(function (sel) {
+            var v = parseFloat(sd(sel)[cfg.column]);
+            if (!isFinite(v)) return;
+            var b = bounds[groupKey(sel)] || (bounds[groupKey(sel)] = { lo: null, hi: null });
+            if (v <= target && (b.lo === null || v > b.lo)) b.lo = v;
+            if (v >= target && (b.hi === null || v < b.hi)) b.hi = v;
+        });
+        return selections.filter(function (sel) {
+            var v = parseFloat(sd(sel)[cfg.column]);
+            var b = bounds[groupKey(sel)];
+            return b && isFinite(v) && (v === b.lo || v === b.hi);
+        });
     }
 
     function getUniqueFilterValues(data, filterName, filterValues, visibleFilters) {

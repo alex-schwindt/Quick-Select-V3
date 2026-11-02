@@ -183,7 +183,7 @@
         // greyed out with a COMING SOON banner. Drop a JPG at pictureFile to
         // give a tile its photo.
         {
-            // Enviro-Tec fan coils (HL, HP, CDV, VF/VL, VH) from the ETI
+            // Enviro-Tec fan coils (HL, HP, CDV, VF/VL) from the ETI
             // catalogs - see the SOURCES tab of DATA/DATA FILES/FAN COIL
             // DATA.xlsx.
             productKey: 'fan_coils',
@@ -193,11 +193,20 @@
             assetsFolder: 'ASSETS/FAN COILS',
             tileClass: 'tile-fan-coils',
             autoTagPrefix: 'FCU-',
+            // Airflow box in the filter bar: keeps the nearest CFM at or
+            // below and at or above the entry for each series / cabinet /
+            // coil-rows line.
+            nearestFilter: {
+                column: 'D',
+                label: 'AIRFLOW (CFM)',
+                groupFilters: ['SERIES', 'CABINET'],
+                groupColumns: ['G']
+            },
             // Electric heat kW dropdown ('-' = no heat); heat type, heater
             // amps and the calculated MCA / MOP change with it.
             kwVariants: {
-                variantColumn: 'R',
-                dependentColumns: ['N', 'S', 'V', 'W'],
+                variantColumn: 'P',
+                dependentColumns: ['L', 'Q', 'T', 'U'],
                 filterName: 'ELECTRIC HEAT',
                 defaultValue: '-'
             }

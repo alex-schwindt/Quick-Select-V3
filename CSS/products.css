@@ -184,6 +184,12 @@
     border-color: var(--color-primary-light);
 }
 
+/* Typed number box (product.nearestFilter) styled like the dropdowns */
+.filter-number {
+    cursor: text;
+    width: 140px;
+}
+
 /* Constraining filters get a brand-blue border + label so a quick scan
    of the bar shows which dropdowns are set vs. on "All". The classes
    are toggled in buildFilterBar (JS/base.js). */
