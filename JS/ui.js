@@ -232,28 +232,6 @@
         },
 
         /**
-         * "User Guide" header button - opens the PDF guide in a new tab.
-         * Shared by the main-overview header (main.js) and the standard
-         * header below so both stay in sync.
-         *
-         * @returns {HTMLElement}
-         */
-        createUserGuideButton: function () {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'header-action';
-            btn.appendChild(HHpro.UI.icon('file-text'));
-            var label = document.createElement('span');
-            label.textContent = 'User Guide';
-            btn.appendChild(label);
-            btn.addEventListener('click', function () {
-                // encodeURI handles the space in the filename
-                window.open(encodeURI('ASSETS/HHpro User Guide.pdf'), '_blank', 'noopener');
-            });
-            return btn;
-        },
-
-        /**
          * Build the dark top header used on every logged-in view.
          *
          * @param {string=} currentPage - optional breadcrumb label shown after the logo.
@@ -315,8 +293,6 @@
 
             var actions = document.createElement('div');
             actions.className = 'header-actions';
-
-            actions.appendChild(HHpro.UI.createUserGuideButton());
 
             var logout = document.createElement('button');
             logout.type = 'button';

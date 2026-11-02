@@ -456,7 +456,7 @@ input[type="checkbox"], input[type="radio"] {
     }
 }
 
-/* Right side of the header: User Guide + Log out sit together as one
+/* Right side of the header: the action buttons (Log out etc.) sit together as one
    flex-child so the header's space-between keeps its 3-zone layout. */
 .header-actions {
     display: flex;

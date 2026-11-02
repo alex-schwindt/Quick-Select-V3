@@ -3708,14 +3708,13 @@ WHAT'S IN THE GRID
     // the border (subset for notes rows), draw text inside.
     function buildPdfPageStream(grid) {
         var rows = grid.rows;
-        var colWidths = (grid.colWidths || []).slice();
         var colCount = grid.colCount || (rows[0] ? rows[0].length : 0);
-        while (colWidths.length < colCount) colWidths.push(10);
+        var colPts = pdfColumnWidths(grid, colCount);
 
         // Natural column edges (no scaling yet)
         var natColXs = [0];
         for (var c = 0; c < colCount; c++) {
-            natColXs.push(natColXs[c] + colWidths[c] * PDF_CHAR_W);
+            natColXs.push(natColXs[c] + colPts[c]);
         }
         var natWidth = natColXs[colCount];
 
@@ -3812,7 +3811,11 @@ WHAT'S IN THE GRID
                 // plus word-wrapping for bold headers + notes so long text
                 // stays inside the cell. Drawn stacked, vertically centered.
                 var doWrap = (cell2.bold || cell2.notesRow) && !cell2.title && !cell2.watermark;
-                var vlines = pdfPhysicalLines(value, doWrap, cellW, size);
+                // Wrap at natural (unscaled) size, the same basis
+                // pdfRowHeightFor sized the row with - wrapping the scaled
+                // cell against unscaled padding broke words ("MOD/EL") and
+                // spilled lines past the row borders on shrunken pages.
+                var vlines = pdfPhysicalLines(value, doWrap, cellW / scale, size / scale);
                 var lineH = size * 1.2;
                 for (var li = 0; li < vlines.length; li++) {
                     var ln = vlines[li];
@@ -3908,18 +3911,82 @@ WHAT'S IN THE GRID
     // non-ASCII drops to '?'. Each surviving char is written as one byte
     // (charCodeAt & 0xff), so 0xB0 lands correctly.
     function pdfEscapeText(s) {
-        return asciiizeCircledDigits(s)
+        return pdfPlainText(s)
             .replace(/[^\x20-\x7e°]/g, '?')
             .replace(/\\/g, '\\\\')
             .replace(/\(/g, '\\(')
             .replace(/\)/g, '\\)');
     }
 
-    // Approx Helvetica width: 0.5 em per character is a workable
-    // average across the full character set. Good enough for centering
-    // a single-line cell value within a few points.
+    // Helvetica advance widths (1/1000 em) for ASCII 32-126, from the
+    // standard Adobe font metrics. Measuring with these (instead of a flat
+    // per-character average) keeps capitals and digits inside their cells
+    // and centres text properly.
+    var HELV_W = [278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278,
+        556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556,
+        1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778,
+        667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556,
+        333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556,
+        556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584];
+
+    // Glyphs Helvetica/WinAnsi can't draw, spelled out for the PDF only
+    // (e.g. "MIN ΔPs" would otherwise print as "MIN ?Ps").
+    function pdfPlainText(s) {
+        return asciiizeCircledDigits(String(s)).replace(/Δ/g, 'DELTA ');
+    }
+
     function approxPdfTextWidth(text, size) {
-        return text.length * size * 0.5;
+        var units = 0;
+        text = pdfPlainText(text);
+        for (var i = 0; i < text.length; i++) {
+            var code = text.charCodeAt(i);
+            units += (code >= 32 && code <= 126) ? HELV_W[code - 32]
+                   : (code === 176 ? 400 : 556);     // degree sign / '?' fallback
+        }
+        return units * size / 1000;
+    }
+
+    // Column widths in points: the grid's Excel widths, widened so every
+    // single-line cell fits on one line and every wrapping cell (bold
+    // headers, notes) fits its longest word. Cells spanning several
+    // columns push any shortfall onto the last column they cover. The
+    // page-level scale then shrinks the whole table to fit, so nothing
+    // spills past a border or gets cut off.
+    function pdfColumnWidths(grid, colCount) {
+        var PAD = 10;                                  // 4-5 pt inner padding each side
+        var w = [];
+        for (var c = 0; c < colCount; c++) {
+            w.push(((grid.colWidths || [])[c] || 10) * PDF_CHAR_W);
+        }
+        var spans = [];
+        for (var r = 0; r < grid.rows.length; r++) {
+            var row = grid.rows[r];
+            if (!row) continue;
+            var isHeader = gridRowKind(grid, r) === 'header';
+            for (var cc = 0; cc < colCount; cc++) {
+                var cell = row[cc];
+                if (!cell || cell.covered || cell.title || cell.notesRow || cell.legendCell) continue;
+                var v = (cell.value == null) ? '' : String(cell.value);
+                if (!v) continue;
+                var size = isHeader ? PDF_TXT_HEADER : PDF_TXT_BODY;
+                var wraps = cell.bold && !cell.watermark;
+                var need = 0;
+                v.split(/\r?\n/).forEach(function (ln) {
+                    var parts = wraps ? ln.split(/\s+/) : [ln];
+                    parts.forEach(function (p) { need = Math.max(need, approxPdfTextWidth(p, size)); });
+                });
+                need += PAD;
+                var span = Math.min(cell.colSpan || 1, colCount - cc);
+                if (span === 1) w[cc] = Math.max(w[cc], need);
+                else spans.push({ c: cc, span: span, need: need });
+            }
+        }
+        spans.forEach(function (sp) {
+            var have = 0;
+            for (var k = 0; k < sp.span; k++) have += w[sp.c + k];
+            if (sp.need > have) w[sp.c + sp.span - 1] += sp.need - have;
+        });
+        return w;
     }
 
     // Greedy word-wrap to a width (pt) at a given font size, mirroring the
@@ -3928,17 +3995,21 @@ WHAT'S IN THE GRID
     // together), so it yields the same break points at any zoom.
     function pdfWrapWords(text, widthPt, size) {
         var avail = Math.max(1, widthPt - 8);   // 4pt inner padding each side
-        var perLine = Math.max(1, Math.floor(avail / (size * 0.5)));
+        var fits = function (t) { return approxPdfTextWidth(t, size) <= avail; };
         var words = String(text).split(/\s+/).filter(Boolean);
         var lines = [], cur = '';
         words.forEach(function (w) {
-            while (w.length > perLine) {
+            // A single word wider than the cell (columns are sized to avoid
+            // this, but notes boxes can be narrow) breaks by characters.
+            while (!fits(w) && w.length > 1) {
                 if (cur) { lines.push(cur); cur = ''; }
-                lines.push(w.slice(0, perLine));
-                w = w.slice(perLine);
+                var n = w.length - 1;
+                while (n > 1 && !fits(w.slice(0, n))) n--;
+                lines.push(w.slice(0, n));
+                w = w.slice(n);
             }
             if (!cur) cur = w;
-            else if ((cur.length + 1 + w.length) <= perLine) cur += ' ' + w;
+            else if (fits(cur + ' ' + w)) cur += ' ' + w;
             else { lines.push(cur); cur = w; }
         });
         if (cur) lines.push(cur);
