@@ -246,15 +246,14 @@ PRODUCT_CONFIGS = {
         "assetsFolder": "VAVS",
         # ~32 MB in one file, over the 25 MiB asset limit - split like grilles.
         "splitParts": 2,
-        "idColumns": ["B", "E", "H", "I", "N", "P", "W", "V"],
+        "idColumns": ["B", "D", "E", "F", "I", "J", "R", "W", "X", "AA"],
         "searchSchema": {
             "displayName": "VAVs",
             "description": "Enviro-Tec VAV terminal units (SDR single duct, VFR parallel and CRB series fan-powered) at catalog rating points. Enter the design airflow and heating load and the page returns units that meet the targets within your tolerance.",
             "targets": [
-                {"label": "Max Primary Airflow", "col": "E", "unit": "CFM", "defaultTolerance": 10},
-                {"label": "Fan Airflow",         "col": "H", "unit": "CFM", "defaultTolerance": 10},
-                {"label": "HW Heating Capacity", "col": "Q", "unit": "MBH", "defaultTolerance": 10},
-                {"label": "Electric Heat",       "col": "V", "unit": "kW",  "defaultTolerance": 10},
+                {"label": "Max Airflow",      "col": "E", "unit": "CFM", "defaultTolerance": 10},
+                {"label": "Heating Airflow",  "col": "F", "unit": "CFM", "defaultTolerance": 10},
+                {"label": "Heating Capacity", "col": "M", "unit": "MBH", "defaultTolerance": 10},
             ],
         },
     },

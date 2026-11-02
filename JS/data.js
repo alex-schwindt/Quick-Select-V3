@@ -216,12 +216,14 @@
             // ~6,400 rows across the three series; open on one so the
             // first render stays quick.
             initialFilters: { 'TYPE': 'SDR SINGLE DUCT' },
-            // Electric heat kW dropdown on the -EH rows; heater amps and the
+            // Heat size dropdown: hot water rows list each coil option
+            // ("1-ROW @ 1 GPM"), electric heat rows the kW sizes. Min dPs,
+            // capacity, LAT / LWT / WPD / APD, heater amps and the
             // calculated MCA / MOP change with it.
             kwVariants: {
-                variantColumn: 'V',
-                dependentColumns: ['Y', 'Z', 'AA'],
-                filterName: 'ELECTRIC HEAT'
+                variantColumn: 'J',
+                dependentColumns: ['H', 'M', 'N', 'O', 'P', 'Q', 'T', 'U', 'V'],
+                filterName: 'HEAT SIZE'
             }
         },
         {

@@ -1266,6 +1266,10 @@
 
             if (capCtrl && capCtrl.handles(colLetter)) {
                 capCtrl.fillCell(td, colLetter);
+            } else if (colLetter === variantCol && fam.variants.length === 1 &&
+                       formatKwLabel(fam.variants[0].kw) === '-') {
+                // Nothing to choose (e.g. a VAV with no heat) - plain dash, no dropdown
+                td.textContent = '-';
             } else if (colLetter === variantCol) {
                 td.classList.add('kw-variant-cell');
                 td.appendChild(buildKwSelect(fam, currentIdx, function (newIdx) {
