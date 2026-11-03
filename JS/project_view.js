@@ -1748,7 +1748,7 @@
               '<span class="rep-totals-label">Project Total Refrigerant:</span> ' +
               '<span class="rep-totals-value">' + reportEscape(totalsLine) + '</span>' +
             '</div>' +
-            '<footer class="rep-footer">Created with HHpro-HVAC.com</footer>' +
+            '<footer class="rep-footer">Created with Hoffman &amp; Hoffman Quick Select</footer>' +
           '</body></html>';
     }
 

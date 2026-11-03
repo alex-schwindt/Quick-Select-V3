@@ -511,7 +511,16 @@
                     refreshSchedule();      // bar stays put so the box keeps focus
                 }
             } : null;
-            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters, nearest);
+            // Dropdown options follow only the filters the user picked.
+            // Values auto-selected because one option was left must not
+            // narrow the other dropdowns, or a dropdown locks to the rows
+            // its own pick left (e.g. Size 3 -> 460/3 auto-picked -> the
+            // Size list loses every size not built in 460/3).
+            var optionValues = {};
+            Object.keys(filterValues).forEach(function (k) {
+                optionValues[k] = autoSelectedNames[k] ? null : filterValues[k];
+            });
+            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters, nearest, optionValues);
             filterBarContainer.innerHTML = '';
             filterBarContainer.appendChild(bar);
         }
@@ -714,12 +723,12 @@
     // Filter bar
     // ---------------------------------------------------------------
 
-    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll, nearest) {
+    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll, nearest, optionValues) {
         var bar = document.createElement('div');
         bar.className = 'filter-bar';
 
         visibleFilters.forEach(function (fc) {
-            var options = getUniqueFilterValues(data, fc.name, filterValues, visibleFilters);
+            var options = getUniqueFilterValues(data, fc.name, optionValues || filterValues, visibleFilters);
             var current = filterValues[fc.name];
             var hasValue = current !== null && current !== undefined;
 

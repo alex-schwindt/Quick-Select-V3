@@ -1088,7 +1088,7 @@ WHAT'S IN THE GRID
     // tucked inside the last box (matches the native notes section).
     function appendTemplateNotes(rows, merges, colCount, template, startRow) {
         // Engineer schedules intentionally omit the "Created with
-        // HHpro-HVAC.com" watermark - they reproduce the firm's own sheet.
+        // Hoffman & Hoffman Quick Select" watermark - they reproduce the firm's own sheet.
         var r = startRow;
         if (template.notes && template.notes.length) {
             r = emitNotesBox(rows, merges, colCount, r,
@@ -1155,7 +1155,7 @@ WHAT'S IN THE GRID
         // last row of whatever notes box is last so it sits inside the
         // section's outer border rather than below it.
         var watermarkFooter = {
-            value: 'Created with HHpro-HVAC.com',
+            value: 'Created with Hoffman & Hoffman Quick Select',
             watermark: true,
             align: 'right'
         };
