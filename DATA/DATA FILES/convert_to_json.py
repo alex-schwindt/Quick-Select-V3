@@ -1189,7 +1189,10 @@ def find_last_data_row(ws, data_start_row, schedule_cols):
     last = data_start_row - 1
     empty_streak = 0
     row = data_start_row
-    while row <= ws.max_row:
+    # ws.max_row scans every cell on each call - read it once (calling it
+    # per row stalled the 23,000-row VAV workbook for 20+ minutes).
+    max_row = ws.max_row
+    while row <= max_row:
         has_value = False
         for c in range(min_col, max_col + 1):
             if ws.cell(row=row, column=c).value not in (None, ""):
