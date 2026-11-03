@@ -102,11 +102,10 @@
         }
       ],
       // ACCESS_AUD: the "Application Audience (AUD) Tag" of the staging
-      // Access app. Until it's filled in, nobody can sign in to staging
-      // (every identity check fails closed).
+      // Access app "HHpro Staging" (H&H staff only).
       "vars": {
         "ACCESS_TEAM_DOMAIN": "wispy-glitter-fd02.cloudflareaccess.com",
-        "ACCESS_AUD": "REPLACE_WITH_STAGING_ACCESS_AUD",
+        "ACCESS_AUD": "ed175dee2a0a9d505fb92e1ce38f7e96d6d66139b355c0c007ea88cf559f7d37",
         "EMAIL_FROM": "requests@hhtrecho.com",
         "ENV_LABEL": "STAGING",
         "STORAGE_PREFIX": "STAGING/"

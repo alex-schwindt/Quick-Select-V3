@@ -44,19 +44,29 @@ staging.hhtrecho.com would briefly be reachable without signing in.
    Self-hosted. Domain `staging.hhtrecho.com`. Policy: Allow, emails ending in
    `@hoffman-hoffman.com` (H&H staff only). Save, then copy the app's
    **Application Audience (AUD) Tag** into `wrangler.jsonc` > `env.staging.vars.ACCESS_AUD`.
-2. **First deploy** (from this folder): `bash build.sh && npx wrangler deploy --env staging`.
+2. **First deploy** (from this folder, one command per line in PowerShell):
+   ```
+   bash build.sh
+   npx wrangler deploy --env staging
+   ```
    This creates the `quick-select-v3-staging` Worker and the staging.hhtrecho.com
-   address.
-3. **Automatic builds** - Workers & Pages > quick-select-v3-staging > Settings > Builds >
+   address. Commit and push the AUD change to `master`.
+3. **Live Worker builds** - Workers & Pages > quick-select-v3 > Settings > Build: keep the
+   production branch `master` and turn off builds for non-production branches, so pushes to
+   `staging` don't create preview versions of the live site. Do this before step 4.
+4. **Branch** - create it once from an up-to-date `master`:
+   ```
+   git switch master
+   git pull
+   git switch -c staging
+   git push -u origin staging
+   ```
+5. **Automatic builds** - Workers & Pages > quick-select-v3-staging > Settings > Build >
    Connect the same GitHub repository:
-   - Production branch: `staging`
+   - Branch: `staging`
    - Build command: `bash build.sh`
    - Deploy command: `npx wrangler deploy --env staging`
    - Turn off builds for non-production branches.
-4. **Live Worker builds** - Workers & Pages > quick-select-v3 > Settings > Builds: keep the
-   production branch `master` and turn off builds for non-production branches, so pushes to
-   `staging` don't create preview versions of the live site.
-5. **Branch** - create it once: `git switch -c staging && git push -u origin staging`.
 
 Design-request and feedback emails from staging go to the same recipients
 (server/recipients.js), marked `[STAGING]`.
