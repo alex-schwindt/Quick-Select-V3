@@ -2955,6 +2955,25 @@
                     data, productKey, item.selectionId);
             }
 
+            // Electric heat airflow entered on the browse page (SDR VAVs,
+            // JS/heat_airflow.js): the kW list keeps only the sizes it
+            // supports, and heating CFM / LAT show it instead of the
+            // row's own values.
+            var heatOv = (item.heatCfm && HHpro.HeatAirflow)
+                ? function (sd) { return HHpro.HeatAirflow.overridesForItem(item, sd); } : null;
+            if (heatOv && kwFamilyInfo) {
+                var heatCfg = HHpro.HeatAirflow.configFor(productKey);
+                var kept = kwFamilyInfo.family.variants.filter(function (v) {
+                    return v.sel.id === item.selectionId ||
+                        HHpro.HeatAirflow.fitsSelection(heatCfg, v.sel, Number(item.heatCfm));
+                });
+                kwFamilyInfo = {
+                    family: { variants: kept },
+                    variantIdx: kept.findIndex(function (v) { return v.sel.id === item.selectionId; })
+                };
+            }
+            var heatOvNow = heatOv ? heatOv((sel.rows[0] && sel.rows[0].scheduleData) || {}) : {};
+
             // Capacity dropdowns (Multi Position Split systems with a
             // matching capacity table). Chosen conditions persist on the
             // cart item so they survive reloads and feed the exports.
@@ -3118,9 +3137,11 @@
                         td.classList.add('kw-variant-cell');
                         td.appendChild(buildProjectKwSelect(
                             kwFamilyInfo, item, productKey, data,
-                            depCells, kwVariants, capCtrl));
+                            depCells, kwVariants, capCtrl, heatOv));
                     } else {
-                        td.textContent = formatCellValue(cell.value, colLetter, productKey);
+                        var shown = (rowIndex === 0 && Object.prototype.hasOwnProperty.call(heatOvNow, colLetter))
+                            ? heatOvNow[colLetter] : cell.value;
+                        td.textContent = formatCellValue(shown, colLetter, productKey);
                         if (depColSet[colLetter]) depCells[colLetter] = td;
                     }
 
@@ -3220,7 +3241,7 @@
      * the airflow dropdown together, so the capacity controller owns it
      * and just gets told the new kW (see capacity.js).
      */
-    function buildProjectKwSelect(familyInfo, item, productKey, data, depCells, kwVariants, capCtrl) {
+    function buildProjectKwSelect(familyInfo, item, productKey, data, depCells, kwVariants, capCtrl, heatOv) {
         var family = familyInfo.family;
         var variants = family.variants;
         var currentIdx = familyInfo.variantIdx;
@@ -3251,9 +3272,11 @@
             // variant's scheduleData (so the user sees the change
             // immediately without re-rendering the whole table).
             var sd = (newSel.rows[0] && newSel.rows[0].scheduleData) || {};
+            var ov = heatOv ? heatOv(sd) : {};
             (kwVariants.dependentColumns || []).forEach(function (col) {
                 var td = depCells[col];
-                if (td) td.textContent = formatCellValue(sd[col], col, productKey);
+                var v = Object.prototype.hasOwnProperty.call(ov, col) ? ov[col] : sd[col];
+                if (td) td.textContent = formatCellValue(v, col, productKey);
             });
             if (capCtrl) capCtrl.setAuxKw(variants[idx].kw);
 

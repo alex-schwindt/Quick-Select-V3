@@ -330,6 +330,10 @@
         // Typed value for product.nearestFilter (e.g. fan coil airflow);
         // null = box empty, no narrowing.
         var nearestValue = null;
+        // Typed electric heat airflow (product.heatAirflow, SDR VAVs -
+        // JS/heat_airflow.js); null = box empty or hidden.
+        var heatAirflowCfg = (HHpro.HeatAirflow && product.heatAirflow) ? product.heatAirflow : null;
+        var heatCfmValue = null;
         // Optional model-substring filter passed in from the quick-lookup
         // search ("show only selections containing this model"). Cleared
         // by the chip's clear button. Initialized from params, so a
@@ -471,6 +475,7 @@
         function onClearAllFilters() {
             Object.keys(filterValues).forEach(function (k) { filterValues[k] = null; });
             nearestValue = null;
+            heatCfmValue = null;
             autoSelectedNames = {};
             applyFilterChange();
         }
@@ -511,6 +516,23 @@
                     refreshSchedule();      // bar stays put so the box keeps focus
                 }
             } : null;
+            var numberBoxes = nearest ? [nearest] : [];
+            if (heatAirflowCfg) {
+                if (HHpro.HeatAirflow.isShown(heatAirflowCfg, filterValues)) {
+                    numberBoxes.push({
+                        label: heatAirflowCfg.label,
+                        value: heatCfmValue,
+                        title: 'Heating airflow you will schedule. Keeps the kW sizes it supports ' +
+                               '(70 CFM per kW, up to the max airflow) and recalculates heating CFM and LAT.',
+                        onChange: function (v) {
+                            heatCfmValue = v;
+                            refreshSchedule();
+                        }
+                    });
+                } else {
+                    heatCfmValue = null;
+                }
+            }
             // Dropdown options follow only the filters the user picked.
             // Values auto-selected because one option was left must not
             // narrow the other dropdowns, or a dropdown locks to the rows
@@ -520,7 +542,7 @@
             Object.keys(filterValues).forEach(function (k) {
                 optionValues[k] = autoSelectedNames[k] ? null : filterValues[k];
             });
-            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters, nearest, optionValues);
+            var bar = buildFilterBar(data, visible, filterValues, onUserFilterChange, onClearAllFilters, numberBoxes, optionValues);
             filterBarContainer.innerHTML = '';
             filterBarContainer.appendChild(bar);
         }
@@ -564,6 +586,9 @@
             if (product.nearestFilter && nearestValue !== null) {
                 visible = applyNearestFilter(visible, product.nearestFilter, nearestValue);
             }
+            if (heatAirflowCfg && heatCfmValue !== null) {
+                visible = HHpro.HeatAirflow.filterSelections(heatAirflowCfg, visible, heatCfmValue);
+            }
             updateStatus(visible.length, (data.selections || []).length);
             if (visible.length === 0) {
                 // Shared empty-state primitives (base.css): icon + title +
@@ -597,7 +622,8 @@
                     ' matching selections - use the filters or the model cards above to narrow the list.';
                 scheduleWrap.appendChild(notice);
             }
-            var table = buildScheduleTable(data, renderList, product);
+            var table = buildScheduleTable(data, renderList, product,
+                { heatCfm: heatAirflowCfg ? heatCfmValue : null });
             scheduleWrap.appendChild(table);
             applyStickyHeaderOffsets(table);
             scheduleStickyRecomputes(table);
@@ -723,7 +749,7 @@
     // Filter bar
     // ---------------------------------------------------------------
 
-    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll, nearest, optionValues) {
+    function buildFilterBar(data, visibleFilters, filterValues, onChange, onClearAll, numberBoxes, optionValues) {
         var bar = document.createElement('div');
         bar.className = 'filter-bar';
 
@@ -781,10 +807,10 @@
             bar.appendChild(group);
         });
 
-        // Numeric "nearest match" box (product.nearestFilter). Typing
+        // Numeric boxes (product.nearestFilter, product.heatAirflow). Typing
         // narrows the schedule after a short pause; the bar isn't rebuilt,
         // so focus and the caret stay in the box.
-        if (nearest) {
+        (numberBoxes || []).forEach(function (nearest) {
             var nGroup = document.createElement('div');
             nGroup.className = 'filter-group';
             var nLabel = document.createElement('label');
@@ -796,6 +822,7 @@
             nInput.inputMode = 'numeric';
             nInput.className = 'filter-select filter-number';
             nInput.placeholder = 'Enter value';
+            if (nearest.title) nGroup.title = nearest.title;
             if (nearest.value !== null) {
                 nInput.value = String(nearest.value);
                 nInput.classList.add('is-active');
@@ -815,7 +842,7 @@
             nGroup.appendChild(nLabel);
             nGroup.appendChild(nInput);
             bar.appendChild(nGroup);
-        }
+        });
 
         var clearGroup = document.createElement('div');
         clearGroup.className = 'filter-group';
@@ -918,7 +945,7 @@
     // Schedule table
     // ---------------------------------------------------------------
 
-    function buildScheduleTable(data, selections, product) {
+    function buildScheduleTable(data, selections, product, rowOpts) {
         var table = document.createElement('table');
         table.className = 'schedule-table';
         // Per-product "always hidden" columns (declared in data.js via
@@ -945,7 +972,7 @@
             });
         }
         table.appendChild(buildScheduleHead(data, hiddenSet));
-        table.appendChild(buildScheduleBody(data, selections, product, hiddenSet));
+        table.appendChild(buildScheduleBody(data, selections, product, hiddenSet, rowOpts));
         return table;
     }
 
@@ -1008,7 +1035,7 @@
         return thead;
     }
 
-    function buildScheduleBody(data, selections, product, hiddenSet) {
+    function buildScheduleBody(data, selections, product, hiddenSet, rowOpts) {
         hiddenSet = hiddenSet || {};
         var tbody = document.createElement('tbody');
         var allLetters = (data.scheduleHeader && data.scheduleHeader.columnLetters) || [];
@@ -1022,7 +1049,8 @@
         if (kwVariants) {
             var families = groupKwFamilies(selections, kwVariants);
             families.forEach(function (fam) {
-                tbody.appendChild(buildKwFamilyRow(fam, kwVariants, product, data, colLetters));
+                tbody.appendChild(buildKwFamilyRow(fam, kwVariants, product, data, colLetters,
+                    (rowOpts && rowOpts.heatCfm) || null));
             });
             return tbody;
         }
@@ -1311,7 +1339,7 @@
     // merge kW variants -- see HHpro.Schedule.groupKwFamilies).
     // ---------------------------------------------------------------
 
-    function buildKwFamilyRow(fam, kwVariants, product, data, colLetters) {
+    function buildKwFamilyRow(fam, kwVariants, product, data, colLetters, heatCfm) {
         // No selection-boundary class here: kW family rows are always
         // single rows, so the 1px row border is the right separator.
         var tr = document.createElement('tr');
@@ -1338,8 +1366,23 @@
         // capacity conditions chosen here ride along into the cart on Select.
         var actionsTd = document.createElement('td');
         actionsTd.className = 'actions-cell';
+        // Entered electric heat airflow (JS/heat_airflow.js): heating CFM
+        // and LAT follow it, and it rides into the cart on Select.
+        var heatCfg = (heatCfm && HHpro.HeatAirflow) ? product.heatAirflow : null;
+        function currentSd() {
+            return (getCurrentSel().rows[0] && getCurrentSel().rows[0].scheduleData) || {};
+        }
+        function cellValue(sd, colLetter) {
+            var ov = heatCfg ? HHpro.HeatAirflow.overrides(heatCfg, sd, heatCfm) : {};
+            return Object.prototype.hasOwnProperty.call(ov, colLetter) ? ov[colLetter] : sd[colLetter];
+        }
         var actionsRow = buildActionButtons(getCurrentSel, product, data,
-            capCtrl ? function () { return { capacityInputs: capCtrl.getState() }; } : null);
+            (capCtrl || heatCfg) ? function () {
+                var extra = {};
+                if (capCtrl) extra.capacityInputs = capCtrl.getState();
+                if (heatCfg && HHpro.HeatAirflow.applies(heatCfg, currentSd())) extra.heatCfm = heatCfm;
+                return extra;
+            } : null);
         actionsTd.appendChild(actionsRow);
         tr.appendChild(actionsTd);
 
@@ -1371,8 +1414,7 @@
                     if (capCtrl) capCtrl.setAuxKw(fam.variants[newIdx].kw);
                 }));
             } else {
-                var sd = (getCurrentSel().rows[0] && getCurrentSel().rows[0].scheduleData) || {};
-                td.textContent = formatCellValue(sd[colLetter], colLetter, product && product.productKey);
+                td.textContent = formatCellValue(cellValue(currentSd(), colLetter), colLetter, product && product.productKey);
                 if (depColSet[colLetter]) depCells[colLetter] = td;
             }
 
@@ -1385,7 +1427,7 @@
             var sd = (getCurrentSel().rows[0] && getCurrentSel().rows[0].scheduleData) || {};
             depCols.forEach(function (col) {
                 var td = depCells[col];
-                if (td) td.textContent = formatCellValue(sd[col], col, product && product.productKey);
+                if (td) td.textContent = formatCellValue(cellValue(sd, col), col, product && product.productKey);
             });
             // Variants can differ in submittal availability
             if (actionsRow.refreshDocState) actionsRow.refreshDocState();

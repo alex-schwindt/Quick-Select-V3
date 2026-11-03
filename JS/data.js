@@ -229,10 +229,26 @@
             // ("1-ROW @ 1 GPM"), electric heat rows the kW sizes. Min dPs,
             // capacity, LAT / LWT / WPD / APD, heater amps and the
             // calculated MCA / MOP change with it.
+            // Heating airflow (F) is a dependent too: SDR electric heat rows
+            // are rated at the least airflow each kW needs (kW x 70 CFM).
             kwVariants: {
                 variantColumn: 'J',
-                dependentColumns: ['H', 'K', 'M', 'O', 'P', 'Q', 'T', 'U', 'V'],
+                dependentColumns: ['F', 'H', 'K', 'M', 'O', 'P', 'Q', 'T', 'U', 'V'],
                 filterName: 'HEAT SIZE'
+            },
+            // SDR electric heat: the engineer types the heating airflow;
+            // the kW list keeps the sizes it supports (70 CFM per kW, up to
+            // the max airflow) and heating CFM / LAT follow it
+            // (JS/heat_airflow.js). Saved on the cart item as heatCfm.
+            heatAirflow: {
+                label: 'ELECTRIC HEAT AIRFLOW (CFM)',
+                showWhen: { 'TYPE': 'SDR SINGLE DUCT', 'HEATING TYPE': 'ELECTRIC' },
+                appliesWhen: { 'C': 'SDR SINGLE DUCT', 'I': 'ELECTRIC' },
+                airflowColumn: 'F',
+                maxColumn: 'E',
+                capacityColumn: 'K',
+                eatColumn: 'L',
+                latColumn: 'M'
             }
         },
         {

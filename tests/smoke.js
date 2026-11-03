@@ -370,6 +370,10 @@ async function productChecks(page) {
             await page.ev(`(document.querySelector('.filter-clear') || { click() {} }).click()`);
         }
 
+        // entered electric heat airflow (product.heatAirflow, SDR VAVs)
+        const ha = await page.ev(`(HHpro.Data.getProduct('${p.key}').heatAirflow || null)`);
+        if (ha) await heatAirflowCheck(page, p.key, ha);
+
         // exports
         try {
             const ex = await page.ev(`(async () => {
@@ -396,6 +400,57 @@ async function productChecks(page) {
         } catch (e) { fail('exports', e.message); }
     }
     return pdfSections;
+}
+
+// Set the showWhen filters, type a heating CFM, and check: the box shows,
+// every kW offered needs no more than 70 CFM per kW of it, and an exported
+// item carrying heatCfm shows that CFM and the recalculated LAT.
+async function heatAirflowCheck(page, key, ha) {
+    const CFM = 1000;
+    const problems = [];
+    for (const [name, value] of Object.entries(ha.showWhen || {})) {
+        const ok = await page.ev(`(() => { const g = [...document.querySelectorAll('.filter-bar .filter-group')]
+            .find(x => (x.querySelector('.filter-label') || {}).textContent === ${JSON.stringify(name)});
+            const s = g && g.querySelector('select'); if (!s) return false;
+            s.value = ${JSON.stringify(value)}; s.dispatchEvent(new Event('change', { bubbles: true })); return s.value === ${JSON.stringify(value)}; })()`);
+        if (!ok) problems.push(`could not set ${name} = ${value}`);
+        await sleep(400);
+    }
+    const shown = await page.ev(`[...document.querySelectorAll('.filter-bar .filter-group')].some(g =>
+        (g.querySelector('.filter-label') || {}).textContent === ${JSON.stringify(ha.label)} && g.querySelector('.filter-number'))`);
+    if (!shown) problems.push('heat airflow box not shown');
+    const maxBefore = await page.ev(`Math.max(0, ...[...document.querySelectorAll('.kw-variant-select option')].map(o => parseFloat(o.textContent) || 0))`);
+    let maxAfter = null;
+    if (shown) {
+        await page.ev(`(() => { const g = [...document.querySelectorAll('.filter-bar .filter-group')].find(x => x.querySelector('.filter-label').textContent === ${JSON.stringify(ha.label)});
+            const i = g.querySelector('.filter-number'); i.value = '${CFM}'; i.dispatchEvent(new Event('input', { bubbles: true })); })()`);
+        await sleep(1200);
+        const r = await page.ev(`({ rows: document.querySelectorAll('tbody tr').length,
+            maxKw: Math.max(0, ...[...document.querySelectorAll('.kw-variant-select option')].map(o => parseFloat(o.textContent) || 0)) })`);
+        if (!r.rows) problems.push(`no rows at ${CFM} CFM`);
+        if (r.maxKw * 70 > CFM) problems.push(`offers ${r.maxKw} kW at ${CFM} CFM (needs ${r.maxKw * 70})`);
+        maxAfter = r.maxKw;
+        if (!(maxBefore > r.maxKw)) problems.push(`entering ${CFM} CFM did not narrow the kW list (${maxBefore} -> ${r.maxKw})`);
+    }
+    const ex = await page.ev(`(async () => {
+        const cfg = HHpro.Data.getProduct('${key}').heatAirflow, data = await HHpro.Data.loadProduct('${key}');
+        const sd = s => s.rows[0].scheduleData;
+        const sel = data.selections.find(s => HHpro.HeatAirflow.applies(cfg, sd(s)) &&
+            +sd(s)[cfg.airflowColumn] < ${CFM} && +sd(s)[cfg.maxColumn] >= ${CFM});
+        if (!sel) return { err: 'no row fits ${CFM} CFM' };
+        const want = Math.round((+sd(sel)[cfg.eatColumn] + sd(sel)[cfg.capacityColumn] * 1000 / (1.085 * ${CFM})) * 10) / 10;
+        const grid = HHpro.Export.buildScheduleGrid('${key}', [{ productKey: '${key}', selectionId: sel.id, tag: 'T-1', qty: 1, heatCfm: ${CFM} }], data);
+        const text = JSON.stringify(grid.rows);
+        return { cfm: text.indexOf('${CFM}') >= 0, lat: text.indexOf(String(want)) >= 0, want };
+    })()`);
+    if (ex.err) problems.push(ex.err);
+    else if (!ex.cfm || !ex.lat) problems.push(`export missing ${!ex.cfm ? 'the entered CFM' : 'LAT ' + ex.want}`);
+    const errs = page.takeErrors();
+    if (errs.length) problems.push(errs[0]);
+    problems.length ? fail('electric heat airflow box', problems.join('; '))
+                    : pass('electric heat airflow box', `max kW ${maxBefore} -> ${maxAfter} at ${CFM} CFM; export shows CFM and LAT`);
+    await page.ev(`(document.querySelector('.filter-clear') || { click() {} }).click()`);
+    await sleep(300);
 }
 
 async function pdfLayout(page, keys) {

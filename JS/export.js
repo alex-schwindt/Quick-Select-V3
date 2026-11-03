@@ -483,6 +483,11 @@ WHAT'S IN THE GRID
                     item, (sel.rows[0] && sel.rows[0].scheduleData) || {}, data);
                 Object.keys(gpOv).forEach(function (L) { capOverrides[L] = gpOv[L]; });
             }
+            // Entered electric heat airflow (SDR VAVs): heating CFM + LAT.
+            if (HHpro.HeatAirflow) {
+                var haOv = HHpro.HeatAirflow.overridesForItem(item, (sel.rows[0] && sel.rows[0].scheduleData) || {});
+                Object.keys(haOv).forEach(function (L) { capOverrides[L] = haOv[L]; });
+            }
 
             // Data cells (use computeCellLayout to preserve the same
             // merge pattern the on-screen schedule shows)
@@ -746,6 +751,10 @@ WHAT'S IN THE GRID
             var gpOv2 = HHpro.GasPackDesign.exportOverridesFor(
                 item, (srows[0] && srows[0].scheduleData) || {}, data);
             Object.keys(gpOv2).forEach(function (L) { capOverrides[L] = gpOv2[L]; });
+        }
+        if (HHpro.HeatAirflow) {
+            var haOv2 = HHpro.HeatAirflow.overridesForItem(item, (srows[0] && srows[0].scheduleData) || {});
+            Object.keys(haOv2).forEach(function (L) { capOverrides[L] = haOv2[L]; });
         }
         function valAt(letter, i) {
             if (capOverrides[letter] !== undefined) {
