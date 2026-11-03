@@ -36,10 +36,26 @@
   // quickselect.hhtrecho.com and the workers.dev address). Not secrets: the
   // team domain and audience tag are public in every login redirect. Used by
   // server/access.js to verify each request's signed Access token.
+  // EMAIL_FROM: sender for Air Handler Design Request emails
+  // (server/ahu-requests.js). Must be on a domain onboarded to Cloudflare
+  // Email Service (Email Sending) - hhtrecho.com.
   "vars": {
     "ACCESS_TEAM_DOMAIN": "wispy-glitter-fd02.cloudflareaccess.com",
-    "ACCESS_AUD": "e7a0ff4c8b88079eed4f34b2763debb74bac4af2b1e638e22b9d146b66ba409e"
+    "ACCESS_AUD": "e7a0ff4c8b88079eed4f34b2763debb74bac4af2b1e638e22b9d146b66ba409e",
+    "EMAIL_FROM": "requests@hhtrecho.com"
   },
+
+  // Cloudflare Email Service binding used to email Air Handler Design
+  // Requests (recipients: server/ahu-recipients.js). On the Workers Free
+  // plan it can only send to addresses verified under Email Service >
+  // Email Routing > Destination addresses - each recipient verifies once.
+  // If email isn't set up, requests still save and show on Admin > Design
+  // Requests with email status "failed" / "not configured".
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ],
 
   // Saved projects (server/projects.js). The tables create themselves on
   // first use. Created 10/20/2026 with `npx wrangler d1 create hhpro-projects`.

@@ -257,11 +257,14 @@
             }
         },
         {
+            // Not a schedule: the tile opens the design request form
+            // (JS/ahu_request.js), which is emailed to H&H on submit.
             productKey: 'air_handler_design_request',
             displayName: 'AIR HANDLER DESIGN REQUEST',
             pictureFile: 'DATA/PICTURES/AIR HANDLER DESIGN REQUEST.jpg',
             tileClass: 'tile-air-handler-design-request',
-            comingSoon: true
+            view: 'ahu_request',
+            excludeFromDesignSearch: true
         },
         {
             productKey: 'vfds',

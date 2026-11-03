@@ -1,0 +1,501 @@
+/* ============================================================
+   HHpro - Air Handler Design Request (JS/ahu_request.js)
+   ============================================================ */
+
+.ahu-page {
+    padding: var(--space-lg) var(--space-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ahu-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.ahu-title {
+    font-size: var(--font-size-xl);
+    margin: 0 0 var(--space-xs);
+}
+
+.ahu-sub {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+    max-width: 760px;
+    line-height: 1.5;
+}
+
+.ahu-top-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+.ahu-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-lg);
+    align-items: start;
+}
+
+/* Step list */
+.ahu-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: sticky;
+    top: var(--space-md);
+}
+
+.ahu-step {
+    text-align: left;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    border-left: 3px solid transparent;
+}
+
+.ahu-step:hover {
+    background-color: var(--color-row-hover);
+    color: var(--color-text);
+}
+
+.ahu-step.is-active {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-left-color: var(--color-primary-light);
+    font-weight: 600;
+}
+
+/* Step body */
+.ahu-body {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    min-width: 0;
+}
+
+.ahu-step-title {
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--space-md);
+}
+
+.ahu-subhead {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: var(--space-md) 0 var(--space-sm);
+    grid-column: 1 / -1;
+}
+
+.ahu-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.ahu-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.ahu-field.is-wide {
+    grid-column: 1 / -1;
+}
+
+.ahu-field.is-check {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+}
+
+.ahu-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.ahu-input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ahu-input {
+    width: 100%;
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.ahu-input:focus {
+    outline: none;
+    border-color: var(--color-primary-light);
+}
+
+.ahu-textarea {
+    resize: vertical;
+    min-height: 64px;
+}
+
+.ahu-check {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-primary-light);
+}
+
+.ahu-unit,
+.ahu-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
+.ahu-unit {
+    white-space: nowrap;
+}
+
+.ahu-error {
+    color: var(--color-error-light);
+    font-size: var(--font-size-sm);
+    margin: var(--space-xs) 0;
+}
+
+.ahu-error:empty {
+    display: none;
+}
+
+/* Buttons */
+.ahu-btn,
+.ahu-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    background-color: transparent;
+}
+
+.ahu-btn:hover,
+.ahu-icon-btn:hover {
+    border-color: var(--color-primary-light);
+    background-color: var(--color-row-hover);
+}
+
+.ahu-icon-btn {
+    padding: 6px 8px;
+}
+
+.ahu-flip svg {
+    transform: scaleX(-1);
+}
+
+.ahu-danger:hover {
+    border-color: var(--color-error);
+    color: var(--color-error-light);
+}
+
+.ahu-stepnav {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.ahu-next {
+    margin-left: auto;
+}
+
+/* Configurator */
+.ahu-config {
+    margin-bottom: var(--space-lg);
+}
+
+.ahu-flow-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+}
+
+.ahu-diagram {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    overflow-x: auto;
+    padding: var(--space-md);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    min-height: 110px;
+}
+
+.ahu-diagram-empty {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    align-self: center;
+}
+
+.ahu-block {
+    flex: 0 0 auto;
+    width: 96px;
+    min-height: 84px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--blk, var(--color-border-strong));
+    background-color: color-mix(in srgb, var(--blk, #475569) 18%, transparent);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: grab;
+    user-select: none;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.ahu-block:hover {
+    transform: translateY(-2px);
+}
+
+.ahu-block.is-selected {
+    box-shadow: 0 0 0 2px var(--color-text);
+}
+
+.ahu-block.is-drop {
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.ahu-block-num {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.ahu-block-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.ahu-arrow {
+    align-self: center;
+    color: var(--color-text-muted);
+}
+
+/* Section group colours (blocks + palette chips) */
+.ahu-g-fan { --blk: #5ba9d8; }
+.ahu-g-cool { --blk: #38bdf8; }
+.ahu-g-heat { --blk: #f97316; }
+.ahu-g-filter { --blk: #a3e635; }
+.ahu-g-erv { --blk: #c084fc; }
+.ahu-g-air { --blk: #94a3b8; }
+
+.ahu-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ahu-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--blk);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    background-color: transparent;
+}
+
+.ahu-chip:hover {
+    background-color: color-mix(in srgb, var(--blk) 22%, transparent);
+}
+
+.ahu-editor {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg);
+}
+
+.ahu-editor-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ahu-editor-head .ahu-subhead {
+    margin: 0;
+    color: var(--color-text);
+}
+
+.ahu-editor-tools {
+    display: flex;
+    gap: 6px;
+}
+
+/* Files */
+.ahu-file-input {
+    display: none;
+}
+
+.ahu-file-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-sm) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ahu-file-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: 6px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+}
+
+.ahu-file-list a {
+    color: var(--color-primary-light);
+}
+
+/* Review */
+.ahu-alert {
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-sm);
+}
+
+.ahu-alert ul {
+    margin: 6px 0 0 18px;
+    padding: 0;
+}
+
+.ahu-alert li + li {
+    margin-top: 4px;
+}
+
+.ahu-alert.is-error {
+    border: 1px solid var(--color-error);
+    background-color: color-mix(in srgb, var(--color-error) 12%, transparent);
+}
+
+.ahu-alert.is-warn {
+    border: 1px solid var(--color-warning);
+    background-color: color-mix(in srgb, var(--color-warning) 12%, transparent);
+}
+
+.ahu-config-string {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+.ahu-review-sec {
+    margin-bottom: var(--space-sm);
+}
+
+.ahu-review-list {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) 1fr;
+    gap: 3px var(--space-md);
+    margin: 0;
+    font-size: var(--font-size-sm);
+}
+
+.ahu-review-list dt {
+    color: var(--color-text-muted);
+}
+
+.ahu-review-list dd {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.ahu-submit-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+.ahu-status {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.ahu-status.is-error {
+    color: var(--color-error-light);
+}
+
+.ahu-done p {
+    font-size: var(--font-size-base);
+}
+
+/* Request lists */
+.ahu-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.ahu-table th,
+.ahu-table td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+.ahu-table th {
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.ahu-detail-row > td {
+    background-color: var(--color-bg);
+    padding: var(--space-md);
+}
+
+.ahu-status-select {
+    width: auto;
+}
+
+@media (max-width: 900px) {
+    .ahu-page { padding: var(--space-md); }
+    .ahu-layout { grid-template-columns: 1fr; }
+    .ahu-steps { position: static; flex-direction: row; flex-wrap: wrap; }
+    .ahu-topbar { flex-direction: column; }
+    .ahu-review-list { grid-template-columns: 1fr; }
+}

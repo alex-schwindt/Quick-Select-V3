@@ -98,6 +98,17 @@
         exportBtn.appendChild(exportLbl);
         exportBtn.addEventListener('click', function () { exportXlsx(visibleRows(), exportBtn, status); });
         head.appendChild(exportBtn);
+
+        // Air Handler Design Requests (JS/ahu_request.js)
+        var reqBtn = document.createElement('button');
+        reqBtn.type = 'button';
+        reqBtn.className = 'admin-copy-btn admin-export-btn';
+        reqBtn.appendChild(HHpro.UI.icon('file-text'));
+        var reqLbl = document.createElement('span');
+        reqLbl.textContent = 'Design Requests';
+        reqBtn.appendChild(reqLbl);
+        reqBtn.addEventListener('click', function () { HHpro.App.showView('ahu_admin'); });
+        head.appendChild(reqBtn);
         main.appendChild(head);
 
         var search = document.createElement('input');

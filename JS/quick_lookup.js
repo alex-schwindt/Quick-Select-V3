@@ -254,7 +254,8 @@
 
         indexBuilding = Promise.all(
             HHpro.Data.getProducts().filter(function (product) {
-                return !product.comingSoon;     // sections being rebuilt
+                // sections being rebuilt, and form tiles with no schedule data
+                return !product.comingSoon && !product.view;
             }).map(function (product) {
                 return HHpro.Data.loadProduct(product.productKey)
                     .then(function (data) { return { product: product, data: data }; })

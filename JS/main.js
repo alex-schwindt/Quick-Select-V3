@@ -266,7 +266,9 @@
         }
 
         tile.addEventListener('click', function () {
-            HHpro.App.showView('product', { productKey: product.productKey });
+            // Form-type tiles (data.js `view`) open their own page.
+            if (product.view) HHpro.App.showView(product.view);
+            else HHpro.App.showView('product', { productKey: product.productKey });
         });
 
         return tile;
