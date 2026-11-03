@@ -294,6 +294,8 @@
             var actions = document.createElement('div');
             actions.className = 'header-actions';
 
+            if (HHpro.Feedback) actions.appendChild(HHpro.Feedback.createButton());
+
             var logout = document.createElement('button');
             logout.type = 'button';
             logout.className = 'header-action';

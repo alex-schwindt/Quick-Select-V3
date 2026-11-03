@@ -69,5 +69,64 @@
 
   "observability": {
     "enabled": true
+  },
+
+  // ------------------------------------------------------------------
+  // Staging copy of the site (see STAGING.md). Deployed with
+  // `npx wrangler deploy --env staging` as the separate Worker
+  // "quick-select-v3-staging" at staging.hhtrecho.com - built from the
+  // `staging` branch by its own Workers Builds connection. Its own
+  // projects database, its own Cloudflare Access app (H&H staff only),
+  // no workers.dev / preview URLs. Documents come from the same R2
+  // bucket; staging uploads are kept under STAGING/ and staging emails
+  // say [STAGING] in the subject. Bindings and vars don't inherit from
+  // the top level, so everything the Worker uses is repeated here.
+  // ------------------------------------------------------------------
+  "env": {
+    "staging": {
+      "workers_dev": false,
+      "preview_urls": false,
+      "routes": [
+        { "pattern": "staging.hhtrecho.com", "custom_domain": true }
+      ],
+      "assets": {
+        "directory": "./dist",
+        "binding": "ASSETS",
+        "not_found_handling": "404-page",
+        "run_worker_first": ["/api/*", "/firms/*", "/ASSETS/*"]
+      },
+      "r2_buckets": [
+        {
+          "binding": "DOCS",
+          "bucket_name": "hhpro-assets"
+        }
+      ],
+      // ACCESS_AUD: the "Application Audience (AUD) Tag" of the staging
+      // Access app. Until it's filled in, nobody can sign in to staging
+      // (every identity check fails closed).
+      "vars": {
+        "ACCESS_TEAM_DOMAIN": "wispy-glitter-fd02.cloudflareaccess.com",
+        "ACCESS_AUD": "REPLACE_WITH_STAGING_ACCESS_AUD",
+        "EMAIL_FROM": "requests@hhtrecho.com",
+        "ENV_LABEL": "STAGING",
+        "STORAGE_PREFIX": "STAGING/"
+      },
+      "send_email": [
+        {
+          "name": "EMAIL"
+        }
+      ],
+      // Created 11/03/2026 with `npx wrangler d1 create hhpro-projects-staging`.
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "hhpro-projects-staging",
+          "database_id": "f9d25a7e-96bd-44ab-8a12-765c08338c18"
+        }
+      ],
+      "observability": {
+        "enabled": true
+      }
+    }
   }
 }

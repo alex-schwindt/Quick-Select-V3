@@ -23,6 +23,8 @@
                 console.error('HHpro.App: unknown view "' + viewName + '"');
                 return;
             }
+            // Remembered for the Feedback button's page context (feedback.js)
+            HHpro.App.current = { view: viewName, params: params || {} };
             view.render(root(), params || {});
         }
     };
@@ -33,6 +35,16 @@
     // and bring their saved projects in from the server (both fall back
     // quietly when unavailable), then open the overview.
     function init() {
+        // The staging copy (STAGING.md) wears a badge so it is never
+        // mistaken for the live site.
+        if (/^staging\./.test(location.hostname)) {
+            var badge = document.createElement('div');
+            badge.className = 'env-badge';
+            badge.textContent = 'STAGING';
+            badge.title = 'Test copy of HHpro - changes here do not affect the live site';
+            document.body.appendChild(badge);
+        }
+
         Promise.all([HHpro.Templates.loadFirms(), HHpro.ProjectSync.init()]).then(function (res) {
             // Re-point saved gas pack items if the schedule was regenerated
             // (gas_packs.js) and flag discontinued mini splits

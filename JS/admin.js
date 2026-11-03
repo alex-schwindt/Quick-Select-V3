@@ -109,6 +109,17 @@
         reqBtn.appendChild(reqLbl);
         reqBtn.addEventListener('click', function () { HHpro.App.showView('ahu_admin'); });
         head.appendChild(reqBtn);
+
+        // Feedback button submissions (JS/feedback.js)
+        var fbBtn = document.createElement('button');
+        fbBtn.type = 'button';
+        fbBtn.className = 'admin-copy-btn admin-export-btn';
+        fbBtn.appendChild(HHpro.UI.icon('file-plus'));
+        var fbLbl = document.createElement('span');
+        fbLbl.textContent = 'Feedback';
+        fbBtn.appendChild(fbLbl);
+        fbBtn.addEventListener('click', function () { HHpro.App.showView('feedback_admin'); });
+        head.appendChild(fbBtn);
         main.appendChild(head);
 
         var search = document.createElement('input');

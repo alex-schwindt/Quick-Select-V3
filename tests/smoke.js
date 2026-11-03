@@ -26,6 +26,7 @@
           needs Python + PyMuPDF; skipped with a warning if missing)
         - a full Air Handler Design Request: form, configurator, attachment,
           submit, stored record, file download, simulated email
+        - the header Feedback button: form, screenshot, page context, send
      4. Prints PASS / FAIL per check, writes .wrangler/smoke/report.txt
         (plus screenshots and PDFs of failures), exits 1 on any failure.
 
@@ -252,13 +253,15 @@ async function homeAndPages(page) {
     })`);
     home.tiles > 5 ? pass('home tiles render', `${home.tiles} tiles`) : fail('home tiles render', `${home.tiles} tiles`);
     home.comingSoonClickable ? fail('coming-soon tiles are disabled', `${home.comingSoonClickable} clickable`) : pass('coming-soon tiles are disabled');
-    home.header.includes('Log out') ? pass('header buttons', home.header.join(', ')) : fail('header buttons', home.header.join(', '));
+    home.header.includes('Log out') && home.header.includes('Feedback') ? pass('header buttons', home.header.join(', '))
+                                                                     : fail('header buttons', home.header.join(', '));
     let errs = page.takeErrors();
     errs.length ? fail('home page has no JS errors', errs[0]) : pass('home page has no JS errors');
 
     const views = [['design_search', '.design-search-form, .design-filter-grid, main'], ['calculators', '.calc-card'],
                    ['psychrometrics', 'main'], ['dewpoint', 'main'], ['projects', 'main'],
-                   ['admin', '.admin-title, .admin-message'], ['ahu_admin', '.ahu-table, .ahu-hint']];
+                   ['admin', '.admin-title, .admin-message'], ['ahu_admin', '.ahu-table, .ahu-hint'],
+                   ['feedback_admin', '.ahu-table, .ahu-hint']];
     for (const [view, sel] of views) {
         try {
             await page.ev(`HHpro.App.showView('${view}')`);
@@ -487,6 +490,45 @@ async function designRequest(page, target) {
     errs.length ? fail('design request has no JS errors', errs[0]) : pass('design request has no JS errors');
 }
 
+// ------------------------------------------------------------------ 5. feedback
+
+async function feedbackCheck(page) {
+    group('Feedback button');
+    await page.goto(SITE + '/');
+    await page.ev(`HHpro.App.showView('product', { productKey: 'fan_coils' })`);
+    await waitFor(() => page.ev(`document.querySelectorAll('tbody tr').length`), 30000);
+    const opened = await page.ev(`(() => { const b = [...document.querySelectorAll('.header-action')].find(x => x.textContent.trim() === 'Feedback');
+        if (!b) return false; b.click(); return !!document.querySelector('.fb-modal'); })()`);
+    if (!opened) { fail('Feedback button opens the form'); await page.shot('fail_feedback'); return; }
+    pass('Feedback button opens the form');
+    await page.ev(`(() => { [...document.querySelectorAll('.fb-type')].find(b => b.textContent === 'Feature request').click();
+        const t = document.querySelector('.fb-text'); t.value = 'Smoke test: please add a dark mode toggle.'; })()`);
+    const shot = path.join(OUT, 'smoke screenshot.png');
+    fs.writeFileSync(shot, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64'));
+    const doc = await page.send('DOM.getDocument', {});
+    const q = await page.send('DOM.querySelector', { nodeId: doc.result.root.nodeId, selector: '.fb-modal input[type=file]' });
+    await page.send('DOM.setFileInputFiles', { nodeId: q.result.nodeId, files: [shot] });
+    await sleep(200);
+    await page.ev(`[...document.querySelectorAll('.fb-modal .modal-btn-primary')].find(b => b.textContent === 'Send').click()`);
+    const sent = await waitFor(() => page.ev(`/Thanks|Could not/.test((document.querySelector('.fb-status') || {}).textContent || '') && document.querySelector('.fb-status').textContent`), 20000);
+    sent && /Thanks/.test(sent) ? pass('feedback sends') : fail('feedback sends', sent || 'timed out');
+    const res = await page.ev(`(async () => {
+        const list = await (await fetch('api/feedback')).json(); const f = list.feedback[0];
+        const dl = await fetch('api/feedback/' + f.id + '/files/' + encodeURIComponent('smoke screenshot.png'));
+        const admin = await fetch('api/admin/feedback');
+        return { type: f.type, msg: f.message, product: f.context.product, filters: f.context.filters || '', version: f.context.version,
+                 email: f.emailStatus, err: f.emailError, files: f.files.length, dl: dl.status, admin: admin.status };
+    })()`);
+    res.type === 'Feature request' && /dark mode/.test(res.msg) && res.files === 1 ? pass('feedback stored with its screenshot') : fail('feedback stored', JSON.stringify(res));
+    /fan_coils/.test(res.product || '') && res.version ? pass('page context captured', `${res.product}, v ${res.version}`) : fail('page context captured', JSON.stringify(res));
+    res.dl === 200 && res.admin === 200 ? pass('screenshot downloads, admin list loads') : fail('screenshot / admin list', `download ${res.dl}, admin ${res.admin}`);
+    res.email === 'sent' ? pass('feedback email (simulated locally, nothing sent)')
+        : res.email === 'not configured' ? warn('feedback email', 'no EMAIL binding / EMAIL_FROM')
+        : fail('feedback email', `${res.email}: ${res.err || ''}`);
+    const errs = page.takeErrors();
+    errs.length ? fail('feedback has no JS errors', errs[0]) : pass('feedback has no JS errors');
+}
+
 // ------------------------------------------------------------------ main
 
 (async () => {
@@ -508,6 +550,7 @@ async function designRequest(page, target) {
         const keys = await productChecks(page);
         await pdfLayout(page, keys);
         await designRequest(page, target);
+        await feedbackCheck(page);
     } catch (e) {
         fail('smoke test aborted', e.message);
         if (page) await page.shot('fail_aborted');

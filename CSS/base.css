@@ -879,3 +879,21 @@ input[type="checkbox"], input[type="radio"] {
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
 }
+
+/* STAGING badge on the test copy of the site (JS/app.js, STAGING.md) */
+.env-badge {
+    position: fixed;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background-color: var(--color-warning);
+    color: #1a1a1a;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+}

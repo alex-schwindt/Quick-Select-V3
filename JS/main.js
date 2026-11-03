@@ -46,9 +46,11 @@
 
         header.appendChild(HHpro.UI.createLookupInput());
 
-        // Header actions on the right: Admin (admins only) + Log out.
+        // Header actions on the right: Feedback, Admin (admins only), Log out.
         var actions = document.createElement('div');
         actions.className = 'header-actions';
+
+        if (HHpro.Feedback) actions.appendChild(HHpro.Feedback.createButton());
 
         // Admins (server/admins.js) get the all-projects view.
         if (HHpro.ProjectSync && HHpro.ProjectSync.isAdmin()) {

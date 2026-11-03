@@ -1,0 +1,132 @@
+/* ============================================================
+   HHpro - Feedback form and admin list (JS/feedback.js).
+   The dialog itself uses the shared .modal classes (cart.css).
+   ============================================================ */
+
+.fb-modal {
+    max-width: 560px;
+}
+
+.fb-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.fb-type {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    background-color: transparent;
+}
+
+.fb-type:hover {
+    border-color: var(--color-primary-light);
+}
+
+.fb-type.is-active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary-light);
+    color: var(--color-text-inverse);
+}
+
+.fb-text {
+    resize: vertical;
+    min-height: 110px;
+    font-family: inherit;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+.fb-add {
+    align-self: flex-start;
+}
+
+.fb-files {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-sm);
+}
+
+.fb-files:empty,
+.fb-error:empty,
+.fb-status:empty {
+    display: none;
+}
+
+.fb-files li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: 4px 0;
+    color: var(--color-text-muted);
+}
+
+.fb-remove {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    padding: 0 6px;
+}
+
+.fb-remove:hover {
+    color: var(--color-error-light);
+}
+
+.fb-context {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.fb-context summary {
+    cursor: pointer;
+}
+
+.fb-context dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px var(--space-sm);
+    margin: var(--space-xs) 0 0;
+}
+
+.fb-context dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.fb-error,
+.fb-status.is-error {
+    color: var(--color-error-light);
+}
+
+.fb-error,
+.fb-status {
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.fb-status {
+    color: var(--color-text-muted);
+}
+
+.fb-message {
+    max-width: 480px;
+    white-space: pre-wrap;
+}
+
+.fb-file-link {
+    display: block;
+    margin-top: 4px;
+    color: var(--color-primary-light);
+    font-size: var(--font-size-xs);
+}
+
+.fb-where {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    max-width: 260px;
+}

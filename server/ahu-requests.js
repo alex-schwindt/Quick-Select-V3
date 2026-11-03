@@ -16,17 +16,18 @@
    lost if email isn't configured or fails - it still shows on the
    Admin page. Email goes through the Cloudflare Email Service
    binding `EMAIL` (wrangler.jsonc "send_email") from EMAIL_FROM
-   (wrangler.jsonc "vars"); recipients come from ahu-recipients.js.
+   (wrangler.jsonc "vars"); recipients come from recipients.js and the
+   shared helpers from mail.js.
 
    The browser sends a ready-made `summary` (titled sections of
    label / value rows) alongside the raw form, so this file renders
    the email without knowing the form's fields.
    ============================================================ */
 
-import RECIPIENTS from './ahu-recipients.js';
 import { isAdmin } from './projects.js';
+import { designRequestRecipients } from './recipients.js';
+import { json, safeName, newId, storageKey, esc, fmtSize, loadAttachments, sendMail } from './mail.js';
 
-const JSON_HEADERS = { 'Content-Type': 'application/json', 'Cache-Control': 'private, no-store' };
 const MAX_FORM_BYTES = 512 * 1024;
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
 const MAX_FILES = 12;
@@ -55,38 +56,7 @@ function ensureSchema(db) {
     return schemaReady;
 }
 
-function json(body, status = 200) {
-    return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
-}
-
-function matches(email, entries) {
-    return (entries || []).some((entry) => {
-        const e = String(entry).trim().toLowerCase();
-        return !!e && (e.startsWith('@') ? email.endsWith(e) : email === e);
-    });
-}
-
-/** Everyone who gets this submitter's requests (deduplicated). */
-export function recipientsFor(submitter) {
-    const out = new Set((RECIPIENTS.always || []).map((e) => String(e).trim().toLowerCase()));
-    (RECIPIENTS.bySubmitter || []).forEach((rule) => {
-        if (matches(submitter, rule.match)) (rule.to || []).forEach((e) => out.add(String(e).trim().toLowerCase()));
-    });
-    return [...out].filter(Boolean);
-}
-
-function safeName(name) {
-    const base = String(name || '').split(/[\\/]/).pop()
-        .replace(/[^A-Za-z0-9 ._()\-]/g, '_').replace(/^\.+/, '').trim().slice(0, 120);
-    return base || 'file';
-}
-
-function newId() {
-    const bytes = crypto.getRandomValues(new Uint8Array(10));
-    return 'ahu_' + Date.now().toString(36) + [...bytes].map((b) => b.toString(36).padStart(2, '0')).join('').slice(0, 12);
-}
-
-const fileKey = (id, name) => `REQUESTS/AHU/${id}/${name}`;
+const fileKey = (env, id, name) => storageKey(env, 'REQUESTS', 'AHU', id, name);
 
 async function getRow(db, id) {
     return db.prepare('SELECT * FROM ahu_requests WHERE id = ?').bind(id).first();
@@ -113,7 +83,7 @@ async function create(db, email, request) {
     if (!body || typeof body !== 'object' || !body.summary || !Array.isArray(body.summary.sections)) {
         return json({ error: 'missing summary' }, 400);
     }
-    const id = newId();
+    const id = newId('ahu');
     const name = String(body.summary.projectName || '').slice(0, 300);
     await db.prepare(
         `INSERT INTO ahu_requests (id, owner, project_name, status, data, files, created_at)
@@ -139,7 +109,7 @@ async function upload(env, email, id, rawName, request) {
     if (total > MAX_TOTAL_BYTES) return json({ error: 'attachments total more than 75 MB' }, 413);
 
     const type = (request.headers.get('Content-Type') || 'application/octet-stream').split(';')[0];
-    await env.DOCS.put(fileKey(id, name), bytes, { httpMetadata: { contentType: type } });
+    await env.DOCS.put(fileKey(env, id, name), bytes, { httpMetadata: { contentType: type } });
     others.push({ name, size: bytes.byteLength, type });
     await env.DB.prepare('UPDATE ahu_requests SET files = ? WHERE id = ?').bind(JSON.stringify(others), id).run();
     return json({ name, size: bytes.byteLength });
@@ -160,24 +130,6 @@ async function submit(env, email, id, origin) {
 }
 
 // ---------------- email ----------------
-
-const esc = (s) => String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-// Base64 text works with both the deployed binding and wrangler dev's
-// local email simulator (which can't serialize ArrayBuffer attachments).
-function toBase64(buf) {
-    const bytes = new Uint8Array(buf);
-    let bin = '';
-    for (let i = 0; i < bytes.length; i += 0x8000) {
-        bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
-    }
-    return btoa(bin);
-}
-
-function fmtSize(n) {
-    return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
-}
 
 export function renderEmail(row, origin, attachedNames) {
     const data = JSON.parse(row.data || '{}');
@@ -227,33 +179,11 @@ export function renderEmail(row, origin, attachedNames) {
 }
 
 async function sendRequestEmail(env, row, origin) {
-    const to = recipientsFor(row.owner);
-    if (!env.EMAIL || !env.EMAIL_FROM) return { status: 'not configured', recipients: to };
-    if (!to.length) return { status: 'no recipients' };
-    try {
-        // Attach files in upload order until the message would exceed the limit.
-        const files = JSON.parse(row.files || '[]');
-        const attachments = [], attachedNames = [];
-        let used = 0;
-        for (const f of files) {
-            if (used + f.size > MAX_ATTACH_BYTES) continue;
-            const obj = await env.DOCS.get(fileKey(row.id, f.name));
-            if (!obj) continue;
-            attachments.push({ content: toBase64(await obj.arrayBuffer()), filename: f.name,
-                               type: f.type || 'application/octet-stream', disposition: 'attachment' });
-            attachedNames.push(f.name);
-            used += f.size;
-        }
-        const msg = renderEmail(row, origin, attachedNames);
-        await env.EMAIL.send({
-            to, from: { email: env.EMAIL_FROM, name: 'HHpro Design Requests' },
-            replyTo: row.owner, subject: msg.subject, html: msg.html, text: msg.text,
-            attachments: attachments.length ? attachments : undefined
-        });
-        return { status: 'sent', recipients: to };
-    } catch (err) {
-        return { status: 'failed', error: `${err.code || ''} ${err.message || err}`.trim().slice(0, 500), recipients: to };
-    }
+    const files = JSON.parse(row.files || '[]');
+    const { attachments, attachedNames } = await loadAttachments(env, (name) => fileKey(env, row.id, name), files, MAX_ATTACH_BYTES);
+    const msg = renderEmail(row, origin, attachedNames);
+    return sendMail(env, { to: designRequestRecipients(row.owner), fromName: 'HHpro Design Requests', replyTo: row.owner,
+                           subject: msg.subject, html: msg.html, text: msg.text, attachments });
 }
 
 // ---------------- reads ----------------
@@ -275,7 +205,7 @@ async function download(env, email, id, rawName) {
     const row = await getRow(env.DB, id);
     if (!row || (row.owner !== email && !isAdmin(email))) return json({ error: 'not found' }, 404);
     const name = safeName(rawName);
-    const obj = await env.DOCS.get(fileKey(id, name));
+    const obj = await env.DOCS.get(fileKey(env, id, name));
     if (!obj) return json({ error: 'not found' }, 404);
     const headers = new Headers({ 'Cache-Control': 'private, no-store' });
     obj.writeHttpMetadata(headers);

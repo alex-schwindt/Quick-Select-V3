@@ -17,6 +17,9 @@
      /api/ahu-requests*, /api/admin/ahu-requests*
                         -> Air Handler Design Requests: D1 record, R2
                            attachments, email (server/ahu-requests.js)
+     /api/feedback*, /api/admin/feedback*
+                        -> Feedback button: bug reports / feature
+                           requests (server/feedback.js)
      INTERNAL_ONLY files -> H&H staff only (firm-access.js "internal");
                            everyone else gets a plain 404
      /ASSETS/<key>      -> product documentation from the R2 bucket
@@ -31,6 +34,7 @@
 import { accessEmail, firmsFor, isInternal } from '../server/access.js';
 import { handleProjects } from '../server/projects.js';
 import { handleAhuRequests } from '../server/ahu-requests.js';
+import { handleFeedback } from '../server/feedback.js';
 
 // Site files only H&H staff may load (each must also be listed under
 // "run_worker_first" in wrangler.jsonc so requests reach this script).
@@ -150,6 +154,7 @@ export default {
         if (pathname.startsWith('/api/')) {
             const email = await accessEmail(request, env);
             const res = (await handleAhuRequests(request, env, pathname, email)) ||
+                        (await handleFeedback(request, env, pathname, email)) ||
                         (await handleProjects(request, env, pathname, email));
             return res || notFound();
         }
