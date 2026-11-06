@@ -1351,18 +1351,17 @@
             ? HHpro.Data.getProduct(item.productKey) : null;
         var assetsFolder = (product && product.assetsFolder) || '';
 
-        if (item.productKey === 'multi_position_splits' ||
-            item.productKey === 'gas_splits') {
+        // Daikin long line set guides - only the retired Daikin Gas Splits
+        // data uses them; the Fraser Johnston unitary splits don't.
+        if (item.productKey === 'gas_splits') {
             var rows = (selection && selection.rows) || [];
             var firstRow = rows[0] || {};
             var sched = firstRow.scheduleData || {};
             var filterData = firstRow.filterData || {};
 
-            // Per-product source columns. Multi Position writes voltage
-            // as "208/1" in W and stages in AD; Gas Splits writes
-            // "208/60/1" in S and stages in Z.
-            var elecCol = item.productKey === 'gas_splits' ? 'S' : 'W';
-            var stagesCol = item.productKey === 'gas_splits' ? 'Z' : 'AD';
+            // Gas Splits writes voltage as "208/60/1" in S and stages in Z.
+            var elecCol = 'S';
+            var stagesCol = 'Z';
 
             var outdoorElectrical = String(sched[elecCol] || '').trim();
             var stages = String(sched[stagesCol] || '').trim().toLowerCase();

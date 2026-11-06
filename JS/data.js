@@ -82,27 +82,24 @@
         },
         {
             productKey: 'multi_position_splits',
-            // Being rebuilt for the Nashville line card (Fraser-Johnston): tile shows greyed out with a
-            // COMING SOON banner and isn't clickable; kept out of Design
-            // Search and the model lookup. Remove to reopen the section.
-            comingSoon: true,
+            // Fraser Johnston heat pump + air handler and AC + gas furnace
+            // systems, 1.5-5 tons, in one schedule (SYSTEM TYPE filter).
             displayName: 'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEMS',
             jsonFile: 'DATA/JSON/multi_position_splits.json',
             pictureFile: 'DATA/PICTURES/MULTI POSITION SPLITS.jpg',
             assetsFolder: 'ASSETS/MULTI POSITION SPLITS',
             tileClass: 'tile-multi-position-splits',
-            // Collapse selections that differ only in AUX. ELECTRIC HEAT
-            // kW into a single row with a kW dropdown. The dropdown
-            // swaps the dependent columns (TEMPERATURE RISE, MCA, MOP)
-            // to the chosen variant's values; Select / Submittal / Docs
-            // and the project-view schedule all act on whichever variant
-            // is currently selected.
+            // Heat pump rows: one row per 8HK heat kit, folded into a kW
+            // dropdown; temperature rise and the indoor MCA / MOP follow it.
             kwVariants: {
-                variantColumn: 'L',
-                dependentColumns: ['M', 'O', 'P'],
+                variantColumn: 'O',
+                dependentColumns: ['P', 'R', 'S'],
                 filterName: 'KW',
                 defaultValue: '-'
-            }
+            },
+            // Gas columns on heat pump rows (and heat pump / kW columns on
+            // gas rows) are "-": hide whatever is all "-" for the rows in view.
+            hideEmptyColumns: true
         },
         {
             productKey: 'gas_splits',

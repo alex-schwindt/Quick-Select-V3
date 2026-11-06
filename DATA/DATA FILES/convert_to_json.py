@@ -324,20 +324,18 @@ PRODUCT_CONFIGS = {
         "dataStartRow": 6,
         "supportsMultiRow": False,
         "assetsFolder": "MULTI POSITION SPLITS",
-        # Sold under the TempMaster label. Two MAKE columns: A is the
-        # indoor air handler, R the outdoor condensing unit.
-        "brandOverrides": [
-            {"cols": ["A", "R"], "frm": "DAIKIN", "to": "TEMPMASTER"},
-        ],
+        # Fraser Johnston heat pump + air handler and AC + gas furnace
+        # systems in one schedule; built from the selection-tool
+        # Submittal Reports (see the workbook's SOURCES tab).
         "searchSchema": {
             "displayName": "Unitary & Light Commercial Split Systems",
-            "description": "Conventional split systems with a multi-position air handler + outdoor condensing unit. Enter design loads and the page returns models that meet the targets within your tolerance.",
+            "description": "Fraser Johnston split systems, 1.5-5 tons: heat pump + air handler or AC + gas furnace. Enter design loads and the page returns systems that meet the targets within your tolerance.",
             "targets": [
-                {"label": "Indoor Cooling Capacity",    "col": "I", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Indoor Sensible Capacity",   "col": "J", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Heat Pump Heating Capacity", "col": "U", "unit": "BTU/h", "defaultTolerance": 10},
-                {"label": "Aux. Electric Heat",         "col": "L", "unit": "kW",    "defaultTolerance": 10},
-                {"label": "Indoor Airflow",             "col": "C", "unit": "CFM",   "defaultTolerance": 10},
+                {"label": "Total Cooling Capacity",    "col": "J", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Sensible Cooling Capacity", "col": "K", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Heating Capacity",          "col": "L", "unit": "BTU/h", "defaultTolerance": 10},
+                {"label": "Aux. Electric Heat",        "col": "O", "unit": "kW",    "defaultTolerance": 10},
+                {"label": "Indoor Airflow",            "col": "D", "unit": "CFM",   "defaultTolerance": 10},
             ],
         },
     },

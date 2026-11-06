@@ -126,7 +126,8 @@
                 var sd = row.scheduleData || {};
                 Object.keys(sd).forEach(function (k) {
                     var v = sd[k];
-                    if (v !== null && v !== undefined && String(v) !== '') {
+                    // "-" = not applicable (e.g. gas columns on heat pump rows)
+                    if (v !== null && v !== undefined && String(v) !== '' && String(v) !== '-') {
                         hasValue[k] = true;
                     }
                 });
