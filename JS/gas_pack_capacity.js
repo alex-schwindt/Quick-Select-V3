@@ -337,15 +337,6 @@
         return Math.abs(value - target) <= Math.abs(target) * tol;
     }
 
-    // Capacity is one-sided: a unit must deliver at least the required
-    // capacity, and may exceed it by up to the tolerance (oversizing).
-    // A unit that is short of the requirement never passes.
-    function meets(value, target, tolPct) {
-        if (target == null || !isFinite(target) || target <= 0) return true;
-        var tol = (tolPct == null ? 10 : tolPct) / 100;
-        return value >= target && value <= target * (1 + tol);
-    }
-
     function deviation(value, target) {
         if (target == null || !isFinite(target) || target <= 0) return 0;
         return Math.abs(value - target) / target;
@@ -444,10 +435,14 @@
                 return;
             }
             var r = cool.result;
-            if (!meets(r.total, c.coolTotal && c.coolTotal.value,
-                       c.coolTotal && c.coolTotal.tol)) return;
-            if (!meets(r.sensible, c.coolSensible && c.coolSensible.value,
-                       c.coolSensible && c.coolSensible.tol)) return;
+            // Capacity targets are two-sided (± tolerance): a unit slightly
+            // under the requested capacity can be closer to what the
+            // engineer actually needs than an oversized one. Results rank
+            // by absolute deviation, so the closest unit still sorts first.
+            if (!within(r.total, c.coolTotal && c.coolTotal.value,
+                        c.coolTotal && c.coolTotal.tol)) return;
+            if (!within(r.sensible, c.coolSensible && c.coolSensible.value,
+                        c.coolSensible && c.coolSensible.tol)) return;
             // Heat rise follows the air the unit will actually move: the
             // design CFM when one was entered, otherwise the rated airflow.
             var heatCfm = (cfmTarget && isFinite(cfmTarget)) ? cfmTarget : r.airflow;

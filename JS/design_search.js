@@ -724,8 +724,8 @@
         hint.textContent = 'Results come from TempMaster’s published capacity tables, not from the ' +
             'schedule’s stored selection. A condition between rated points is evaluated at the ' +
             'worst-case bracketing rated point, so the capacity shown is never optimistic. ' +
-            'Capacity targets are minimums: a unit must meet them and may exceed them by up to ' +
-            'the tolerance.';
+            'Capacity results can fall above or below the target by up to the tolerance; ' +
+            'the closest match is listed first.';
         box.appendChild(hint);
 
         // ----- Unit constraints -----
@@ -1079,12 +1079,13 @@
         return Math.abs(actual - target) / Math.abs(target) * 100;
     }
 
-    // Capacity is one-sided: the unit must deliver at least the target and
-    // may exceed it by up to tolPct (oversizing). Returns the % over target,
-    // or null when the unit falls short or is oversized past the tolerance.
+    // Capacity targets are two-sided: the unit may be up to tolPct above or
+    // below the target (a slightly smaller unit can be closer to what the
+    // engineer actually needs). Returns the absolute % deviation, or null
+    // when it falls outside the tolerance.
     function capacityMargin(actual, target, tolPct) {
         var d = pctDev(actual, target);
-        if (d == null || actual < target || d > tolPct) return null;
+        if (d == null || d > tolPct) return null;
         return d;
     }
 
@@ -1308,7 +1309,7 @@
             if (t[def.key] == null) return;
             var curveMode = (def.key === 'hpHeating') ? capQ.useHp : capQ.useCool;
             if (!curveMode) return; // nominal-mode targets already chip via activeTargets
-            chips.push(def.label + ' ' + t[def.key] + ' ' + def.unit + ' (−0/+' + capQ.tolOf(def.key) + '%)');
+            chips.push(def.label + ' ' + t[def.key] + ' ' + def.unit + ' ±' + capQ.tolOf(def.key) + '%');
         });
         return chips;
     }
@@ -1586,9 +1587,7 @@
         GP_NUMERIC.forEach(function (def) {
             var t = c[def.key];
             if (t && t.value != null && !isNaN(t.value)) {
-                var oneSided = def.key === 'coolTotal' || def.key === 'coolSensible';
-                chips.push(def.label + ' ' + t.value + ' ' + def.unit +
-                    (oneSided ? ' (−0/+' + t.tol + '%)' : ' ±' + t.tol + '%'));
+                chips.push(def.label + ' ' + t.value + ' ' + def.unit + ' ±' + t.tol + '%');
             }
         });
         if (c.convOutlet) chips.push('powered convenience outlet');
