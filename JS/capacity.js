@@ -20,13 +20,23 @@
    Data: DATA/JSON/multi_position_split_capacity.json (built by
    convert_to_json.py). Columns are resolved by header NAME, not a
    fixed letter, so the feature survives schedule column edits.
+
+   NO TABLES SHIP TODAY. The old tables were for a previous line and
+   matched none of the current Fraser Johnston systems, so they were
+   removed (11/2026). Until Fraser Johnston expanded performance tables
+   are built, CAPACITY_URL is null: nothing is fetched, hasTables() is
+   false, and Design Search uses plain nominal search for split systems.
+   When the tables exist, restore the URL - and update resolveColumns
+   for the current schedule's headers (the indoor model is now under
+   INDOOR UNIT -> MODEL (AIR HANDLER OR COIL / FURNACE), and heating is
+   one HEATING CAPACITY column).
    ============================================================ */
 
 (function () {
     'use strict';
     window.HHpro = window.HHpro || {};
 
-    var CAPACITY_URL = 'DATA/JSON/multi_position_split_capacity.json';
+    var CAPACITY_URL = null;   // 'DATA/JSON/multi_position_split_capacity.json' - see the note above
     var CAPACITY_PRODUCT = 'multi_position_splits';
 
     var cache = null;        // loaded JSON ({ matchups: {...} })
@@ -70,6 +80,10 @@
     function load() {
         if (cache) return Promise.resolve(cache);
         if (loadPromise) return loadPromise;
+        if (!CAPACITY_URL) {
+            cache = { matchups: {} };
+            return Promise.resolve(cache);
+        }
         loadPromise = fetch(CAPACITY_URL)
             .then(function (r) {
                 if (!r.ok) throw new Error('capacity tables ' + r.status);
@@ -257,8 +271,8 @@
     // ambient DOWN, the opposite of cooling, because the COLDER bracketing
     // ambient is the harsher heating condition.
     //
-    // Some heat-pump tables hold text like "15900 (standard), 22500 (boost)"
-    // (DH6VSA wall mounts); capNum takes the leading standard rating for
+    // Some heat-pump tables hold text like "15900 (standard), 22500 (boost)";
+    // capNum takes the leading standard rating for
     // search math while the schedule cell still displays the full string.
 
     // Heat-pump heating capacity at an outdoor ambient (tables rated at

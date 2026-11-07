@@ -244,7 +244,7 @@ PRODUCT_CONFIGS = {
         "dataStartRow": 5,
         "supportsMultiRow": False,
         "assetsFolder": "VAVS",
-        # ~32 MB in one file, over the 25 MiB asset limit - split like grilles.
+        # ~32 MB in one file, over the 25 MiB asset limit - split in two.
         "splitParts": 2,
         "idColumns": ["B", "D", "E", "F", "I", "J", "R", "W", "X", "AA"],
         "searchSchema": {
@@ -339,30 +339,6 @@ PRODUCT_CONFIGS = {
             ],
         },
     },
-    "GAS SPLIT DATA.xlsx": {
-        "productType": "GAS SPLITS",
-        "outputFileName": "gas_splits.json",
-        "headerRows": 4,
-        "dataStartRow": 6,
-        "supportsMultiRow": False,
-        "assetsFolder": "GAS SPLITS",
-        # Sold under the TempMaster label. Two MAKE columns: A is the
-        # indoor furnace/coil, Q the outdoor condensing unit.
-        "brandOverrides": [
-            {"cols": ["A", "Q"], "frm": "DAIKIN", "to": "TEMPMASTER"},
-        ],
-        "searchSchema": {
-            "displayName": "Gas Splits",
-            "description": "Three-component split systems with a gas furnace, indoor coil, and outdoor condensing unit. Enter design loads and the page returns models that meet the targets within your tolerance.",
-            "targets": [
-                {"label": "Total Cooling Capacity", "col": "H", "unit": "BTU/h",  "defaultTolerance": 10},
-                {"label": "Gas Heating Output",     "col": "J", "unit": "BTU/h",  "defaultTolerance": 10},
-                {"label": "Indoor Airflow",         "col": "C", "unit": "CFM",    "defaultTolerance": 10},
-                {"label": "AFUE",                   "col": "L", "unit": "%",      "defaultTolerance": 5},
-                {"label": "Compressor Stages",      "col": "Z", "unit": "stages", "defaultTolerance": 0},
-            ],
-        },
-    },
     "GPS DATA.xlsx": {
         "productType": "BIPOLAR IONIZATION",
         "outputFileName": "gps.json",
@@ -398,50 +374,6 @@ PRODUCT_CONFIGS = {
             "displayName": "VFDs",
             "description": "Variable frequency drives. Engineers typically size VFDs to an exact motor HP and electrical service, so this category uses filters only -- no tolerance-based targets apply.",
             "targets": [],
-        },
-    },
-    "PRICE DIFFUSER DATA.xlsx": {
-        "productType": "DIFFUSERS",
-        "outputFileName": "diffusers.json",
-        "headerRows": 2,
-        "dataStartRow": 4,
-        "supportsMultiRow": False,
-        "assetsFolder": "DIFFUSERS",
-        # The diffuser SCHEDULE NOTES tab has TWO columns: col A is the
-        # model list the note applies to ("ALL" or a comma-separated
-        # list like "SPD, SCD"), col B is the note text. The site uses
-        # this mapping to show only the notes that apply to the models
-        # actually selected, and to auto-number each schedule row's
-        # applicable notes in its Accessories column.
-        "notesFormat": "modelmap",
-        "searchSchema": {
-            "displayName": "Diffusers",
-            "description": "Price ceiling diffusers (supply + return). Enter a target airflow and/or use the filters to narrow by model, size, and application.",
-            "targets": [
-                {"label": "Airflow", "col": "U", "unit": "CFM", "defaultTolerance": 15},
-            ],
-        },
-    },
-    "PRICE GRILLE DATA.xlsx": {
-        "productType": "GRILLES",
-        "outputFileName": "grilles.json",
-        "headerRows": 2,
-        "dataStartRow": 4,
-        "supportsMultiRow": False,
-        "assetsFolder": "GRILLES",
-        # Same two-column SCHEDULE NOTES mapping as the diffusers (col A
-        # is "ALL" or a comma-separated MODEL list, col B is the note).
-        "notesFormat": "modelmap",
-        # The full grille JSON is ~27 MB and Cloudflare Pages caps files
-        # at 25 MiB, so split the selections across two files
-        # (grilles.json + grilles-2.json); the site re-joins them.
-        "splitParts": 2,
-        "searchSchema": {
-            "displayName": "Grilles",
-            "description": "Price supply, return, and transfer grilles. Enter a target airflow and/or use the filters to narrow by model, size, and application.",
-            "targets": [
-                {"label": "Airflow", "col": "I", "unit": "CFM", "defaultTolerance": 15},
-            ],
         },
     },
 }
@@ -645,8 +577,6 @@ def convert_capacity_tables(input_path, output_path):
 # schedule offers: 208/230, 460 and 575 V). Combinations printed "-" in the guide - and cells left
 # blank as misprints - are simply omitted, so the site only ever sees rated
 # data.
-#
-# The superseded "Daikin LC RTU Capacity Tables.xlsx" is no longer read.
 # -----------------------------------------------------------------------------
 
 GAS_PACK_CAPACITY_FILE = "TempMaster RTU Capacity Tables.xlsx"
@@ -915,9 +845,8 @@ def convert_gas_pack_capacity(input_path, output_path):
         entry["motors"] = sorted({m for v in entry["electrical"].values() for m in v})
         if not entry["cooling"]:
             # A cabinet with heating/electrical rows but no cooling table
-            # (the Daikin DSG150 was one: its spec sheet reprinted the DSG120
-            # tables). Keep the cabinet and flag it so the UI can say why
-            # rather than go quiet.
+            # (its spec sheet misprinted or omitted them). Keep the cabinet
+            # and flag it so the UI can say why rather than go quiet.
             entry["coolingUnavailable"] = True
             no_cooling.append(name)
 
@@ -950,6 +879,136 @@ def convert_gas_pack_capacity(input_path, output_path):
         print(f"     (no cooling data: {', '.join(sorted(no_cooling))})")
     if no_hp:
         print(f"     (no indoor motor HP: {', '.join(sorted(no_hp))})")
+
+
+# -----------------------------------------------------------------------------
+# PACKAGED HEAT PUMP CAPACITY TABLES
+# -----------------------------------------------------------------------------
+# "TempMaster Heat Pump Capacity Tables.xlsx" - cooling and heat-pump heating
+# tables extracted from the TempMaster packaged heat pump technical guides by
+# tools/heat_pump_capacity (its Notes sheet records the sources, the check
+# against PACKAGED HEAT PUMP DATA.xlsx and every catalog misprint handled).
+# It drives the condition-aware Packaged Heat Pumps section of Design Search.
+# Keyed by the first five characters of the schedule model number (WQE04,
+# WXEA7, ...), which is the size a capacity table is published for.
+#
+#   Cooling            long form, one row per EAT-DB / EAT-WB / OA-DB / CFM
+#                      -> total MBh, sensible MBh.
+#   Heat Pump Heating  one row per CFM / indoor DB / OA-DB -> MBh. Only the
+#                      70°F indoor rows are carried (the site's heat-pump
+#                      heating condition, as for the split systems).
+# -----------------------------------------------------------------------------
+
+HP_CAPACITY_FILE = "TempMaster Heat Pump Capacity Tables.xlsx"
+HP_CAPACITY_OUTPUT = "packaged_heat_pump_capacity.json"
+HP_HEATING_INDOOR_DB = 70
+
+
+def convert_hp_capacity(input_path, output_path):
+    """Convert the packaged heat pump capacity workbook to a size-keyed JSON.
+
+    Output shape:
+      {
+        "units": {
+          "WQE04": {
+            "tons": 3,
+            "axes":    {"eatDb":[...], "eatWb":[...], "oaCooling":[...], "airflow":[...]},
+            "cooling": {"<eatDb>|<eatWb>|<oaCooling>|<airflow>": [total, sensible, LAT], ...},
+            "heating": {"airflow": [...], "oa": [...],
+                        "capacity": {"<airflow>": {"<oa>": BTU/h, ...}, ...}}
+          }, ...
+        }
+      }
+    Capacities are BTU/h (the workbook is MBh) to match the schedule columns.
+    LAT = EAT-DB - sensible / (1.08 x CFM).
+    """
+    print(f"\nConverting: {os.path.basename(input_path)}")
+    wb = openpyxl.load_workbook(input_path, data_only=True)
+    units = {}
+
+    def unit(name):
+        e = units.get(name)
+        if e is None:
+            e = units[name] = {
+                "tons": None,
+                "axes": {"eatDb": set(), "eatWb": set(),
+                         "oaCooling": set(), "airflow": set()},
+                "cooling": {},
+                "heating": {"airflow": set(), "oa": set(), "capacity": {}},
+            }
+        return e
+
+    ws = wb["Cooling"]
+    h = _gp_headers(ws)
+    need = ["Model", "Tons", "CFM", "EAT DB (°F)", "EAT WB (°F)", "OA DB (°F)",
+            "MBh", "Sensible MBh"]
+    missing = [n for n in need if n not in h]
+    if missing:
+        raise ValueError(f"Cooling sheet is missing column(s): {missing}")
+    skipped = 0
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        model = row[h["Model"] - 1]
+        if not model:
+            continue
+        mbh, sens = row[h["MBh"] - 1], row[h["Sensible MBh"] - 1]
+        if not all(isinstance(x, (int, float)) for x in (mbh, sens)):
+            skipped += 1        # blank cell - never invent a value
+            continue
+        e = unit(str(model).strip())
+        e["tons"] = _gp_trim(row[h["Tons"] - 1])
+        db, wbt = row[h["EAT DB (°F)"] - 1], row[h["EAT WB (°F)"] - 1]
+        oa, cfm = row[h["OA DB (°F)"] - 1], row[h["CFM"] - 1]
+        for axis, v in (("eatDb", db), ("eatWb", wbt), ("oaCooling", oa), ("airflow", cfm)):
+            e["axes"][axis].add(v)
+        lat = round(db - sens * 1000 / (1.08 * cfm), 2)
+        e["cooling"]["|".join(_num_key(v) for v in (db, wbt, oa, cfm))] = [
+            int(round(mbh * 1000)), int(round(sens * 1000)), _gp_trim(lat)]
+
+    ws = wb["Heat Pump Heating"]
+    h = _gp_headers(ws)
+    need = ["Model", "CFM", "Indoor DB (°F)", "OA DB (°F)", "MBh"]
+    missing = [n for n in need if n not in h]
+    if missing:
+        raise ValueError(f"Heat Pump Heating sheet is missing column(s): {missing}")
+    heat_n = 0
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        model = row[h["Model"] - 1]
+        if not model or row[h["Indoor DB (°F)"] - 1] != HP_HEATING_INDOOR_DB:
+            continue
+        mbh = row[h["MBh"] - 1]
+        if not isinstance(mbh, (int, float)):
+            continue
+        e = unit(str(model).strip())
+        heat = e["heating"]
+        cfm, oa = row[h["CFM"] - 1], row[h["OA DB (°F)"] - 1]
+        heat["airflow"].add(cfm)
+        heat["oa"].add(oa)
+        heat["capacity"].setdefault(_num_key(cfm), {})[_num_key(oa)] = int(round(mbh * 1000))
+        heat_n += 1
+
+    for e in units.values():
+        e["axes"] = {k: sorted(_gp_trim(x) for x in v) for k, v in e["axes"].items()}
+        e["heating"]["airflow"] = sorted(_gp_trim(x) for x in e["heating"]["airflow"])
+        e["heating"]["oa"] = sorted(_gp_trim(x) for x in e["heating"]["oa"])
+
+    out = {
+        "_meta": {
+            "sourceFile": os.path.basename(input_path),
+            "generatedAt": datetime.now().isoformat(timespec="seconds"),
+            "unitCount": len(units),
+            "coolingKey": "eatDb|eatWb|oaCooling|airflow",
+            "coolingValue": "[total BTU/h, sensible BTU/h, LAT degF]",
+            "heating": f"BTU/h at {HP_HEATING_INDOOR_DB}F indoor DB, by airflow then outdoor DB",
+        },
+        "units": units,
+    }
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+    cool_n = sum(len(e["cooling"]) for e in units.values())
+    print(f"  -> {len(units)} units written to {os.path.basename(output_path)} "
+          f"({cool_n} cooling points, {heat_n} heating points)")
+    if skipped:
+        print(f"     ({skipped} cooling row(s) skipped - blank in the source)")
 
 
 # -----------------------------------------------------------------------------
@@ -1420,7 +1479,7 @@ def extract_schedule_notes(wb, notes_format=None):
 
     `notes_format` comes from the product config:
       "modelmap"  - two-column layout (col A = model list or "ALL",
-                    col B = note text). Used by DIFFUSERS.
+                    col B = note text). No current product uses it.
       None        - auto-detect: the Marvair three-section layout is
                     recognized by cell A1 starting with 'STANDARD
                     OPTIONS'; otherwise a flat one-note-per-row list.
@@ -1901,7 +1960,7 @@ def convert_file(input_path, config, output_path):
     }
 
     # Cloudflare Pages rejects any single file over 25 MiB. Products
-    # whose JSON would exceed that (grilles: 32k+ selections) set
+    # whose JSON would exceed that (VAVs) set
     # "splitParts" in PRODUCT_CONFIGS: the selections array is split
     # into that many contiguous chunks. The main file keeps everything
     # else (header, filters, docs, notes, searchSchema) plus chunk 1
@@ -1948,8 +2007,7 @@ def convert_file(input_path, config, output_path):
 def choose_files(candidates):
     """Ask which of the convertible files to run this time.
 
-    Converting everything takes a long while (the grille/diffuser files
-    alone are ~30 minutes), so the script lists what it found and lets
+    Converting everything takes a long while, so the script lists what it found and lets
     you convert just the file(s) you actually changed.
 
     Press Enter (or type "all") to convert everything; otherwise type the
@@ -1996,7 +2054,7 @@ def main():
     all_xlsx = [f for f in sorted(os.listdir(script_dir))
                 if f.lower().endswith(".xlsx") and not f.startswith("~$")]
     candidates = [f for f in all_xlsx
-                  if f in (CAPACITY_FILE, GAS_PACK_CAPACITY_FILE)
+                  if f in (CAPACITY_FILE, GAS_PACK_CAPACITY_FILE, HP_CAPACITY_FILE)
                   or f in PRODUCT_CONFIGS]
     skipped = [f for f in all_xlsx if f not in candidates]
 
@@ -2022,6 +2080,16 @@ def main():
                 convert_gas_pack_capacity(
                     input_path,
                     os.path.join(output_dir, GAS_PACK_CAPACITY_OUTPUT),
+                )
+                converted += 1
+            except Exception as e:
+                print(f"  ERROR processing {fname}: {e}")
+            continue
+        if fname == HP_CAPACITY_FILE:
+            try:
+                convert_hp_capacity(
+                    input_path,
+                    os.path.join(output_dir, HP_CAPACITY_OUTPUT),
                 )
                 converted += 1
             except Exception as e:

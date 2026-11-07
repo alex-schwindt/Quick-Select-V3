@@ -88,9 +88,21 @@
         { key: 'hpHeating',    label: 'Heat Pump Heating Capacity', unit: 'BTU/H' }
     ];
 
+    // The capacity-table module for the current product (HHpro.Capacity for
+    // Multi Position Splits, HHpro.HeatPumpCapacity for Packaged Heat
+    // Pumps), found through the CapacityCore registry, or null when the
+    // product has no tables loaded. Gas Pack RTUs have their own section
+    // (gasPackUiActive) and are not in the registry.
+    function capProvider() {
+        if (!state.productData || !HHpro.CapacityCore || !HHpro.CapacityCore.activeProviderFor) {
+            return null;
+        }
+        var p = HHpro.CapacityCore.activeProviderFor(state.productKey);
+        return (p && p.matchupForRow) ? p : null;
+    }
+
     function capacityUiActive() {
-        return !!(HHpro.Capacity && HHpro.Capacity.isProduct(state.productKey) &&
-                  HHpro.Capacity.hasTables() && state.productData);
+        return !!capProvider();
     }
 
     // Nominal schedule column letter behind each capacity target (used
@@ -99,12 +111,13 @@
     // carries EVERY heat-pump total letter (indoor summary + outdoor
     // duplicate) so both spellings of the schema target hide.
     function capacityNominalCols() {
-        var cols = HHpro.Capacity.columnsFor(state.productData);
+        var cols = capProvider().columnsFor(state.productData);
         return {
             coolTotal:    cols.coolTotal || null,
             coolSensible: cols.coolSensible || null,
             hpHeating:    (cols.hpTotalCols && cols.hpTotalCols[0]) || null,
-            hpHeatingAll: (cols.hpTotalCols || []).slice()
+            hpHeatingAll: (cols.hpTotalCols || []).slice(),
+            airflow:      cols.airflow || null
         };
     }
 
@@ -535,9 +548,14 @@
 
         var hint = document.createElement('p');
         hint.className = 'design-search-hint';
+        var hpInterp = !!(capProvider() && capProvider().showsEvaluatedResults);
         hint.textContent = 'Systems with capacity tables are verified at these conditions. ' +
             'A condition between rated points is evaluated at the bracketing rated points ' +
-            'with the worst case shown. Leave the conditions blank to compare nominal ratings instead.';
+            'with the worst case shown' +
+            (hpInterp ? ', except heat pump heating, which is interpolated between the ' +
+                'catalog\'s 10 °F outdoor columns' : '') +
+            '. Leave the conditions blank to compare nominal ratings instead.' +
+            (hpInterp ? ' An Airflow target (below) sets the rated airflow capacity is read at.' : '');
         box.appendChild(hint);
 
         var condGrid = document.createElement('div');
@@ -1183,8 +1201,11 @@
     // comparison and surface in a second "possible solutions" group.
     function runCapacitySearch(afterFilters, activeTargets, data, capQ) {
         var c = capQ.cond, t = c.targets;
+        var P = capProvider();
         var verified = [], nominal = [];
-        var flags = { offGrid: {}, coolOutOfRange: 0, hpOutOfRange: 0, coolNoData: 0, noTable: 0 };
+        var flags = { offGrid: {}, coolOutOfRange: 0, hpOutOfRange: 0, coolNoData: 0, noTable: 0,
+                      hpInterpolated: {}, hpAirflowNearest: {}, airflowAboveDesign: {},
+                      airflowNoRated: {} };
 
         function noteOffGrid(axisLabel, entered, og) {
             if (!og) return;
@@ -1193,11 +1214,39 @@
             f.pairs[og.lo + ' & ' + og.hi] = true;
         }
 
+        // Products whose CFM target picks the rated airflow (heat pumps):
+        // the target is taken out of the nominal gates and applied to the
+        // capacity tables instead. A system that falls back to nominal
+        // comparison still has it checked against its stored CFM.
+        var airTarget = null;
+        var gateTargets = activeTargets;
+        if (P.airflowFollowsTarget && capQ.ncols.airflow) {
+            airTarget = activeTargets.filter(function (a) {
+                return a.col === capQ.ncols.airflow;
+            })[0] || null;
+            gateTargets = activeTargets.filter(function (a) { return a !== airTarget; });
+        }
+
+        // Rated airflows inside the CFM target's window, at or below the
+        // design CFM first (capacity rated at more air than the unit will
+        // move is optimistic) - the gas pack rule. null = no CFM target.
+        function airflowPool(matchup) {
+            if (!airTarget) return { airflows: null, aboveDesign: false };
+            var cfm = airTarget.target;
+            var tol = (airTarget.tolerance || 0) / 100;
+            var inTol = ((matchup.axes && matchup.axes.airflow) || []).map(Number)
+                .filter(function (a) { return Math.abs(a - cfm) <= cfm * tol; });
+            var atOrBelow = inTol.filter(function (a) { return a <= cfm; });
+            return atOrBelow.length
+                ? { airflows: atOrBelow, aboveDesign: false }
+                : { airflows: inTol, aboveDesign: inTol.length > 0 };
+        }
+
         afterFilters.forEach(function (sel) {
             // Remaining schema targets and any nominal-mode capacity
             // targets gate every result, verified or not.
             var baseDev = 0;
-            var gates = activeTargets.concat(capQ.nominalTargets);
+            var gates = gateTargets.concat(capQ.nominalTargets);
             for (var i = 0; i < gates.length; i++) {
                 var g = bestRowDeviation(sel, gates[i]);
                 if (g == null) return;
@@ -1205,7 +1254,7 @@
             }
 
             var sd = (sel.rows && sel.rows[0] && sel.rows[0].scheduleData) || {};
-            var matchup = HHpro.Capacity.matchupForRow(sd, data);
+            var matchup = P.matchupForRow(sd, data);
 
             // Heat-pump conditions entered -> heat pumps ONLY, in both
             // result groups. Cooling-only systems (DC/other non-HP
@@ -1213,16 +1262,28 @@
             // no hp table, so they can't answer a heating question.
             if (capQ.useHp && !hasHeatPumpData(sel, capQ, matchup)) return;
 
-            var coolRes = (matchup && capQ.useCool)
-                ? HHpro.Capacity.coolingAt(matchup,
+            var pool = matchup ? airflowPool(matchup) : { airflows: null, aboveDesign: false };
+            // A CFM target no rated airflow is near: this unit can't be
+            // read at that airflow, so it is compared by nominal ratings.
+            var airflowOk = !(airTarget && pool.airflows && !pool.airflows.length);
+
+            var coolRes = (matchup && airflowOk && capQ.useCool)
+                ? P.coolingAt(matchup,
                     { oa: c.coolOa, eatDb: c.coolDb, eatWb: c.coolWb },
-                    { total: t.coolTotal, sensible: t.coolSensible })
+                    { total: t.coolTotal, sensible: t.coolSensible },
+                    pool.airflows ? { airflows: pool.airflows } : undefined)
                 : null;
-            var hpRes = (matchup && capQ.useHp)
-                ? HHpro.Capacity.hpAt(matchup, c.hpOa)
+            // Heating runs at the airflow cooling was read at, else the CFM
+            // target, else the row's scheduled CFM (providers that ignore
+            // airflow - split systems - ignore the third argument).
+            var hpCfm = (coolRes && coolRes.result && coolRes.result.airflow) ||
+                (airTarget && airTarget.target) ||
+                (capQ.ncols.airflow ? Number(sd[capQ.ncols.airflow]) : null);
+            var hpRes = (matchup && airflowOk && capQ.useHp)
+                ? P.hpAt(matchup, c.hpOa, hpCfm)
                 : null;
 
-            var verifiable = !!matchup;
+            var verifiable = !!matchup && airflowOk;
             if (coolRes && coolRes.outOfRange) { verifiable = false; flags.coolOutOfRange++; }
             if (coolRes && coolRes.noData)     { verifiable = false; flags.coolNoData++; }
             if (hpRes && hpRes.applicable && (hpRes.outOfRange || hpRes.noData)) {
@@ -1233,12 +1294,18 @@
             if (verifiable) {
                 var capDev = 0;
                 var seed = {};
+                var evald = { cooling: null, offGrid: null, hp: null,
+                              airflowAboveDesign: false };
                 if (coolRes && coolRes.result) {
                     var r = coolRes.result;
                     seed.eatDb = r.eatDb;
                     seed.eatWb = r.eatWb;
                     seed.oaCooling = r.oaCooling;
                     seed.airflow = r.airflow;
+                    evald.cooling = r;
+                    evald.offGrid = (coolRes.offGrid && Object.keys(coolRes.offGrid).length)
+                        ? coolRes.offGrid : null;
+                    evald.airflowAboveDesign = pool.aboveDesign;
                     noteOffGrid('Coil EAT (DB)', c.coolDb, coolRes.offGrid && coolRes.offGrid.eatDb);
                     noteOffGrid('Coil EAT (WB)', c.coolWb, coolRes.offGrid && coolRes.offGrid.eatWb);
                     noteOffGrid('Cooling OA Ambient', c.coolOa, coolRes.offGrid && coolRes.offGrid.oaCooling);
@@ -1255,9 +1322,17 @@
                 }
                 if (hpRes && hpRes.applicable) {
                     seed.hpAmbient = hpRes.ambientUsed;
+                    evald.hp = hpRes;
                     if (hpRes.offGrid) {
                         noteOffGrid('Heat Pump OA Ambient', c.hpOa,
                             { lo: hpRes.lo.ambient, hi: hpRes.hi.ambient });
+                    }
+                    if (hpRes.interpolated && hpRes.oaBracket) {
+                        flags.hpInterpolated[hpRes.oaBracket.lo + ' & ' + hpRes.oaBracket.hi] = true;
+                    }
+                    if (hpRes.airflowNearest) {
+                        var ncol = (P.columnsFor(data) || {}).model;
+                        flags.hpAirflowNearest[ncol ? String(sd[ncol]).slice(0, 5) : sel.id] = true;
                     }
                     if (t.hpHeating != null) {
                         var dHp = capacityMargin(hpRes.capacity, t.hpHeating, capQ.tolOf('hpHeating'));
@@ -1265,16 +1340,32 @@
                         capDev += dHp;
                     }
                 }
+                // With a CFM target the evaluated airflow's distance from it
+                // counts toward ranking, as the stored CFM would have.
+                if (airTarget && evald.cooling) {
+                    capDev += pctDev(evald.cooling.airflow, airTarget.target) || 0;
+                }
+                if (evald.airflowAboveDesign) {
+                    var acol = (P.columnsFor(data) || {}).model;
+                    flags.airflowAboveDesign[acol ? String(sd[acol]).slice(0, 5) : sel.id] = true;
+                }
                 sel.__capacitySeed = seed;
-                verified.push({ selection: sel, score: baseDev + capDev });
+                verified.push({ selection: sel, score: baseDev + capDev, evald: evald });
             } else {
                 if (!matchup) flags.noTable++;
                 var fallback = capacityFallbackTargets(capQ);
+                if (airTarget) fallback = fallback.concat([airTarget]);
                 var nomDev = 0;
                 for (var j = 0; j < fallback.length; j++) {
                     var f = bestRowDeviation(sel, fallback[j]);
                     if (f == null) return;
                     nomDev += f;
+                }
+                // Named only when the unit made the nominal list, so sizes
+                // nowhere near the CFM target don't crowd the notice.
+                if (matchup && !airflowOk) {
+                    var mcol = (P.columnsFor(data) || {}).model;
+                    flags.airflowNoRated[mcol ? String(sd[mcol]).slice(0, 5) : sel.id] = true;
                 }
                 nominal.push({ selection: sel, score: baseDev + nomDev });
             }
@@ -1286,6 +1377,10 @@
         state.results = {
             mode: 'capacity',
             verified: verified.map(pickSel),
+            // Evaluated values per verified result (same order), for
+            // products whose results show them (showsEvaluatedResults).
+            verifiedEval: verified.map(function (v) { return v.evald; }),
+            evaluatedTable: !!P.showsEvaluatedResults,
             nominal: nominal.map(pickSel),
             selections: verified.concat(nominal).map(pickSel),
             allCount: (data.selections || []).length,
@@ -1316,13 +1411,36 @@
 
     function buildFlagMessages(flags, capQ) {
         var msgs = [];
+        var P = capProvider();
+        var dropdowns = !(P && P.showsEvaluatedResults);
         Object.keys(flags.offGrid).forEach(function (axisLabel) {
             var f = flags.offGrid[axisLabel];
             var pairs = Object.keys(f.pairs).join(', ');
             msgs.push(f.entered + ' °F ' + axisLabel + ' is not a rated condition. Results were ' +
                 'evaluated at the bracketing rated points (' + pairs + ' °F) with the worst case ' +
-                'shown -- adjust the dropdowns on any result to compare.');
+                'shown' + (dropdowns ? ' -- adjust the dropdowns on any result to compare.' : '.'));
         });
+        var interp = Object.keys(flags.hpInterpolated || {});
+        if (interp.length) {
+            msgs.push(capQ.cond.hpOa + ' °F falls between the heating table\'s outdoor columns (' +
+                interp.join(', ') + ' °F). Heating capacity was interpolated between them.');
+        }
+        var nearestHp = Object.keys(flags.hpAirflowNearest || {}).sort();
+        if (nearestHp.length) {
+            msgs.push('Airflow outside the heating table for ' + nearestHp.join(', ') +
+                '; heating capacity is shown at the nearest rated airflow.');
+        }
+        var above = Object.keys(flags.airflowAboveDesign || {}).sort();
+        if (above.length) {
+            msgs.push('No rated airflow at or below the design CFM within tolerance for ' +
+                above.join(', ') + '; cooling is read at the next rated airflow above it, so ' +
+                'actual capacity will be slightly lower.');
+        }
+        var noAir = Object.keys(flags.airflowNoRated || {}).sort();
+        if (noAir.length) {
+            msgs.push(noAir.join(', ') + ': no rated airflow within the Airflow tolerance, so ' +
+                'listed under nominal ratings below.');
+        }
         if (flags.coolOutOfRange) {
             msgs.push(flags.coolOutOfRange + ' system(s) have cooling tables that do not cover these ' +
                 'conditions and were compared by nominal ratings instead.');
@@ -1774,6 +1892,181 @@
         return tableWrap;
     }
 
+    // Verified results for products whose schedule has no capacity
+    // dropdowns (Packaged Heat Pumps): a table of the values read from the
+    // capacity tables at the design conditions, beside the schedule fields
+    // that identify the unit. Like the gas pack results, it is deliberately
+    // not the product schedule, so an evaluated number can't be mistaken
+    // for the standard rating stored there.
+    var EVAL_COLUMNS = [
+        { label: 'Model', col: 'model', cls: 'gp-col-model' },
+        { label: 'Nom Tons', col: 'tons' },
+        { label: 'Blower', col: 'blower' },
+        { label: 'Volt/PH', col: 'voltage' },
+        { label: 'Elec Heat (kW)', col: 'elecKw' },
+        { label: 'HGRH', col: 'hgrh' },
+        { label: 'CFM', group: 'Cooling', get: function (e) { return e.cooling && e.cooling.airflow; } },
+        { label: 'OA DB (°F)', group: 'Cooling', get: function (e) { return e.cooling && e.cooling.oaCooling; } },
+        { label: 'EDB (°F)', group: 'Cooling', get: function (e) { return e.cooling && e.cooling.eatDb; } },
+        { label: 'EWB (°F)', group: 'Cooling', get: function (e) { return e.cooling && e.cooling.eatWb; } },
+        { label: 'LDB (°F)', group: 'Cooling', get: function (e) { return e.cooling && fmt(e.cooling.lat, 1); } },
+        { label: 'Total (BTU/h)', group: 'Cooling', get: function (e) { return e.cooling && fmtInt(e.cooling.total); } },
+        { label: 'Sensible (BTU/h)', group: 'Cooling', get: function (e) { return e.cooling && fmtInt(e.cooling.sensible); } },
+        { label: 'OA DB (°F)', group: 'Heat Pump Heating', get: function (e) { return e.hp && e.hp.ambientUsed; } },
+        { label: 'CFM', group: 'Heat Pump Heating', get: function (e) { return e.hp && e.hp.airflowUsed; } },
+        { label: 'Capacity (BTU/h)', group: 'Heat Pump Heating', get: function (e) { return e.hp && fmtInt(e.hp.capacity); } }
+    ];
+
+    // Electric-heat options are separate selections that the product
+    // schedule folds into one row with a kW dropdown (data.js kwVariants).
+    // Fold them with the schedule's own grouping (HHpro.Schedule.
+    // groupKwFamilies), so a unit appears once with its heater sizes
+    // listed. Capacity never depends on the heater; each group keeps its
+    // best-ranked member's evaluated values (groups come out in rank
+    // order) and the family's default (no-heat) selection as its face.
+    function foldKwVariants(selections, evals) {
+        var product = HHpro.Data.getProduct(state.productKey) || {};
+        var kv = product.kwVariants;
+        if (!kv) {
+            return selections.map(function (s, i) { return { sel: s, evald: evals[i], kws: null }; });
+        }
+        var evalById = {};
+        selections.forEach(function (s, i) {
+            if (!(s.id in evalById)) evalById[s.id] = evals[i];
+        });
+        return HHpro.Schedule.groupKwFamilies(selections, kv).map(function (fam) {
+            return {
+                sel: fam.defaultSel,
+                evald: evalById[fam.variants[0].sel.id] || evalById[fam.defaultSel.id],
+                kws: fam.variants.map(function (v) {
+                    return (v.kw == null || v.kw === '') ? '-' : String(v.kw);
+                })
+            };
+        });
+    }
+
+    function buildEvaluatedTable(selections, evals) {
+        var cols = capProvider().columnsFor(state.productData);
+        var groups = foldKwVariants(selections, evals);
+        // Drop a whole group when nothing in it was evaluated (cooling-only
+        // or heating-only search).
+        var anyCool = evals.some(function (e) { return e && e.cooling; });
+        var anyHp = evals.some(function (e) { return e && e.hp; });
+        var columns = EVAL_COLUMNS.filter(function (c) {
+            if (c.group === 'Cooling') return anyCool;
+            if (c.group === 'Heat Pump Heating') return anyHp;
+            return !c.col || cols[c.col];
+        });
+
+        var tableWrap = document.createElement('div');
+        tableWrap.className = 'schedule-wrap design-search-schedule-wrap';
+        var table = document.createElement('table');
+        table.className = 'schedule-table design-gp-table design-eval-table';
+
+        var thead = document.createElement('thead');
+        var groupRow = document.createElement('tr');
+        var headRow = document.createElement('tr');
+        var actionsHead = document.createElement('th');
+        actionsHead.className = 'actions-head';
+        actionsHead.rowSpan = 2;
+        groupRow.appendChild(actionsHead);
+        var i = 0;
+        while (i < columns.length) {
+            var g = columns[i].group || null;
+            var span = 1;
+            while (i + span < columns.length && (columns[i + span].group || null) === g) span++;
+            var th = document.createElement('th');
+            th.colSpan = span;
+            th.textContent = g || '';
+            if (!g) th.className = 'design-gp-group-blank';
+            groupRow.appendChild(th);
+            i += span;
+        }
+        columns.forEach(function (c) {
+            var h = document.createElement('th');
+            h.textContent = c.label;
+            headRow.appendChild(h);
+        });
+        thead.appendChild(groupRow);
+        thead.appendChild(headRow);
+        table.appendChild(thead);
+
+        var tbody = document.createElement('tbody');
+        groups.forEach(function (grp) {
+            var sel = grp.sel;
+            var e = grp.evald || {};
+            var sd = (sel.rows && sel.rows[0] && sel.rows[0].scheduleData) || {};
+            var tr = document.createElement('tr');
+
+            var actionsTd = document.createElement('td');
+            actionsTd.className = 'actions-cell';
+            var actions = document.createElement('div');
+            actions.className = 'actions-row design-gp-actions';
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'action-btn action-btn-select';
+            btn.textContent = 'Select';
+            btn.title = 'Opens this unit on the ' + (HHpro.Data.getProduct(state.productKey) || {}).displayName +
+                ' schedule (standard rating).';
+            btn.addEventListener('click', function () {
+                HHpro.App.showView('product', {
+                    productKey: state.productKey,
+                    focusSelectionId: sel.id
+                });
+            });
+            actions.appendChild(btn);
+            actionsTd.appendChild(actions);
+            tr.appendChild(actionsTd);
+
+            columns.forEach(function (c) {
+                var td = document.createElement('td');
+                if (c.cls) td.className = c.cls;
+                var v = (c.col === 'elecKw' && grp.kws) ? grp.kws.join(' / ')
+                    : (c.col ? sd[cols[c.col]] : c.get(e));
+                td.textContent = (v == null || v === '') ? '—' : String(v);
+                tr.appendChild(td);
+            });
+
+            // Say on the row itself how each number was read.
+            var notes = [];
+            if (e.offGrid) {
+                notes.push('Cooling evaluated at the worst-case bracketing rated point: ' +
+                    Object.keys(e.offGrid).map(function (k) {
+                        return k + ' ' + e.offGrid[k].lo + '–' + e.offGrid[k].hi;
+                    }).join(', '));
+            }
+            if (e.airflowAboveDesign) {
+                notes.push('Cooling is rated at ' + e.cooling.airflow + ' CFM, above the design CFM ' +
+                    '(no lower rated airflow within tolerance) - actual capacity will be slightly lower.');
+            }
+            if (e.hp && e.hp.interpolated && e.hp.oaBracket) {
+                notes.push('Heating interpolated between the ' + e.hp.oaBracket.lo + ' °F and ' +
+                    e.hp.oaBracket.hi + ' °F outdoor columns.');
+            }
+            if (e.hp && e.hp.airflowBracket) {
+                notes.push('Heating shown at ' + e.hp.airflowUsed + ' CFM, the weaker of the rated ' +
+                    'airflows ' + e.hp.airflowBracket.lo + ' and ' + e.hp.airflowBracket.hi + ' CFM.');
+            }
+            if (e.hp && e.hp.airflowNearest) {
+                notes.push('Heating shown at ' + e.hp.airflowUsed + ' CFM, the nearest rated airflow ' +
+                    'in the heating table.');
+            }
+            if (notes.length) {
+                tr.title = notes.join('\n');
+                tr.classList.add('design-gp-offgrid');
+            }
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        tableWrap.appendChild(table);
+
+        HHpro.Schedule.applyStickyHeaderOffsets(table);
+        requestAnimationFrame(function () {
+            if (table.isConnected) HHpro.Schedule.applyStickyHeaderOffsets(table);
+        });
+        return tableWrap;
+    }
+
     // Results for a condition-aware search: systems verified against
     // their capacity tables first, then possible solutions compared by
     // nominal ratings, with any off-grid / out-of-range flags between.
@@ -1787,7 +2080,11 @@
 
         var title = document.createElement('h2');
         title.className = 'design-search-section-title design-search-results-title';
-        var n = res.verified.length + res.nominal.length;
+        // An evaluated table folds electric-heat variants into one row, so
+        // count rows as shown.
+        var verifiedShown = res.evaluatedTable
+            ? foldKwVariants(res.verified, res.verifiedEval).length : res.verified.length;
+        var n = verifiedShown + res.nominal.length;
         var titleText = document.createElement('span');
         titleText.textContent = 'Results';
         title.appendChild(titleText);
@@ -1864,7 +2161,17 @@
             return sub;
         }
 
-        if (res.verified.length) {
+        if (res.verified.length && res.evaluatedTable) {
+            wrap.appendChild(subSection(
+                'Verified at design conditions (' + verifiedShown + ')',
+                'Values are read from the manufacturer\'s capacity tables at your design ' +
+                'conditions -- worst-case rated point when a cooling condition falls between ' +
+                'rated points. Select opens the unit on the product schedule, which lists its ' +
+                'standard rating (80/67 °F, 95 °F ambient; heating at 47 °F and 17 °F).',
+                'design-search-subtitle-verified'
+            ));
+            wrap.appendChild(buildEvaluatedTable(res.verified, res.verifiedEval));
+        } else if (res.verified.length) {
             wrap.appendChild(subSection(
                 'Verified at design conditions (' + res.verified.length + ')',
                 'Capacity columns show rated performance at your design conditions -- worst-case ' +

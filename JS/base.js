@@ -103,7 +103,7 @@
             return findKwFamilyForSelection(data, productKey, selectionId);
         },
         // Data columns with no value in any row of `selections`. Used by
-        // products flagged with hideEmptyColumns in data.js (diffusers)
+        // products flagged with hideEmptyColumns in data.js
         // to drop the columns that don't apply to the models in view -
         // on the browse page, the project schedule, and the exports.
         emptyDataColumns: function (data, selections) {
@@ -343,7 +343,7 @@
             ? params.modelQuery.trim()
             : null;
 
-        // Optional per-product intro section (e.g. the diffuser model
+        // Optional per-product intro section (e.g. a model
         // gallery) rendered between the title block and the filter bar.
         // Populated after the filter callbacks below exist, since the
         // section may drive the filters (see introApi).
@@ -399,7 +399,7 @@
             });
         }
 
-        // Per-product intro section (diffuser model gallery). The api
+        // Per-product intro section (model gallery). The api
         // lets the section read + drive the filter state and re-sync
         // itself after every filter change.
         var introListeners = [];
@@ -608,7 +608,7 @@
                 scheduleWrap.appendChild(zero);
                 return;
             }
-            // Products with very large datasets (grilles: 32k+ rows) cap
+            // Products with very large datasets (data.js maxBrowseRows) cap
             // how many rows the browse table renders at once; the status
             // line still reports the true match count and a notice tells
             // the user to narrow the filters to see the rest.
@@ -637,7 +637,17 @@
             var wantId = params && params.focusSelectionId;
             if (!wantId) return;
             var visible = applyFilters(data.selections || [], filterValues);
-            var idx = visible.findIndex(function (s) { return s.id === wantId; });
+            var idx;
+            if (product && product.kwVariants) {
+                // kW-merging products render one row per kW family, so the
+                // row is the family that holds the selection, not the
+                // selection's position in the filtered list.
+                idx = groupKwFamilies(visible, product.kwVariants).findIndex(function (fam) {
+                    return fam.variants.some(function (v) { return v.sel.id === wantId; });
+                });
+            } else {
+                idx = visible.findIndex(function (s) { return s.id === wantId; });
+            }
             if (idx < 0) return;
             var rows = table.querySelectorAll('tbody tr');
             var tr = rows[idx];
@@ -760,7 +770,7 @@
             var hasValue = current !== null && current !== undefined;
 
             // Multi-model sheets leave many columns blank for most models
-            // (e.g. CORE STYLE only applies to SMD diffusers). Once the
+            // (e.g. a filter that only applies to some models). Once the
             // current selection has no values for a filter, its dropdown
             // would offer nothing but "All" - hide it instead of showing
             // a dead control. It reappears as soon as the selection
@@ -963,7 +973,7 @@
                 product && product.productKey, data, selections
             ).forEach(function (letter) { hiddenSet[letter] = true; });
         }
-        // Products with hideEmptyColumns (diffusers): drop any data
+        // Products with hideEmptyColumns: drop any data
         // column that has no value in the rows currently in view, so
         // e.g. filtering to SPD hides the columns that only apply to
         // other models (APPLICATION, DUCT SIZE, CFM/SIDE, ...).

@@ -224,7 +224,7 @@
     flex-shrink: 0;
 }
 
-/* Notice shown when a large product (grilles) caps how many rows the
+/* Notice shown when a large product caps how many rows the
    browse table renders at once (data.js maxBrowseRows). */
 .schedule-row-cap-notice {
     font-size: var(--font-size-sm);
@@ -606,7 +606,7 @@
     max-width: min(520px, calc(100% - var(--space-xl) * 2));
 }
 /* ============================================================
-   Diffuser model gallery (product intro section)
+   Model gallery (product intro section, data.js modelGallery)
    ------------------------------------------------------------
    A row of picture cards above the filter bar - one per model
    family. Clicking a card filters the schedule to that model
@@ -722,7 +722,7 @@
     text-transform: capitalize;
 }
 
-/* Narrower windows: tighten the strip so even the 15-card grille
+/* Narrower windows: tighten the strip so even a 15-card
    gallery fits a ~1200px window without resorting to horizontal
    scrolling. */
 @media (max-width: 1440px) {
@@ -752,9 +752,9 @@
 }
 
 /* ============================================================
-   Core-style icon row (diffusers, SMD/AMD family)
+   Core-style icon row (data.js coreStyles; no current product)
    ------------------------------------------------------------
-   A single horizontal row of Price core-style icons under the
+   A single horizontal row of core-style icons under the
    model gallery. Visible only while an SMD-family model is
    selected. Icons present in the data act as CORE STYLE filter
    buttons; the rest render dimmed as reference only.

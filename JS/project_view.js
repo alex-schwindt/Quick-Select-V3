@@ -205,6 +205,15 @@
         var modeLabel = activeState.mode === 'project' ? 'Project' : 'Temporary cart';
         meta.textContent = modeLabel + ' \u00b7 ' + count + ' item' + (count === 1 ? '' : 's');
         left.appendChild(meta);
+        if (activeState.hiddenItems) {
+            var hidden = document.createElement('p');
+            hidden.className = 'project-meta project-hidden-items';
+            hidden.textContent = activeState.hiddenItems + ' item' +
+                (activeState.hiddenItems === 1 ? ' is' : 's are') +
+                ' hidden: ' + (activeState.hiddenItems === 1 ? 'its' : 'their') +
+                ' product section is no longer offered.';
+            left.appendChild(hidden);
+        }
 
         // Only offer the layout selector when this login can use more
         // than the standard layout (i.e. has an engineer template).
@@ -650,7 +659,7 @@
     // Product keys whose JSON files include a refrigerantColumns block.
     // Adding a new product here is the only code change needed when you
     // start emitting refrigerantColumns for a new product type.
-    var REFRIGERANT_PRODUCT_KEYS = ['mini_splits', 'multi_position_splits', 'gas_splits'];
+    var REFRIGERANT_PRODUCT_KEYS = ['mini_splits', 'multi_position_splits'];
 
     // Product tabs that fold into the combined "Split Systems" schedule when
     // it's active (see showSplitSystemsTab).
@@ -814,8 +823,7 @@
     // Adding a new product here is the only change needed when its
     // refrigerant data lands in JSON.
     var MODEL_COLS_BY_PRODUCT = {
-        // Midea layout (sensible capacity column removed, so these sit one
-        // letter left of the old Daikin layout's M/N and V/W).
+        // Midea layout.
         'mini_splits': {
             indoor:  { make: 'L', model: 'M' },
             outdoor: { make: 'U', model: 'V' }
@@ -823,10 +831,6 @@
         'multi_position_splits': {
             indoor:  { make: 'A', model: 'B' },
             outdoor: { make: 'R', model: 'S' }
-        },
-        'gas_splits': {
-            indoor:  { make: 'A', model: 'B' },
-            outdoor: { make: 'Q', model: 'R' }
         }
     };
 
@@ -1304,25 +1308,7 @@
     // Last cell in each refrigerant row -- a link to the most relevant
     // PDF for the selected system:
     //
-    //   Multi Position Splits:
-    //     - Long Line Set Guide (Light Commercial Three Phase) when the
-    //       outdoor unit is 208/3 or 460/3.
-    //     - Long Line Set Guide (Unitary Single Phase) when the outdoor
-    //       unit is 208/1, the system is 1.5-5 ton, AND the compressor
-    //       is NOT an inverter (the guide doesn't apply to inverter-
-    //       driven systems).
-    //     - Otherwise: outdoor unit Installation Manual.
-    //
-    //   Gas Splits:
-    //     Same rules as Multi Position Splits, but the outdoor electrical
-    //     column is S (vs W) and includes a frequency segment in the
-    //     middle of the string (e.g. "208/60/1" vs "208/1"); compressor
-    //     stages are in column Z (vs AD). Phase is matched off the last
-    //     "/N" segment so both formats are handled consistently.
-    //
-    //   Mini Splits:
-    //     The long-line-set guides don't apply -- always link to the
-    //     outdoor unit's installation manual.
+    //   Every product links the outdoor unit's installation manual.
     // -----------------------------------------------------------------
 
     function buildReferenceCell(item, selection, data) {
@@ -1350,52 +1336,6 @@
         var product = (HHpro.Data && HHpro.Data.getProduct)
             ? HHpro.Data.getProduct(item.productKey) : null;
         var assetsFolder = (product && product.assetsFolder) || '';
-
-        // Daikin long line set guides - only the retired Daikin Gas Splits
-        // data uses them; the Fraser Johnston unitary splits don't.
-        if (item.productKey === 'gas_splits') {
-            var rows = (selection && selection.rows) || [];
-            var firstRow = rows[0] || {};
-            var sched = firstRow.scheduleData || {};
-            var filterData = firstRow.filterData || {};
-
-            // Gas Splits writes voltage as "208/60/1" in S and stages in Z.
-            var elecCol = 'S';
-            var stagesCol = 'Z';
-
-            var outdoorElectrical = String(sched[elecCol] || '').trim();
-            var stages = String(sched[stagesCol] || '').trim().toLowerCase();
-            var size = parseFloat(filterData['SIZE']);
-
-            // Voltage = first "/" segment; phase = last "/" segment. This
-            // handles both "208/1" (Multi Position) and "208/60/1" (Gas
-            // Splits) without product-specific string equality checks.
-            var parts = outdoorElectrical.split('/');
-            var voltage = parts[0] || '';
-            var phase = parts.length > 1 ? parts[parts.length - 1] : '';
-
-            var isThreePhase = phase === '3' && (voltage === '208' || voltage === '460');
-            var isUnitarySinglePhase = phase === '1' && voltage === '208' &&
-                                        !isNaN(size) && size >= 1.5 && size <= 5 &&
-                                        stages !== 'inverter';
-
-            if (isThreePhase) {
-                return {
-                    url: encodeURI(assetsFolder +
-                        '/Long Line Set Application Guide - Light Commercial Three Phase.pdf'),
-                    label: 'Long Line Set Guide',
-                    title: 'Long Line Set Application Guide — Light Commercial Three Phase'
-                };
-            }
-            if (isUnitarySinglePhase) {
-                return {
-                    url: encodeURI(assetsFolder +
-                        '/Long Line Set Application Guide - Unitary Single Phase.pdf'),
-                    label: 'Long Line Set Guide',
-                    title: 'Long Line Set Application Guide — Unitary Single Phase'
-                };
-            }
-        }
 
         return resolveOutdoorIomLink(assetsFolder, selection, data);
     }
@@ -2234,7 +2174,7 @@
         if (HHpro.Capacity && HHpro.Capacity.scheduleHiddenColumns) {
             hidden = HHpro.Capacity.scheduleHiddenColumns(productKey, data, sels);
         }
-        // hideEmptyColumns products (diffusers): also hide any data
+        // hideEmptyColumns products: also hide any data
         // column that's empty for every item in the project, so the
         // schedule only shows the columns relevant to its models.
         var product = HHpro.Data && HHpro.Data.getProduct
@@ -2922,7 +2862,7 @@
             HHpro.App.showView('project_view');
         });
 
-        // Model-mapped notes context (diffusers): numbers the visible
+        // Model-mapped notes context: numbers the visible
         // schedule notes once per render so each row's Accessories cell
         // can cite the note numbers that apply to its model.
         var notesCtx = (HHpro.ModelNotes && HHpro.ModelNotes.isModelMap(data))
@@ -3303,7 +3243,7 @@
         td.className = 'project-sched-acc-cell';
         if (numRows > 1) td.rowSpan = numRows;
 
-        // Model-mapped notes (diffusers): the applicable schedule-note
+        // Model-mapped notes: the applicable schedule-note
         // numbers are generated automatically and shown as a fixed
         // prefix; the text input holds only the user's extra text
         // (options like "BN, EHT"), appended after the numbers.
@@ -3428,8 +3368,7 @@
 
     function hasIndoorTagColumn(productKey) {
         return productKey === 'mini_splits' ||
-               productKey === 'multi_position_splits' ||
-               productKey === 'gas_splits';
+               productKey === 'multi_position_splits';
     }
 
     function hasConfigurationColumn(productKey) {
@@ -3463,8 +3402,7 @@
 
     function getPrimaryTagLabel(productKey) {
         return (productKey === 'mini_splits' ||
-                productKey === 'multi_position_splits' ||
-                productKey === 'gas_splits')
+                productKey === 'multi_position_splits')
             ? 'Outdoor Tag' : 'Tag';
     }
 
@@ -3799,7 +3737,6 @@
             case 'marvair':                return 'AC-';
             case 'mini_splits':            return 'ODU-';
             case 'multi_position_splits':  return 'CU-';
-            case 'gas_splits':             return 'CU-';
             default:                       return 'EQ-';
         }
     }
@@ -3813,7 +3750,6 @@
         switch (productKey) {
             case 'mini_splits':            return 'IDU-';
             case 'multi_position_splits':  return 'AHU-';
-            case 'gas_splits':             return 'AHU-';
             default:                       return null;
         }
     }
@@ -5001,7 +4937,7 @@
     }
 
     // =================================================================
-    // Model-mapped notes layout (diffusers)
+    // Model-mapped notes layout (notesFormat 'modelmap')
     // -----------------------------------------------------------------
     // Only the notes applicable to the models actually in the project
     // are shown, numbered in sheet order. The numbers match what the

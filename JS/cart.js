@@ -524,12 +524,24 @@
     // Active-state reads & writes
     // =================================================================
 
+    // Items whose product section no longer exists (sections removed from
+    // the site, e.g. Gas Splits, Diffusers, Grilles in 11/2026) are left
+    // in the saved project untouched but kept out of every read, so the
+    // project's tabs, Files and exports work for everything else.
+    // hiddenItems counts them for the project page's notice.
+    function knownProduct(item) {
+        return !(HHpro.Data && HHpro.Data.getProduct) ||
+            !!HHpro.Data.getProduct(item && item.productKey);
+    }
+
     function getActiveState() {
+        var items = state.items.filter(knownProduct);
         return {
             mode: state.mode,
             projectId: state.projectId,
             name: state.name,
-            items: state.items.slice(),
+            items: items,
+            hiddenItems: state.items.length - items.length,
             extra: deepClone(state.extra),
             engineer: state.engineer || defaultEngineer()
         };
@@ -949,7 +961,8 @@
         if (!panel) return;
         panelTitle.textContent = state.name || 'Cart';
 
-        if (!state.items.length) {
+        var shown = state.items.filter(knownProduct);
+        if (!shown.length) {
             panelEmpty.style.display = '';
             panelItemsList.innerHTML = '';
             return;
@@ -958,7 +971,7 @@
 
         var groups = {};
         var order = [];
-        state.items.forEach(function (it) {
+        shown.forEach(function (it) {
             if (!groups[it.productKey]) {
                 groups[it.productKey] = [];
                 order.push(it.productKey);
@@ -1020,8 +1033,9 @@
 
     function renderToggle() {
         if (!toggleBtn) return;
-        toggleCount.textContent = String(state.items.length);
-        toggleBtn.classList.toggle('cart-toggle-has-items', state.items.length > 0);
+        var shownCount = state.items.filter(knownProduct).length;
+        toggleCount.textContent = String(shownCount);
+        toggleBtn.classList.toggle('cart-toggle-has-items', shownCount > 0);
         // Label follows the active context: project name when working
         // inside a project, "Cart" otherwise. Matches the panel title.
         // Only the text span changes - the icon next to it stays put.

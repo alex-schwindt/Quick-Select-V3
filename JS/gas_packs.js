@@ -436,7 +436,7 @@
      * Each item also keeps its label ("3 TON KJ037N06D2BEAAA5A1"), so a
      * stale item is re-pointed to the row with the same cabinet, voltage,
      * blower, heat size and reheat, and its label refreshed. Items whose
-     * old model can't be read (pre-TempMaster Daikin numbers) are left as
+     * old model can't be read (numbers from before the TempMaster data) are left as
      * they are. Runs at startup, before the cart loads.
      */
     var PROJECTS_KEY = 'hhpro_projects';

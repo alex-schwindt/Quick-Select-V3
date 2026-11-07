@@ -287,7 +287,7 @@ WHAT'S IN THE GRID
             hidden = (HHpro.Capacity && HHpro.Capacity.scheduleHiddenColumns)
                 ? HHpro.Capacity.scheduleHiddenColumns(productKey, data, defSels)
                 : [];
-            // hideEmptyColumns products (diffusers): mirror the on-screen
+            // hideEmptyColumns products: mirror the on-screen
             // default of dropping columns with no data for these items.
             var hepProduct = HHpro.Data && HHpro.Data.getProduct
                 ? HHpro.Data.getProduct(productKey) : null;
@@ -434,7 +434,7 @@ WHAT'S IN THE GRID
         // --- Data rows ------------------------------------------------
         var curRow = numHeaderRows;
 
-        // Model-mapped notes context (diffusers): drives the auto note
+        // Model-mapped notes context: drives the auto note
         // numbers in the Accessories column and the notes section below.
         var notesCtx = (HHpro.ModelNotes && HHpro.ModelNotes.isModelMap(data))
             ? HHpro.ModelNotes.buildContext(productKey, data, items)
@@ -1309,7 +1309,7 @@ WHAT'S IN THE GRID
             return;
         }
 
-        // Model-mapped format (diffusers): only the notes applicable to
+        // Model-mapped format: only the notes applicable to
         // the models in the schedule, numbered to match the Accessories
         // column. Custom notes continue the numbering. When the legend
         // image applies, the notes box narrows and the legend box sits
@@ -1515,11 +1515,9 @@ WHAT'S IN THE GRID
             'cambridge':              'DIRECT GAS-FIRED HEATER SCHEDULE',
             'mini_splits':            'MINI SPLIT SCHEDULE',
             'multi_position_splits':  'UNITARY & LIGHT COMMERCIAL SPLIT SYSTEM SCHEDULE',
-            'gas_splits':             'GAS SPLIT SCHEDULE',
             'water_source_heat_pumps': 'WATER SOURCE HEAT PUMP SCHEDULE',
             'stocked_chillers':       'AIR-COOLED CHILLER SCHEDULE',
             'vfds':                   'VFD SCHEDULE',
-            'diffusers':              'DIFFUSER SCHEDULE',
             'gps':                    'AIR IONIZATION DEVICE SCHEDULES'
         };
         return titles[productKey] || 'SCHEDULE';
@@ -1565,7 +1563,7 @@ WHAT'S IN THE GRID
             capacityField: cellData.capacityField || '',
             // kW-variant field (on-screen renderer binds the kW dropdown).
             kwSelect: !!cellData.kwSelect,
-            // Legend box cell (diffusers): the HTML/PDF renderer puts
+            // Legend box cell (data.js notesLegend): the HTML/PDF renderer puts
             // the legend image inside this cell; XLSX anchors the
             // drawing over it.
             legendCell: !!cellData.legendCell
@@ -1661,7 +1659,7 @@ WHAT'S IN THE GRID
      * Build a multi-sheet xlsx blob. sheets = [{title, grid}, ...].
      * Each section becomes its own worksheet in the workbook.
      *
-     * Grids carrying a legendImage (diffusers "SMD & AMD Options") get
+     * Grids carrying a legendImage (data.js notesLegend) get
      * the image embedded below the notes section via a per-sheet
      * drawing part. Image bytes are fetched up front; a fetch failure
      * simply drops the image rather than failing the export.
@@ -1727,7 +1725,7 @@ WHAT'S IN THE GRID
 
     /**
      * Drawing part XML for the grid's legend image. When the grid has
-     * a legendAnchor (diffusers: legend box to the right of the notes
+     * a legendAnchor (legend box to the right of the notes
      * inside the schedule frame), the image is anchored inside that
      * box, sized to its column span. Otherwise it falls back to one
      * row below the grid at ~560 px wide. Aspect ratio is preserved.
@@ -2297,7 +2295,7 @@ WHAT'S IN THE GRID
     /**
      * Fallback legend block below the table - used only when the grid
      * has a legend image but no in-schedule legend box (non-modelmap
-     * grids). Diffuser grids render the legend inside the notes rows
+     * grids). Grids with a notesLegend render it inside the notes rows
      * via the legendCell instead.
      */
     function renderLegendHtml(grid) {
@@ -2454,7 +2452,7 @@ WHAT'S IN THE GRID
                 var attrs = '';
                 if (cell.rowSpan > 1) attrs += ' rowspan="' + cell.rowSpan + '"';
                 if (cell.colSpan > 1) attrs += ' colspan="' + cell.colSpan + '"';
-                // Legend box cell (diffusers): title + the legend image
+                // Legend box cell (notesLegend): title + the legend image
                 // inside the schedule frame, to the right of the notes.
                 if (cell.legendCell && grid.legendImage) {
                     out.push('<td' + attrs + ' class="legend-cell">' +
@@ -2493,8 +2491,7 @@ WHAT'S IN THE GRID
 
     function hasIndoorTagColumn(productKey) {
         return productKey === 'mini_splits' ||
-               productKey === 'multi_position_splits' ||
-               productKey === 'gas_splits';
+               productKey === 'multi_position_splits';
     }
 
     function hasConfigurationColumn(productKey) {
@@ -2517,8 +2514,7 @@ WHAT'S IN THE GRID
 
     function getPrimaryTagLabel(productKey) {
         if (productKey === 'mini_splits' ||
-            productKey === 'multi_position_splits' ||
-            productKey === 'gas_splits') {
+            productKey === 'multi_position_splits') {
             return 'Outdoor Tag';
         }
         return 'Tag';
@@ -2639,11 +2635,9 @@ WHAT'S IN THE GRID
             'cambridge': 'Cambridge Direct-Fired Heaters',
             'mini_splits': 'Mini Splits',
             'multi_position_splits': 'Unitary & Light Commercial Split Systems',
-            'gas_splits': 'Gas Splits',
             'water_source_heat_pumps': 'Water Source Heat Pumps',
             'stocked_chillers': 'Air-Cooled Chillers',
-            'vfds': 'VFDs',
-            'diffusers': 'Diffusers'
+            'vfds': 'VFDs'
         };
         return fallback[productKey] || productKey;
     }
@@ -3240,7 +3234,7 @@ WHAT'S IN THE GRID
         // here (explicit MTEXT \P line breaks) rather than relying on the
         // CAD renderer's own width-based word-wrap, which varies between
         // viewers and let long text spill outside the cell. That includes
-        // DATA cells: values like a 30-char diffuser DESCRIPTION or the
+        // DATA cells: values like a 30-char DESCRIPTION or the
         // auto-numbered Accessories list ("1, 2, 3, ... 22") are wider
         // than their column and overflowed into the neighbours in
         // AutoCAD/LibreCAD. computeRowHeights already wraps every cell

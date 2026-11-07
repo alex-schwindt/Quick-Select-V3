@@ -62,7 +62,7 @@
     // ---- value transforms ------------------------------------------
     function s(v) { return (v === null || v === undefined) ? '' : String(v).trim(); }
 
-    // "DAIKIN" + "FTKF09BVJU9" -> "DAIKIN FTKF09BVJU9"   (mini splits;
+    // "MIDEA" + "<model>" -> "MIDEA <model>"   (mini splits;
     //  the three TempMaster-branded lines read "TEMPMASTER" here)
     function combine(make, model) {
         return [s(make), s(model)].filter(Boolean).join(' ');

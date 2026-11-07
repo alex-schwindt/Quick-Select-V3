@@ -70,7 +70,7 @@
             // match a TYPE (INDOOR UNIT #1) filter value exactly -
             // clicking a card filters the schedule to that indoor type.
             // Photos are the indoor-unit shots from the Midea submittal
-            // PDFs, flood-filled onto black like the Price "(Black)" renders.
+            // PDFs, flood-filled onto black.
             typeGallery: [
                 { type: 'Wall Mounted',        picture: 'DATA/PICTURES/MINI SPLIT TYPES/Wall Mounted (Midea).jpg' },
                 { type: 'One-Way Cassette',    picture: 'DATA/PICTURES/MINI SPLIT TYPES/One-Way Cassette.jpg' },
@@ -100,16 +100,6 @@
             // Gas columns on heat pump rows (and heat pump / kW columns on
             // gas rows) are "-": hide whatever is all "-" for the rows in view.
             hideEmptyColumns: true
-        },
-        {
-            productKey: 'gas_splits',
-            // Daikin data, hidden until rebuilt for the Nashville line card.
-            retired: true,
-            displayName: 'GAS SPLITS',
-            jsonFile: 'DATA/JSON/gas_splits.json',
-            pictureFile: 'DATA/PICTURES/GAS SPLITS.jpg',
-            assetsFolder: 'ASSETS/GAS SPLITS',
-            tileClass: 'tile-gas-splits'
         },
         {
             // Bosch CL / CF / CP / EC at AHRI water-loop ratings - see the
@@ -310,103 +300,6 @@
             autoTagPrefix: 'VFD-'
         },
         {
-            productKey: 'diffusers',
-            retired: true,
-            displayName: 'DIFFUSERS',
-            jsonFile: 'DATA/JSON/diffusers.json',
-            pictureFile: 'DATA/PICTURES/DIFFUSERS.jpg',
-            assetsFolder: 'ASSETS/DIFFUSERS',
-            tileClass: 'tile-diffusers',
-            autoTagPrefix: 'D-',
-            // The diffuser schedule holds 8 model families in one sheet,
-            // so most columns only apply to some models. Hide any data
-            // column that is empty for every row currently in view
-            // (browse page respects the active filters; the project
-            // schedule + exports respect the items in the project).
-            hideEmptyColumns: true,
-            // Model picker gallery rendered above the filters/schedule
-            // on the browse page. `model` must match the MODEL column
-            // value in the Excel data exactly - clicking a card filters
-            // the schedule to that model (via the DESCRIPTION filter).
-            modelGallery: [
-                { model: 'SPD',          picture: 'DATA/PICTURES/Price SPD (Black).jpg' },
-                { model: 'SCD',          picture: 'DATA/PICTURES/Price SCD (Black).jpg' },
-                { model: 'SPD (Return)', picture: 'DATA/PICTURES/Price SPD (Black).jpg' },
-                { model: 'SCDA',         picture: 'DATA/PICTURES/Price SCDA (Black).jpg' },
-                { model: 'SMD/AMD',      picture: 'DATA/PICTURES/Price SMD (Black).jpg' },
-                { model: 'SMD w/ SR',    picture: 'DATA/PICTURES/Price SMD (Black).jpg' },
-                { model: 'PDDR',         picture: 'DATA/PICTURES/Price PDDR (Black).jpg' }
-            ],
-            // Core-style icon row: shown under the model gallery on the
-            // browse page whenever an SMD-family model is selected.
-            // Each icon (sliced from the Price options sheet) acts as a
-            // CORE STYLE filter button - clicking selects the filter
-            // value containing that code. Icons whose code isn't in the
-            // data render dimmed as reference only.
-            coreStyles: {
-                folder: 'DATA/PICTURES/CORE STYLES',
-                codes: ['1S', '2S', '2G', '3A', '4A',
-                        '1A', '1B', '2A', '2B', '2C', '2D', '2E', '2F',
-                        '3A1', '3A2', '3B', '3C', '3E',
-                        '4B', '4C', '4E'],
-                descriptions: ['MODULAR LOUVERED FACE DIFFUSER',
-                               'MODULAR LOUVERED FACE DIFFUSER (SQUARE TO ROUND)']
-            },
-            // Core-style legend image embedded INSIDE the schedule frame
-            // (to the right of the schedule notes) on-screen and in the
-            // Excel / PDF exports whenever any of the listed models is
-            // in the project schedule.
-            notesLegend: {
-                models: ['SMD/AMD', 'SMD w/ SR'],
-                title: 'SMD/AMD CORE STYLE LEGEND:',
-                picture: 'DATA/PICTURES/SMD & AMD Options.jpg',
-                width: 1064,
-                height: 616
-            }
-        },
-        {
-            productKey: 'grilles',
-            retired: true,
-            displayName: 'GRILLES',
-            jsonFile: 'DATA/JSON/grilles.json',
-            pictureFile: 'DATA/PICTURES/GRILLES.jpg',
-            assetsFolder: 'ASSETS/GRILLES',
-            tileClass: 'tile-grilles',
-            autoTagPrefix: 'G-',
-            // 32 model groups from 13 catalogs share one sheet, so most
-            // columns only apply to some families (supply deflection
-            // columns, return neg. static pressure, linear-bar per-foot
-            // columns). Hide any data column empty for every row in view.
-            hideEmptyColumns: true,
-            // 32k+ selections - never render them all at once. The status
-            // line still shows the true match count; a notice asks the
-            // user to narrow filters past this many rows.
-            maxBrowseRows: 500,
-            // Family picker gallery (same mechanics as the diffusers,
-            // rendered by JS/grilles.js). `model` must match a MODEL
-            // column value; clicking a card filters via DESCRIPTION, so
-            // one representative model per family is enough. `label` is
-            // the card caption (family name instead of the long grouped
-            // model string).
-            modelGallery: [
-                { model: '150',                     label: '150',             picture: 'DATA/PICTURES/Price 150 (Black).jpg' },
-                { model: '21/22/31/32',             label: '20/30',           picture: 'DATA/PICTURES/Price 20-30 (Black).jpg' },
-                { model: '301/302',                 label: '300',             picture: 'DATA/PICTURES/Price 300 (Black).jpg' },
-                { model: '510/520/610/620/710/720', label: '500/600/700',     picture: 'DATA/PICTURES/Price 500-600-700 (Black).jpg' },
-                { model: '910/920',                 label: '900 GYM',         picture: 'DATA/PICTURES/Price 900 (Black).jpg' },
-                { model: '540/640',                 label: '540/640',         picture: 'DATA/PICTURES/Price 540-640 (Black).jpg' },
-                { model: 'LBP/LBPH',                label: 'LINEAR BAR',      picture: 'DATA/PICTURES/Price LBP (Black).jpg' },
-                { model: 'LBMH',                    label: 'LINEAR BAR HD',   picture: 'DATA/PICTURES/Price LBMH (Black).jpg' },
-                { model: '510Z/610Z/710Z',          label: '500/600/700 RTN', picture: 'DATA/PICTURES/Price 500-600-700 Return (Black).jpg' },
-                { model: '60/60FH',                 label: '60/70',           picture: 'DATA/PICTURES/Price Airfoil Return (Black).jpg' },
-                { model: '80/81/82',                label: 'EGG CRATE',       picture: 'DATA/PICTURES/Price Egg Crate (Black).jpg' },
-                { model: '10/10FF',                 label: 'PERFORATED',      picture: 'DATA/PICTURES/Price Perforated Return (Black).jpg' },
-                { model: '90/90FH',                 label: '90 GYM RTN',      picture: 'DATA/PICTURES/Price Return Gym (Black).jpg' },
-                { model: 'LG50',                    label: 'LATTICE',         picture: 'DATA/PICTURES/Price Lattice (Black).jpg' },
-                { model: 'STG',                     label: 'TRANSFER',        picture: 'DATA/PICTURES/Price Transfer (Black).jpg' }
-            ]
-        },
-        {
             productKey: 'gps',
             retired: true,
             displayName: 'Bipolar Ionization',
@@ -497,7 +390,7 @@
                     return resp.json();
                 })
                 .then(function (data) {
-                    // Very large products (grilles) are split across
+                    // Very large products are split across
                     // multiple JSON files to stay under Cloudflare's
                     // 25 MiB per-file asset limit. The main file lists
                     // its continuation files (selections-only chunks in

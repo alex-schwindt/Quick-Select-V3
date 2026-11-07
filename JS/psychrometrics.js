@@ -69,7 +69,7 @@
                 oa:  { enabled: false, db: 95, key: 'wb', value: 78 },
                 erv: { enabled: false, mode: 'mix', effS: 70, effL: 60, exhCfm: null },
                 ra:  { enabled: false, db: 75, key: 'rh', value: 50 },
-                flowMode: 'each', basis: 'actual',           // actual air: what the Daikin selection software uses
+                flowMode: 'each', basis: 'actual',           // actual air: what manufacturer selection software uses
                 oaCfm: 2000, raCfm: 8000, totalCfm: 10000, oaPct: 20,
                 econ: { enabled: false, mode: 'enthalpy', limitDb: 65 },
                 preheat: { enabled: false, db: 55 },

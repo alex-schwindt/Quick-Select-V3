@@ -72,7 +72,7 @@
 
         /**
          * Indoor-unit-type picker gallery above the filter bar (same look
-         * and mechanics as the diffuser model gallery, in the compact
+         * and mechanics as the data.js modelGallery, in the compact
          * size). Clicking a card sets TYPE (INDOOR UNIT #1) to that type;
          * clicking the active card clears it.
          */
@@ -135,9 +135,9 @@
     // -----------------------------------------------------------------
     // Saved-item check (runs at startup, before the cart loads)
     // -----------------------------------------------------------------
-    // The mini split data moved from Daikin to Midea (Oct 2026) and its
+    // The mini split data moved to Midea (Oct 2026) and its
     // selection ids are now built from the model numbers. A saved item
-    // whose id no longer exists is a discontinued (Daikin) system: there's
+    // whose id no longer exists is a discontinued system: there's
     // no one-to-one Midea replacement to point it at, and schedules and
     // exports already skip unresolvable items, so it is only relabelled
     // so the user can see why it dropped off.

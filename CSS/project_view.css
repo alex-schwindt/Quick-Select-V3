@@ -1856,7 +1856,7 @@
     width: 100%;
 }
 /* ============================================================
-   Model-mapped notes (diffusers)
+   Model-mapped notes (notesFormat 'modelmap')
    ------------------------------------------------------------
    Notes list + optional legend image (SMD & AMD Options) side
    by side. The legend wraps below the notes on narrow screens.
@@ -1890,7 +1890,7 @@
     padding: var(--space-xs);
 }
 
-/* Auto note numbers in the Accessories column (diffusers).
+/* Auto note numbers in the Accessories column (model-mapped notes).
    The numbers are generated from the schedule notes; the text
    input next to them holds the user's own additions. */
 .project-sched-acc-cell-auto {

@@ -42,7 +42,7 @@
         return {
             units: 'IP',
             altitude: 0,
-            basis: 'actual',          // 'std' (0.69 rule exactly) | 'actual' (site default, matches Daikin software)
+            basis: 'actual',          // 'std' (0.69 rule exactly) | 'actual' (site default, matches manufacturer selection software)
             solve: 'dp',
             room: { db: 74, key: 'rh', value: 50 },
             ql: 6400,
