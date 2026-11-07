@@ -17,14 +17,20 @@
    never guessed at.
 
    THE OFF-GRID POLICY, in one place so both products agree:
-   where a design condition lands between two rated points, each
-   axis snaps to its HARSHER neighbour - entering air (DB/WB) and
-   outdoor ambient round UP, because hotter/wetter air and a hotter
-   condenser are the tougher condition. Nothing is ever
-   interpolated and nothing outside the table's range is
-   extrapolated; out-of-range inputs come back flagged instead.
-   The result is a conservative number: real capacity at the
-   design point is at least what we report.
+   where a design condition lands between rated points, the
+   reported point is the WORST-CASE bracketing rated point.
+     - Outdoor ambient rounds UP: a hotter condenser always
+       lowers capacity.
+     - Entering air (DB/WB) can't simply round one way. On a DX
+       coil a higher entering WB raises total capacity, and at a
+       given WB a higher entering DB raises sensible capacity -
+       but a LOWER WB raises sensible. So every bracketing DB/WB
+       corner is looked up and the one where the unit looks
+       weakest against the targets is reported (see worstCorner).
+   Nothing is ever interpolated and nothing outside the table's
+   range is extrapolated; out-of-range inputs come back flagged
+   instead. The reported row is always a real rated row, so it
+   matches the schedule and the capacity dropdowns.
    ============================================================ */
 
 (function () {
@@ -64,8 +70,53 @@
         return null;
     }
 
-    // The harsher end of a bracket (see the policy note above).
+    // The harsher end of a bracket for an axis where higher is always
+    // tougher (outdoor ambient; see the policy note above).
     function harsher(b) { return (b.exact != null) ? b.exact : b.hi; }
+
+    // Both rated ends of a bracket (one value when the input is exact).
+    function ends(b) { return (b.exact != null) ? [b.exact] : [b.lo, b.hi]; }
+
+    // How strong a corner looks against the targets: the smaller of
+    // total/target and sensible/target. With no target for a metric, the
+    // corner's value relative to the best corner stands in, so the
+    // weakest corner still wins.
+    function strength(c, targets, best) {
+        var t = (targets && targets.total > 0) ? targets.total : best.total;
+        var s = (targets && targets.sensible > 0) ? targets.sensible : best.sensible;
+        var rt = t > 0 ? c.total / t : Infinity;
+        var rs = s > 0 ? c.sensible / s : Infinity;
+        return Math.min(rt, rs);
+    }
+
+    // The weakest rated DB/WB corner at one ambient + airflow, or null when
+    // none of the bracketing corners is rated. Corners missing from the
+    // table are physically impossible combinations (WB above DB) or
+    // unpublished points and are skipped, never guessed at.
+    function worstCorner(table, dbs, wbs, oa, cfm, targets) {
+        var corners = [];
+        dbs.forEach(function (db) {
+            wbs.forEach(function (wb) {
+                var r = table.cooling[[db, wb, oa, cfm].map(numStr).join('|')];
+                if (!r || !isFinite(capNum(r[0]))) return;
+                corners.push({
+                    eatDb: db, eatWb: wb, oaCooling: oa, airflow: cfm,
+                    total: capNum(r[0]), sensible: capNum(r[1]), lat: r[2]
+                });
+            });
+        });
+        if (!corners.length) return null;
+        var best = {
+            total: Math.max.apply(null, corners.map(function (c) { return c.total; })),
+            sensible: Math.max.apply(null, corners.map(function (c) { return c.sensible; }))
+        };
+        var worst = null, worstS = Infinity;
+        corners.forEach(function (c) {
+            var s = strength(c, targets, best);
+            if (s < worstS) { worst = c; worstS = s; }
+        });
+        return worst;
+    }
 
     /**
      * Cooling performance at design conditions.
@@ -104,7 +155,7 @@
         });
         if (out) return { applicable: true, outOfRange: true, ranges: ranges };
 
-        var db = harsher(br.eatDb), wb = harsher(br.eatWb), oa = harsher(br.oaCooling);
+        var dbs = ends(br.eatDb), wbs = ends(br.eatWb), oa = harsher(br.oaCooling);
         var offGrid = {};
         ['eatDb', 'eatWb', 'oaCooling'].forEach(function (f) {
             if (br[f].exact == null) offGrid[f] = { lo: br[f].lo, hi: br[f].hi };
@@ -113,14 +164,10 @@
         var pool = (opts && opts.airflows) || axes.airflow || [];
         var best = null;
         pool.map(Number).forEach(function (cfm) {
-            // Sparse tables: an airflow whose worst-case combo isn't a
-            // valid rated combination is skipped.
-            var r = table.cooling[[db, wb, oa, cfm].map(numStr).join('|')];
-            if (!r || !isFinite(capNum(r[0]))) return;
-            var c = {
-                eatDb: db, eatWb: wb, oaCooling: oa, airflow: cfm,
-                total: capNum(r[0]), sensible: capNum(r[1]), lat: r[2]
-            };
+            // Sparse tables: an airflow with no rated bracketing corner
+            // is skipped.
+            var c = worstCorner(table, dbs, wbs, oa, cfm, targets);
+            if (!c) return;
             var dev = 0;
             if (targets && targets.total > 0) {
                 dev += Math.abs(c.total - targets.total) / targets.total;

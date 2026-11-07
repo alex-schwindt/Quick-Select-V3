@@ -337,16 +337,36 @@
         return Math.abs(value - target) <= Math.abs(target) * tol;
     }
 
+    // Capacity is one-sided: a unit must deliver at least the required
+    // capacity, and may exceed it by up to the tolerance (oversizing).
+    // A unit that is short of the requirement never passes.
+    function meets(value, target, tolPct) {
+        if (target == null || !isFinite(target) || target <= 0) return true;
+        var tol = (tolPct == null ? 10 : tolPct) / 100;
+        return value >= target && value <= target * (1 + tol);
+    }
+
     function deviation(value, target) {
         if (target == null || !isFinite(target) || target <= 0) return 0;
         return Math.abs(value - target) / target;
     }
 
-    /** Rated airflows inside the CFM tolerance window. */
+    /**
+     * Rated airflows to read capacity at. Capacity rated at MORE air than
+     * the unit will actually move is optimistic, so airflows at or below
+     * the design CFM (within the tolerance) are used. Only when none
+     * exists are airflows above design (within tolerance) allowed, and
+     * the result is flagged `airflowAboveDesign`.
+     * Returns { airflows, aboveDesign }.
+     */
     function airflowsInWindow(axes, cfm, tolPct) {
         var all = ((axes || {}).airflow || []).map(Number).filter(isFinite);
-        if (cfm == null || !isFinite(cfm)) return all;
-        return all.filter(function (a) { return within(a, cfm, tolPct); });
+        if (cfm == null || !isFinite(cfm)) return { airflows: all, aboveDesign: false };
+        var inTol = all.filter(function (a) { return within(a, cfm, tolPct); });
+        var atOrBelow = inTol.filter(function (a) { return a <= cfm; });
+        return atOrBelow.length
+            ? { airflows: atOrBelow, aboveDesign: false }
+            : { airflows: inTol, aboveDesign: inTol.length > 0 };
     }
 
     /**
@@ -398,7 +418,9 @@
 
             var cfmTarget = (c.cfm && c.cfm.value) || null;
             var cfmTol = (c.cfm && c.cfm.tol);
-            var airflows = airflowsInWindow(cab.axes, cfmTarget, cfmTol);
+            var cfmWindow = airflowsInWindow(cab.axes, cfmTarget, cfmTol);
+            var airflows = cfmWindow.airflows;
+            // Wrong size for this airflow - an ordinary filter, not a skip.
             if (!airflows.length) return;
 
             var cool = core.coolingAt(
@@ -415,14 +437,20 @@
                     skipped.push({ cabinet: name, tons: cab.tons,
                                    reason: 'design condition outside the rated table',
                                    ranges: cool.ranges });
+                } else if (cool.noData) {
+                    skipped.push({ cabinet: name, tons: cab.tons,
+                                   reason: 'no rated data at this entering-air condition' });
                 }
                 return;
             }
             var r = cool.result;
-            if (!within(r.total, c.coolTotal && c.coolTotal.value,
-                        c.coolTotal && c.coolTotal.tol)) return;
-            if (!within(r.sensible, c.coolSensible && c.coolSensible.value,
-                        c.coolSensible && c.coolSensible.tol)) return;
+            if (!meets(r.total, c.coolTotal && c.coolTotal.value,
+                       c.coolTotal && c.coolTotal.tol)) return;
+            if (!meets(r.sensible, c.coolSensible && c.coolSensible.value,
+                       c.coolSensible && c.coolSensible.tol)) return;
+            // Heat rise follows the air the unit will actually move: the
+            // design CFM when one was entered, otherwise the rated airflow.
+            var heatCfm = (cfmTarget && isFinite(cfmTarget)) ? cfmTarget : r.airflow;
 
             // Voltage x motor x heat size -> one result each.
             Object.keys(cab.electrical || {}).forEach(function (voltage) {
@@ -434,7 +462,7 @@
                     if (!elec) return;
 
                     (cab.heat || []).forEach(function (h) {
-                        var heat = heatAt(h, r.airflow);
+                        var heat = heatAt(h, heatCfm);
                         if (!heat) return;   // rise outside the published range
                         if (!within(heat.riseHigh, c.heatRise && c.heatRise.value,
                                     c.heatRise && c.heatRise.tol)) return;
@@ -463,11 +491,14 @@
                                     eatDb: r.eatDb, eatWb: r.eatWb,
                                     ambient: r.oaCooling,
                                     total: r.total, sensible: r.sensible,
-                                    lat: r.lat
+                                    lat: r.lat,
+                                    // Rated at more air than the design CFM
+                                    // (no lower rated airflow was in range).
+                                    airflowAboveDesign: cfmWindow.aboveDesign
                                 },
-                                // Which axes were snapped to a harsher rated
-                                // point (null when the design point was rated
-                                // exactly).
+                                // Which axes fell between rated points and
+                                // were evaluated at the worst-case rated
+                                // point (null when rated exactly).
                                 offGrid: Object.keys(cool.offGrid || {}).length
                                     ? cool.offGrid : null,
                                 heat: heat,

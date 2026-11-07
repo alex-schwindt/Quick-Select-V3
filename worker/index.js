@@ -74,6 +74,24 @@ async function firmFile(request, env, pathname) {
 // Files under /ASSETS/ that ship with the site (dist/) rather than R2.
 const SITE_ASSET_PREFIXES = ['/ASSETS/FONTS/', '/ASSETS/favicon.svg'];
 
+// R2 folders that hold user uploads (design-request and feedback
+// attachments, server/mail.js storageKey). They share the DOCS bucket with
+// the product documents but are only ever served through their own
+// owner/admin-checked endpoints - never through /ASSETS/, which any
+// signed-in user can reach. Compared case-insensitively.
+const PRIVATE_KEY_PREFIXES = ['REQUESTS/', 'FEEDBACK/', 'STAGING/'];
+
+function isPrivateKey(key) {
+    // Also check the key decoded once more, so a double-encoded path
+    // ("REQUESTS%2F...") can't slip past the prefix check.
+    let decoded = key;
+    try { decoded = decodeURIComponent(key); } catch (e) { /* keep as is */ }
+    return [key, decoded].some((k) => {
+        const u = k.replace(/^\/+/, '').toUpperCase();
+        return PRIVATE_KEY_PREFIXES.some((p) => u.startsWith(p));
+    });
+}
+
 const CONTENT_TYPES = {
     pdf: 'application/pdf', zip: 'application/zip', dwg: 'application/acad',
     dxf: 'application/dxf', rfa: 'application/octet-stream', rvt: 'application/octet-stream',
@@ -94,7 +112,7 @@ async function docFile(request, env, pathname) {
     } catch (e) {
         return notFound();
     }
-    if (!key || key.includes('..')) return notFound();
+    if (!key || key.includes('..') || key.startsWith('/') || isPrivateKey(key)) return notFound();
 
     // Files dragged into the dashboard keep their names as typed ("MINI
     // SPLITS/..."), but `wrangler r2 object put` stores spaces and other
@@ -119,6 +137,9 @@ async function docFile(request, env, pathname) {
     }
     headers.set('ETag', object.httpEtag);
     headers.set('Accept-Ranges', 'bytes');
+    // Never let a browser guess a different type (e.g. render a mislabeled
+    // file as HTML on the site's origin).
+    headers.set('X-Content-Type-Options', 'nosniff');
     headers.set('Cache-Control', 'private, max-age=3600');
 
     if (request.method === 'HEAD') {

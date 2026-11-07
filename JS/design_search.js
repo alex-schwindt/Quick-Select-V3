@@ -723,7 +723,9 @@
         hint.className = 'design-search-hint';
         hint.textContent = 'Results come from TempMaster’s published capacity tables, not from the ' +
             'schedule’s stored selection. A condition between rated points is evaluated at the ' +
-            'harsher bracketing point, so the capacity shown is never optimistic.';
+            'worst-case bracketing rated point, so the capacity shown is never optimistic. ' +
+            'Capacity targets are minimums: a unit must meet them and may exceed them by up to ' +
+            'the tolerance.';
         box.appendChild(hint);
 
         // ----- Unit constraints -----
@@ -1077,6 +1079,15 @@
         return Math.abs(actual - target) / Math.abs(target) * 100;
     }
 
+    // Capacity is one-sided: the unit must deliver at least the target and
+    // may exceed it by up to tolPct (oversizing). Returns the % over target,
+    // or null when the unit falls short or is oversized past the tolerance.
+    function capacityMargin(actual, target, tolPct) {
+        var d = pctDev(actual, target);
+        if (d == null || actual < target || d > tolPct) return null;
+        return d;
+    }
+
     // Reads the capacity-section inputs into a query object, or null when
     // the section is absent/untouched. problems[] carries validation
     // messages (partial cooling conditions etc.) that block the search.
@@ -1231,13 +1242,13 @@
                     noteOffGrid('Coil EAT (WB)', c.coolWb, coolRes.offGrid && coolRes.offGrid.eatWb);
                     noteOffGrid('Cooling OA Ambient', c.coolOa, coolRes.offGrid && coolRes.offGrid.oaCooling);
                     if (t.coolTotal != null) {
-                        var dTot = pctDev(r.total, t.coolTotal);
-                        if (dTot == null || dTot > capQ.tolOf('coolTotal')) return;
+                        var dTot = capacityMargin(r.total, t.coolTotal, capQ.tolOf('coolTotal'));
+                        if (dTot == null) return;
                         capDev += dTot;
                     }
                     if (t.coolSensible != null) {
-                        var dSen = pctDev(r.sensible, t.coolSensible);
-                        if (dSen == null || dSen > capQ.tolOf('coolSensible')) return;
+                        var dSen = capacityMargin(r.sensible, t.coolSensible, capQ.tolOf('coolSensible'));
+                        if (dSen == null) return;
                         capDev += dSen;
                     }
                 }
@@ -1248,8 +1259,8 @@
                             { lo: hpRes.lo.ambient, hi: hpRes.hi.ambient });
                     }
                     if (t.hpHeating != null) {
-                        var dHp = pctDev(hpRes.capacity, t.hpHeating);
-                        if (dHp == null || dHp > capQ.tolOf('hpHeating')) return;
+                        var dHp = capacityMargin(hpRes.capacity, t.hpHeating, capQ.tolOf('hpHeating'));
+                        if (dHp == null) return;
                         capDev += dHp;
                     }
                 }
@@ -1297,7 +1308,7 @@
             if (t[def.key] == null) return;
             var curveMode = (def.key === 'hpHeating') ? capQ.useHp : capQ.useCool;
             if (!curveMode) return; // nominal-mode targets already chip via activeTargets
-            chips.push(def.label + ' ' + t[def.key] + ' ' + def.unit + ' ±' + capQ.tolOf(def.key) + '%');
+            chips.push(def.label + ' ' + t[def.key] + ' ' + def.unit + ' (−0/+' + capQ.tolOf(def.key) + '%)');
         });
         return chips;
     }
@@ -1575,7 +1586,9 @@
         GP_NUMERIC.forEach(function (def) {
             var t = c[def.key];
             if (t && t.value != null && !isNaN(t.value)) {
-                chips.push(def.label + ' ' + t.value + ' ' + def.unit + ' ±' + t.tol + '%');
+                var oneSided = def.key === 'coolTotal' || def.key === 'coolSensible';
+                chips.push(def.label + ' ' + t.value + ' ' + def.unit +
+                    (oneSided ? ' (−0/+' + t.tol + '%)' : ' ±' + t.tol + '%'));
             }
         });
         if (c.convOutlet) chips.push('powered convenience outlet');
@@ -1641,11 +1654,20 @@
 
             // A row evaluated off-grid says so on the row itself, not just
             // in a summary line that scrolls away.
+            var notes = [];
             if (r.offGrid) {
-                tr.title = 'Evaluated at the harsher bracketing rated point: ' +
+                notes.push('Evaluated at the worst-case bracketing rated point: ' +
                     Object.keys(r.offGrid).map(function (k) {
                         return k + ' ' + r.offGrid[k].lo + '–' + r.offGrid[k].hi;
-                    }).join(', ');
+                    }).join(', '));
+            }
+            if (r.cooling.airflowAboveDesign) {
+                notes.push('Capacity is rated at ' + r.cooling.airflow + ' CFM, above the design ' +
+                    'CFM (no lower rated airflow within tolerance) - actual capacity will be ' +
+                    'slightly lower.');
+            }
+            if (notes.length) {
+                tr.title = notes.join('\n');
                 tr.classList.add('design-gp-offgrid');
             }
             tbody.appendChild(tr);

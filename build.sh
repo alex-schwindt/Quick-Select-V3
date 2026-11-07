@@ -30,4 +30,15 @@ cat > dist/404.html <<'HTML'
 </html>
 HTML
 
+# Response headers for every static file (Workers static assets read
+# dist/_headers). nosniff stops a browser treating a file as a different
+# type than it was served as; the site never frames itself, so framing is
+# limited to its own origin.
+cat > dist/_headers <<'HEADERS'
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+HEADERS
+
 echo "Built dist/: $(find dist -type f | wc -l) files"

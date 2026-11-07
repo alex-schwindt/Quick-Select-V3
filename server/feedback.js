@@ -149,6 +149,10 @@ async function download(env, email, id, rawName) {
     const headers = new Headers({ 'Cache-Control': 'private, no-store' });
     obj.writeHttpMetadata(headers);
     headers.set('Content-Disposition', `attachment; filename="${name.replace(/"/g, '')}"`);
+    // User-uploaded content: always a download, never rendered or sniffed
+    // as a page on the site's origin.
+    headers.set('X-Content-Type-Options', 'nosniff');
+    headers.set('Content-Security-Policy', "sandbox; default-src 'none'");
     return new Response(obj.body, { headers });
 }
 

@@ -2163,6 +2163,13 @@
         inner.className = 'project-product-inner';
         wrap.appendChild(inner);
 
+        // One-time upgrade of position-keyed "Edit Schedule" overrides to
+        // anchor-keyed ones, against this tab's full item list (the grid
+        // the user has been seeing), so they stop drifting between rows.
+        if (HHpro.Export && HHpro.Export.migrateCellOverrides) {
+            HHpro.Export.migrateCellOverrides(productKey, items, data);
+        }
+
         if (editing) {
             // Edit mode replaces the normal schedule with a fully
             // editable grid (every cell). Notes live inside that grid.
@@ -2395,7 +2402,7 @@
                 if (cell.align === 'left') cls.push('tpl-left');
                 if (cls.length) el.className = cls.join(' ');
 
-                el.appendChild(buildCellOverrideInput(productKey, r, c, cell.value));
+                el.appendChild(buildCellOverrideInput(productKey, cell.anchor, cell.value));
                 tr.appendChild(el);
             }
             table.appendChild(tr);
@@ -2403,7 +2410,7 @@
         return table;
     }
 
-    function buildCellOverrideInput(productKey, r, c, value) {
+    function buildCellOverrideInput(productKey, anchor, value) {
         var input = document.createElement('input');
         input.type = 'text';
         input.className = 'tpl-field-input tpl-edit-input';
@@ -2415,21 +2422,11 @@
         // horizontally like the normal schedule view.
         input.size = Math.min(Math.max(str.length, 3), 30);
         input.addEventListener('change', function () {
-            updateCellOverride(productKey, r, c, input.value);
+            // Keyed by the cell's anchor (its item + column, or its
+            // original text for headers/notes) - see export.js.
+            HHpro.Export.setCellEdit(productKey, anchor, input.value);
         });
         return input;
-    }
-
-    // Persist a single cell override under the current engineer layout.
-    function updateCellOverride(productKey, r, c, value) {
-        var engineer = (HHpro.Cart && HHpro.Cart.getProjectEngineer)
-            ? HHpro.Cart.getProjectEngineer() : 'hoffman';
-        var extra = HHpro.Cart.getProjectExtra(productKey) || {};
-        var all = extra.cellOverrides || {};
-        var map = all[engineer] || {};
-        map[r + ',' + c] = value;
-        all[engineer] = map;
-        HHpro.Cart.setProjectExtra(productKey, { cellOverrides: all });
     }
 
     // =================================================================

@@ -64,6 +64,8 @@ WHAT'S IN THE GRID
         // entries so the same path serves a single per-unit schedule
         // and a multi-section combined schedule.
         buildScheduleGrid:        buildScheduleGrid,
+        migrateCellOverrides:     migrateCellOverrides,
+        setCellEdit:              setCellEdit,
         // Shared grid/merge helper - the on-screen schedule renderer in
         // project_view.js delegates to this so the layout logic has a
         // single source of truth.
@@ -250,6 +252,7 @@ WHAT'S IN THE GRID
     // downloads.
     function buildScheduleGrid(productKey, items, data) {
         var grid = buildScheduleGridRaw(productKey, items, data);
+        assignCellAnchors(grid);
         applyCellOverrides(grid, productKey);
         return grid;
     }
@@ -449,14 +452,16 @@ WHAT'S IN THE GRID
 
             // Tag (rowSpan over all sub-rows of the selection)
             putCell(rows, merges, curRow, tagCol,
-                    { value: item.tag || '', dataRow: true },
+                    { value: item.tag || '', dataRow: true,
+                      instanceId: item.instanceId, colKey: 'tag' },
                     numItemRows, 1);
 
             // Serves (rowSpan over all sub-rows) - free-text value
             // stored on the cart item by the project-view renderer
             if (showServes) {
                 putCell(rows, merges, curRow, servesCol,
-                        { value: item.serves || '', dataRow: true },
+                        { value: item.serves || '', dataRow: true,
+                          instanceId: item.instanceId, colKey: 'serves' },
                         numItemRows, 1);
             }
 
@@ -466,7 +471,8 @@ WHAT'S IN THE GRID
                     var tag = '';
                     if (Array.isArray(item.indoorTags)) tag = item.indoorTags[ir] || '';
                     putCell(rows, merges, curRow + ir, indoorTagCol,
-                            { value: tag, dataRow: true }, 1, 1);
+                            { value: tag, dataRow: true,
+                              instanceId: item.instanceId, colKey: 'indoorTag' }, 1, 1);
                 }
             }
 
@@ -501,7 +507,8 @@ WHAT'S IN THE GRID
                         ? capOverrides[letter] : cell.value;
                     putCell(rows, merges,
                             curRow + rIdx, targetCol,
-                            { value: formatCellValue(cellValue, letter, productKey), dataRow: true },
+                            { value: formatCellValue(cellValue, letter, productKey), dataRow: true,
+                              instanceId: item.instanceId, colKey: 'col:' + letter },
                             cell.rowSpan || 1,
                             cell.colSpan || 1);
                 });
@@ -510,7 +517,8 @@ WHAT'S IN THE GRID
             // Configuration (rowSpan over all sub-rows)
             if (showConfig) {
                 putCell(rows, merges, curRow, configCol,
-                        { value: item.configuration || '', dataRow: true },
+                        { value: item.configuration || '', dataRow: true,
+                          instanceId: item.instanceId, colKey: 'configuration' },
                         numItemRows, 1);
             }
 
@@ -527,7 +535,8 @@ WHAT'S IN THE GRID
                         item.accessories);
                 }
                 putCell(rows, merges, curRow, accCol,
-                        { value: accValue, dataRow: true },
+                        { value: accValue, dataRow: true,
+                          instanceId: item.instanceId, colKey: 'accessories' },
                         numItemRows, 1);
             }
 
@@ -700,30 +709,113 @@ WHAT'S IN THE GRID
         return HHpro.Templates.getTemplate(currentEngineer(), productKey);
     }
 
-    // "Edit Schedule" per-cell text overrides, keyed by grid "row,col"
-    // and scoped to the current engineer layout (the grid differs by
-    // layout). Stored in project extra: extra[productKey].cellOverrides.
-    function cellOverridesFor(productKey) {
+    // "Edit Schedule" per-cell text overrides. Each override is keyed by
+    // the cell's ANCHOR, not its grid position, so deleting or reordering
+    // items or showing/hiding columns can never move an edit onto another
+    // unit's row:
+    //   data cell   -> "i:<instanceId>|<colKey>#<n>"  (n = sub-row)
+    //   other cells -> "v:<original text>#<n>"         (n = occurrence)
+    // An override whose anchor no longer exists (its item was deleted)
+    // simply stops applying.
+    //
+    // Stored in project extra: extra[productKey].cellEdits[engineer]. The
+    // older position-keyed extra[productKey].cellOverrides[engineer]
+    // ("row,col") is still applied positionally until the project view
+    // migrates it (migrateCellOverrides), which converts it against the
+    // grid the user is looking at - so nothing they see changes.
+
+    function assignCellAnchors(grid) {
+        if (!grid || !grid.rows) return;
+        var seen = {};
+        grid.rows.forEach(function (row) {
+            (row || []).forEach(function (cell) {
+                if (!cell || cell.covered) return;
+                var base = (cell.dataRow && cell.instanceId && cell.colKey)
+                    ? 'i:' + cell.instanceId + '|' + cell.colKey
+                    : 'v:' + String(cell.value == null ? '' : cell.value);
+                var n = seen[base] || 0;
+                seen[base] = n + 1;
+                cell.anchor = base + '#' + n;
+            });
+        });
+    }
+
+    function projectExtra(productKey) {
         if (!(window.HHpro && HHpro.Cart && HHpro.Cart.getProjectExtra)) return null;
-        var extra = HHpro.Cart.getProjectExtra(productKey) || {};
-        var all = extra.cellOverrides || {};
-        return all[currentEngineer()] || null;
+        return HHpro.Cart.getProjectExtra(productKey) || {};
+    }
+
+    function cellEditsFor(productKey) {
+        var extra = projectExtra(productKey);
+        return (extra && extra.cellEdits && extra.cellEdits[currentEngineer()]) || null;
+    }
+
+    function legacyOverridesFor(productKey) {
+        var extra = projectExtra(productKey);
+        return (extra && extra.cellOverrides && extra.cellOverrides[currentEngineer()]) || null;
+    }
+
+    function forEachLegacyCell(grid, map, fn) {
+        Object.keys(map).forEach(function (key) {
+            var parts = key.split(',');
+            var row = grid.rows[parseInt(parts[0], 10)];
+            var cell = row && row[parseInt(parts[1], 10)];
+            if (cell && !cell.covered) fn(cell, map[key]);
+        });
     }
 
     function applyCellOverrides(grid, productKey) {
         if (!grid || !grid.rows) return;
-        var map = cellOverridesFor(productKey);
-        if (!map) return;
-        Object.keys(map).forEach(function (key) {
-            var parts = key.split(',');
-            var r = parseInt(parts[0], 10);
-            var c = parseInt(parts[1], 10);
-            var row = grid.rows[r];
-            if (!row) return;
-            var cell = row[c];
-            if (!cell || cell.covered) return;
-            cell.value = map[key];
+        var legacy = legacyOverridesFor(productKey);
+        if (legacy) forEachLegacyCell(grid, legacy, function (cell, v) { cell.value = v; });
+        var edits = cellEditsFor(productKey);
+        if (!edits) return;
+        grid.rows.forEach(function (row) {
+            (row || []).forEach(function (cell) {
+                if (cell && !cell.covered && cell.anchor &&
+                    Object.prototype.hasOwnProperty.call(edits, cell.anchor)) {
+                    cell.value = edits[cell.anchor];
+                }
+            });
         });
+    }
+
+    /**
+     * Convert this product's legacy position-keyed overrides (for the
+     * current engineer layout) to anchor-keyed edits, using the grid built
+     * from `items` - the grid the user currently sees. Call only with the
+     * product tab's full item list. No-op when there is nothing to migrate.
+     */
+    function migrateCellOverrides(productKey, items, data) {
+        var legacy = legacyOverridesFor(productKey);
+        if (!legacy || !Object.keys(legacy).length) return;
+        var grid = buildScheduleGridRaw(productKey, items, data);
+        assignCellAnchors(grid);
+        var engineer = currentEngineer();
+        var extra = projectExtra(productKey);
+        var allEdits = Object.assign({}, extra.cellEdits || {});
+        var edits = Object.assign({}, allEdits[engineer] || {});
+        forEachLegacyCell(grid, legacy, function (cell, v) {
+            if (cell.anchor && !Object.prototype.hasOwnProperty.call(edits, cell.anchor)) {
+                edits[cell.anchor] = v;
+            }
+        });
+        allEdits[engineer] = edits;
+        var allLegacy = Object.assign({}, extra.cellOverrides || {});
+        delete allLegacy[engineer];
+        HHpro.Cart.setProjectExtra(productKey, { cellEdits: allEdits, cellOverrides: allLegacy });
+    }
+
+    /** Save one "Edit Schedule" override by cell anchor. */
+    function setCellEdit(productKey, anchor, value) {
+        if (!anchor) return;
+        var engineer = currentEngineer();
+        var extra = projectExtra(productKey) || {};
+        var allEdits = Object.assign({}, extra.cellEdits || {});
+        var edits = Object.assign({}, allEdits[engineer] || {});
+        edits[anchor] = value;
+        allEdits[engineer] = edits;
+        HHpro.Cart.setProjectExtra(productKey, { cellEdits: allEdits });
     }
 
     function resolveTemplateEntries(items, data) {
@@ -809,8 +901,9 @@ WHAT'S IN THE GRID
         return { display: (v === null || v === undefined) ? '' : String(v) };
     }
 
-    function templateCellData(field, resolved, item) {
-        var d = { value: resolved.display, dataRow: true, align: 'center' };
+    function templateCellData(field, resolved, item, colKey) {
+        var d = { value: resolved.display, dataRow: true, align: 'center',
+                  instanceId: item.instanceId, colKey: colKey };
         if (resolved.editable) {
             d.editable = true;
             d.fieldKey = field.fieldKey;
@@ -856,12 +949,12 @@ WHAT'S IN THE GRID
                 if (col.scope === 'item') {
                     var g = makeTemplateApi(productKey, item, sel, 0, data);
                     putCell(rows, merges, curRow, ci,
-                            templateCellData(col, resolveTemplateField(col, g), item), numRows, 1);
+                            templateCellData(col, resolveTemplateField(col, g), item, 'tcol:' + ci), numRows, 1);
                 } else {
                     for (var ri = 0; ri < numRows; ri++) {
                         var g2 = makeTemplateApi(productKey, item, sel, ri, data);
                         putCell(rows, merges, curRow + ri, ci,
-                                templateCellData(col, resolveTemplateField(col, g2), item), 1, 1);
+                                templateCellData(col, resolveTemplateField(col, g2), item, 'tcol:' + ci), 1, 1);
                     }
                 }
             });
@@ -1046,7 +1139,7 @@ WHAT'S IN THE GRID
         var r = titleRowCount;
         var mainStartRow = null;
         var mainCount = 0;
-        attrs.forEach(function (attr) {
+        attrs.forEach(function (attr, ai) {
             var isTop = attr.band === 'top';
             if (isTop) {
                 // Label spans the band + label columns
@@ -1062,7 +1155,7 @@ WHAT'S IN THE GRID
                 var g = makeTemplateApi(productKey, entry.item, entry.selection, 0, data);
                 var resolved = resolveTemplateField(attr, g);
                 putCell(rows, merges, r, 2 + ui,
-                        templateCellData(attr, resolved, entry.item), 1, 1);
+                        templateCellData(attr, resolved, entry.item, 'tattr:' + ai), 1, 1);
             });
             r++;
         });
@@ -1464,6 +1557,9 @@ WHAT'S IN THE GRID
             editable: !!cellData.editable,
             fieldKey: cellData.fieldKey || '',
             instanceId: cellData.instanceId || '',
+            // Column identity of a data cell (with instanceId it anchors
+            // "Edit Schedule" overrides - see assignCellAnchors).
+            colKey: cellData.colKey || '',
             editValue: cellData.editValue || '',
             // Capacity-mapped field (on-screen renderer binds a dropdown).
             capacityField: cellData.capacityField || '',
@@ -1987,9 +2083,12 @@ WHAT'S IN THE GRID
         }
 
         // Numeric? Store as number so Excel can use it in formulas.
-        // Leave things like "208/60/1" and "21.0 / 12.0 / 10.0" as text.
+        // Leave things like "208/60/1" and "21.0 / 12.0 / 10.0" as text,
+        // and only convert when the number reads back identically, so
+        // unit sizes like "0404" and values like "1.50" keep their exact
+        // text instead of becoming 404 and 1.5.
         var str = String(value);
-        if (/^-?\d+(\.\d+)?$/.test(str)) {
+        if (/^-?\d+(\.\d+)?$/.test(str) && String(Number(str)) === str) {
             return '<c r="' + ref + '" s="' + style + '"><v>' + str + '</v></c>';
         }
         return '<c r="' + ref + '" s="' + style + '" t="inlineStr"><is><t xml:space="preserve">' +
